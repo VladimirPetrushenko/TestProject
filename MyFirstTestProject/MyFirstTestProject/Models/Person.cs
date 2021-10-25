@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MyFirstTestProject.Models
 {
-    public class Person
+    public class Person : ICloneable
     {
         [Key]
         public int Id { get; set; }
@@ -18,5 +18,10 @@ namespace MyFirstTestProject.Models
         [Required]
         [MaxLength(20)]
         public string LastName { get; set; }
+
+        public object Clone()
+        {
+            return new Person { Id = this.Id, FirstName = this.FirstName, LastName = this.LastName };
+        }
     }
 }

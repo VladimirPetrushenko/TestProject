@@ -8,11 +8,11 @@ namespace MyFirstTestProject.Data
 {
     public class MockPersonRepo : IPersonRepo
     {
-        List<Person> people;
+        public List<Person> People { get; set; }
 
         public MockPersonRepo()
         {
-            people = new()
+            People = new()
             {
                 new Person { Id = 1, FirstName = "Vladimir", LastName = "Petrushenko" },
                 new Person { Id = 2, FirstName = "Igor", LastName = "Ivanov" },
@@ -24,30 +24,29 @@ namespace MyFirstTestProject.Data
         {
             if (person == null)
                 throw new ArgumentException(nameof(person));
-            people.Add(person);
+            People.Add(person);
         }
 
         public void DeletePerson(Person person)
         {
             if (person == null)
-                throw new ArgumentException(nameof(person));
-            people.Remove(person);
+                throw new ArgumentException("Argument is null", nameof(person));
+            People.Remove(person);
         }
 
         public IEnumerable<Person> GetPeople()
         {
-            return people;
+            return People;
         }
 
         public Person GetPersonById(int id)
         {
-            return people.Where(x => x.Id == id).FirstOrDefault();
+            return People.Where(x => x.Id == id).FirstOrDefault();
         }
 
         public void UpdatePerson(Person person)
         {
-            var temp = people.Where(x => x.Id == person.Id).First();
-            temp = person;
+            //nothing
         }
     }
 }
