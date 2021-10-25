@@ -14,11 +14,11 @@ namespace UnitTestForMyProject
         {
             var validEntity = new MockPersonRepo();
 
-            var expected = validEntity.GetPeople().Count() + 1;
+            var expected = validEntity.GetAll().Count() + 1;
 
-            validEntity.CreatePerson(new Person { Id = 0, FirstName = "firstName", LastName = "lastName" });
+            validEntity.CreateItem(new Person { Id = 0, FirstName = "firstName", LastName = "lastName" });
 
-            Assert.Equal(expected, validEntity.GetPeople().Count());
+            Assert.Equal(expected, validEntity.GetAll().Count());
         }
 
         [Fact]
@@ -26,13 +26,13 @@ namespace UnitTestForMyProject
         {
             var validEntity = new MockPersonRepo();
 
-            var person = validEntity.GetPersonById(1);
+            var person = validEntity.GetByID(1);
 
             person.LastName = "lastName";
 
-            validEntity.UpdatePerson(person);
+            validEntity.UpdateItem(person);
 
-            Assert.Equal("lastName", validEntity.GetPersonById(person.Id).LastName);
+            Assert.Equal("lastName", validEntity.GetByID(person.Id).LastName);
         }
 
         [Theory]
@@ -42,11 +42,11 @@ namespace UnitTestForMyProject
         {
             var validEntity = new MockPersonRepo();
 
-            var expected = validEntity.GetPeople().Count() - 1;
+            var expected = validEntity.GetAll().Count() - 1;
 
-            validEntity.DeletePerson(validEntity.GetPersonById(id));
+            validEntity.DeleteItem(validEntity.GetByID(id));
 
-            Assert.Equal(expected, validEntity.GetPeople().Count());
+            Assert.Equal(expected, validEntity.GetAll().Count());
         }
 
         [Theory]
@@ -56,9 +56,9 @@ namespace UnitTestForMyProject
         {
             var validEntity = new MockPersonRepo();
 
-            var person = validEntity.GetPersonById(id);
+            var person = validEntity.GetByID(id);
 
-            Assert.Throws<ArgumentException>(nameof(person), ()=>validEntity.DeletePerson(person));
+            Assert.Throws<ArgumentException>(nameof(person), ()=>validEntity.DeleteItem(person));
         }
 
 

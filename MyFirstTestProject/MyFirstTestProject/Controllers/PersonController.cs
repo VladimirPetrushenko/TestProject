@@ -17,11 +17,11 @@ namespace MyFirstTestProject.Controllers
     public class PersonController : Controller
     {
         private readonly ILogger<PersonController> _logger;
-        private readonly IPersonRepo _personRepo;
+        private readonly IRepository<Person> _personRepo;
         private readonly IMapper _mapper;
 
         public PersonController(ILogger<PersonController> logger, 
-            IPersonRepo personRepo,
+            IRepository<Person> personRepo,
             IMapper mapper)
         {
             _logger = logger;
@@ -32,7 +32,7 @@ namespace MyFirstTestProject.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<PersonReadDto>> GetAllPerson()
         {
-            var people = _personRepo.GetPeople();
+            var people = _personRepo.GetAll();
             var peopleDto = _mapper.Map<IEnumerable<PersonReadDto>>(people);
 
             return Ok(peopleDto);
@@ -41,17 +41,17 @@ namespace MyFirstTestProject.Controllers
         [HttpGet("{id}", Name = "GetPersonById")]
         public ActionResult<PersonReadDto> GetPersonById(int id)
         {
-            var person = _personRepo.GetPersonById(id);
-            if(person != null) 
-                return Ok(_mapper.Map<PersonReadDto>(person));
-            return NotFound();
+            var person = _personRepo.GetByID(id);
+            return person != null 
+                ? Ok(_mapper.Map<PersonReadDto>(person))
+                : NotFound();
         }
 
         [HttpPost]
         public ActionResult<PersonReadDto> CreatePerson(PersonCreateDto personCreateDto)
         {
             var person = _mapper.Map<Person>(personCreateDto);
-            _personRepo.CreatePerson(person);
+            _personRepo.CreateItem(person);
 
             var personReadDto = _mapper.Map<PersonReadDto>(person);
 
@@ -61,13 +61,15 @@ namespace MyFirstTestProject.Controllers
         [HttpPut]
         public ActionResult<PersonReadDto> UpdatePerson(int id, PersonUpdateDto personUpdateDto)
         {
-            var person = _personRepo.GetPersonById(id);
-            if (person == null)
+            var person = _personRepo.GetByID(id);
+            if (person == null) 
+            { 
                 return NotFound();
+            }
 
             _mapper.Map(personUpdateDto, person);
 
-            _personRepo.UpdatePerson(person);
+            _personRepo.UpdateItem(person);
 
             var personReadDto = _mapper.Map<PersonReadDto>(person);
 
@@ -77,10 +79,12 @@ namespace MyFirstTestProject.Controllers
         [HttpDelete]
         public ActionResult DeletePerson(int id)
         {
-            var person = _personRepo.GetPersonById(id);
+            var person = _personRepo.GetByID(id);
             if (person == null)
+            { 
                 return NotFound();
-            _personRepo.DeletePerson(person);
+            }
+            _personRepo.DeleteItem(person);
 
             return NoContent();
         }

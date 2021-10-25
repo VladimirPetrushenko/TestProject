@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MyFirstTestProject.Data
 {
-    public class MockPersonRepo : IPersonRepo
+    public class MockPersonRepo : IRepository<Person>
     {
         public List<Person> People { get; set; }
 
@@ -20,31 +20,35 @@ namespace MyFirstTestProject.Data
             };
         }
 
-        public void CreatePerson(Person person)
+        public void CreateItem(Person person)
         {
-            if (person == null)
+            if (person == null) 
+            { 
                 throw new ArgumentException(nameof(person));
+            }
             People.Add(person);
         }
 
-        public void DeletePerson(Person person)
+        public void DeleteItem(Person person)
         {
-            if (person == null)
+            if (person == null) 
+            { 
                 throw new ArgumentException("Argument is null", nameof(person));
+            }
             People.Remove(person);
         }
 
-        public IEnumerable<Person> GetPeople()
+        public IEnumerable<Person> GetAll()
         {
             return People;
         }
 
-        public Person GetPersonById(int id)
+        public Person GetByID(int id)
         {
             return People.Where(x => x.Id == id).FirstOrDefault();
         }
 
-        public void UpdatePerson(Person person)
+        public void UpdateItem(Person person)
         {
             //nothing
         }
