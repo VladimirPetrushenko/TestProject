@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using JetBrains.Annotations;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using MyFirstTestProject.Data;
 using MyFirstTestProject.Models;
@@ -12,6 +13,7 @@ using System.Threading.Tasks;
 
 namespace MyFirstTestProject.Commands
 {
+    [UsedImplicitly]
     public class ReadProductByIdCommand : IRequest<Product>
     {
         public int Id { get; set; }
@@ -22,7 +24,7 @@ namespace MyFirstTestProject.Commands
 
             public ReadProductCommandHandler(IRepository<Product> repository)
             {
-                _repository = repository ?? throw new ArgumentException(nameof(repository));
+                _repository = repository ?? throw new ArgumentException(null, nameof(repository));
             }
 
             public Task<Product> Handle(ReadProductByIdCommand request, CancellationToken cancellationToken)

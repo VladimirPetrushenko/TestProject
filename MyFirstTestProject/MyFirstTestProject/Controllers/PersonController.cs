@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -30,32 +31,30 @@ namespace MyFirstTestProject.Controllers
         }
         
         [HttpGet]
-        public ActionResult<IEnumerable<PersonReadDto>> GetAllPerson()
+        [Authorize]
+        public IEnumerable<PersonReadDto> GetAllPerson()
         {
             var people = _personRepo.GetAll();
-            var peopleDto = _mapper.Map<IEnumerable<PersonReadDto>>(people);
+            return _mapper.Map<IEnumerable<PersonReadDto>>(people);
+        }
 
-            return Ok(peopleDto);
-        }
-        
         [HttpGet("{id}", Name = "GetPersonById")]
-        public ActionResult<PersonReadDto> GetPersonById(int id)
-        {
-            var person = _personRepo.GetByID(id);
-            return person != null 
-                ? Ok(_mapper.Map<PersonReadDto>(person))
-                : NotFound();
-        }
+        public PersonReadDto GetPersonById(int id) => _mapper.Map<PersonReadDto>(_personRepo.GetByID(id));
 
         [HttpPost]
         public ActionResult<PersonReadDto> CreatePerson(PersonCreateDto personCreateDto)
         {
+            personCreateDto = null;
+            if (personCreateDto == null)
+            {
+                throw new ArgumentException();
+            }
             var person = _mapper.Map<Person>(personCreateDto);
             _personRepo.CreateItem(person);
 
             var personReadDto = _mapper.Map<PersonReadDto>(person);
 
-            return CreatedAtRoute(nameof(GetPersonById), new { Id = personReadDto.Id }, personReadDto);
+            return CreatedAtRoute(nameof(GetPersonById), new { personReadDto.Id }, personReadDto);
         }
 
         [HttpPut]
@@ -73,7 +72,7 @@ namespace MyFirstTestProject.Controllers
 
             var personReadDto = _mapper.Map<PersonReadDto>(person);
 
-            return CreatedAtRoute(nameof(GetPersonById), new { Id = personReadDto.Id }, personReadDto);
+            return CreatedAtRoute(nameof(GetPersonById), new { personReadDto.Id }, personReadDto);
         }
 
         [HttpDelete]

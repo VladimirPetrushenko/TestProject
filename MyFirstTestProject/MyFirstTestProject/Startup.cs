@@ -1,5 +1,7 @@
 using FluentValidation;
 using MediatR;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -10,12 +12,17 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using MyFirstTestProject.Data;
+using MyFirstTestProject.Features.Authentication;
+using MyFirstTestProject.Features.Authorization;
+using MyFirstTestProject.Features.Exceptions;
+using MyFirstTestProject.Features.Swagger;
 using MyFirstTestProject.Models;
 using MyFirstTestProject.Validation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace MyFirstTestProject
@@ -31,19 +38,41 @@ namespace MyFirstTestProject
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
             services.AddMediatR(Assembly.GetExecutingAssembly());
-
             services.AddScoped<IRepository<Person>, MockPersonRepo>();
             services.AddScoped<IRepository<Product>, MockProductRepo>();
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
             services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
-
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-            services.AddSwaggerGen(c =>
+
+            services.AddAuthentication(options =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "MyFirstTestProject", Version = "v1" });
+                options.DefaultAuthenticateScheme = ApiKeyAuthenticationOptions.DefaultScheme;
+                options.DefaultChallengeScheme = ApiKeyAuthenticationOptions.DefaultScheme;
+            }).AddApiKeySupport(options => { });
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy(Policies.OnlyEmployees, policy => policy.Requirements.Add(new OnlyEmployeesRequirement()));
+                options.AddPolicy(Policies.OnlyManagers, policy => policy.Requirements.Add(new OnlyManagersRequirement()));
+                options.AddPolicy(Policies.OnlyThirdParties, policy => policy.Requirements.Add(new OnlyThirdPartiesRequirement()));
             });
+
+            services.AddSingleton<IAuthorizationHandler, OnlyEmployeesAuthorizationHandler>();
+            services.AddSingleton<IAuthorizationHandler, OnlyManagersAuthorizationHandler>();
+            services.AddSingleton<IAuthorizationHandler, OnlyThirdPartiesAuthorizationHandler>();
+
+            services.AddSingleton<IGetApiKeyQuery, InMemoryGetApiKeyQuery>();
+
+            services.AddRouting(x => x.LowercaseUrls = true);
+            services.AddControllers()
+                .AddJsonOptions(options =>
+                {
+                    options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+                    options.JsonSerializerOptions.IgnoreNullValues = true;
+                });
+
+            services.ConfigureSwaggerFeature();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -59,7 +88,10 @@ namespace MyFirstTestProject
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
+
+            app.UseMiddleware<ExceptionMiddleware>();
 
             app.UseEndpoints(endpoints =>
             {

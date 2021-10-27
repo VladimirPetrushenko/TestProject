@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using JetBrains.Annotations;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,6 +9,7 @@ namespace MyFirstTestProject.Commands.Validators
 {
     public class AddProductValidator : AbstractValidator<AddProductCommand>
     {
+        [UsedImplicitly]
         public AddProductValidator()
         {
             RuleFor(c => c.Name).NotEmpty();

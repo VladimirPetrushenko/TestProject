@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using JetBrains.Annotations;
+using MediatR;
 using MyFirstTestProject.Data;
 using MyFirstTestProject.Models;
 using System;
@@ -9,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace MyFirstTestProject.Commands
 {
+    [UsedImplicitly]
     public class ReadAllProductCommand : IRequest<IEnumerable<Product>>
     {
         public class ReadAllProductCommandHandler : IRequestHandler<ReadAllProductCommand, IEnumerable<Product>>
@@ -17,7 +19,7 @@ namespace MyFirstTestProject.Commands
 
             public ReadAllProductCommandHandler(IRepository<Product> repository)
             {
-                _repository = repository ?? throw new ArgumentException(nameof(repository));
+                _repository = repository ?? throw new ArgumentException(null, nameof(repository));
             }
 
             public Task<IEnumerable<Product>> Handle(ReadAllProductCommand request, CancellationToken cancellationToken)

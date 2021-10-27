@@ -1,4 +1,5 @@
-﻿using MyFirstTestProject.Models;
+﻿using JetBrains.Annotations;
+using MyFirstTestProject.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace MyFirstTestProject.Data
 {
+    [UsedImplicitly]
     public class MockProductRepo : IRepository<Product>
     {
         public List<Product> products;
@@ -21,9 +23,9 @@ namespace MyFirstTestProject.Data
         }
         public void CreateItem(Product product)
         {
-            if (product == null)
+            if (product == null) 
             {
-                throw new ArgumentException(nameof(product));
+                throw new ArgumentException(null, nameof(product));
             }
             products.Add(product);
         }
@@ -32,7 +34,7 @@ namespace MyFirstTestProject.Data
         {
             if (product == null)
             {
-                throw new ArgumentException(nameof(product));
+                throw new ArgumentException(null, nameof(product));
             }
             products.Remove(product);
         }

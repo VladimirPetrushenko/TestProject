@@ -62,12 +62,5 @@ namespace UnitTestForMyProject
         }
 
 
-        [Fact]
-        public void UsingAutoFixture()
-        {
-            var validEntity = new MockPersonRepo();
-
-            var person = new Fixture().Create<MockPersonRepo>();
-        }
     }
 }

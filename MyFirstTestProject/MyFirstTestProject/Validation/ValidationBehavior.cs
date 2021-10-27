@@ -33,7 +33,7 @@ namespace MyFirstTestProject.Validation
                 _logger.LogInformation("----- Validating command {CommandType}", typeName);
 
 
-                ValidationContext<TRequest> context = new ValidationContext<TRequest>(request);
+                var context = new ValidationContext<TRequest>(request);
                 ValidationResult[] validationResults =
                     await Task.WhenAll(_validators.Select(v => v.ValidateAsync(context, cancellationToken)));
                 List<ValidationFailure> failures = validationResults.SelectMany(result => result.Errors)

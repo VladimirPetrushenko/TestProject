@@ -1,4 +1,5 @@
-﻿using MyFirstTestProject.Models;
+﻿using JetBrains.Annotations;
+using MyFirstTestProject.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace MyFirstTestProject.Data
 {
+    [UsedImplicitly]
     public class MockPersonRepo : IRepository<Person>
     {
         public List<Person> People { get; set; }
@@ -24,7 +26,7 @@ namespace MyFirstTestProject.Data
         {
             if (person == null) 
             { 
-                throw new ArgumentException(nameof(person));
+                throw new ArgumentException(null, nameof(person));
             }
             People.Add(person);
         }

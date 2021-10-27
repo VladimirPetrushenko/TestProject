@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MyFirstTestProject.Commands;
@@ -21,32 +22,20 @@ namespace MyFirstTestProject.Controllers
 
         public ProductController(IMediator mediator)
         {
-            _mediator = mediator ?? throw new ArgumentException(nameof(mediator));
+            _mediator = mediator;
         }
 
         [HttpGet("{id}")]
-
-        public async Task<IActionResult> Get(int id, CancellationToken token)
-        {
-            Product entity = await _mediator.Send(new ReadProductByIdCommand { Id = id}, token);
-            return Ok(entity);
-        }
+        public async Task<Product> Get(int id, CancellationToken token) =>  await _mediator.Send(new ReadProductByIdCommand { Id = id}, token);
+        
 
         [HttpGet]
-        public async Task<IActionResult> GetAll(CancellationToken token)
-        {
-            IEnumerable<Product> entity = await _mediator.Send(new ReadAllProductCommand(), token);
-            return Ok(entity.ToList());
-        }
+        public async Task<IEnumerable<Product>> GetAll(CancellationToken token) => await _mediator.Send(new ReadAllProductCommand(), token);
 
         [HttpPost]
         [ProducesResponseType(typeof(Product), StatusCodes.Status201Created)]
         [ProducesDefaultResponseType]
 
-        public async Task<IActionResult> Post([FromBody] AddProductCommand client, CancellationToken token)
-        {
-            Product entity = await _mediator.Send(client, token);
-            return CreatedAtAction(nameof(Get), new { id = entity.Id }, entity);
-        }
+        public async Task<Product> Post([FromBody] AddProductCommand client, CancellationToken token) => await _mediator.Send(client, token);
     }
 }
