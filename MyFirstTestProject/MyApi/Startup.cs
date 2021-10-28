@@ -63,13 +63,23 @@ namespace MyApi
 
             services.AddSingleton<IGetApiKeyQuery, InMemoryGetApiKeyQuery>();
 
-            services.AddRouting(x => x.LowercaseUrls = true);
+            services.AddRouting(options => options.LowercaseUrls = true);
             services.AddControllers()
                 .AddJsonOptions(options =>
                 {
                     options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
                     options.JsonSerializerOptions.IgnoreNullValues = true;
                 });
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy("DefaultPolicy", opt =>
+                {
+                    opt.AllowAnyOrigin();
+                    opt.AllowAnyHeader();
+                    opt.AllowAnyMethod();
+                });
+            });
 
             services.ConfigureSwaggerFeature();
         }
@@ -82,6 +92,7 @@ namespace MyApi
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "MyApi v1"));
             }
+            app.UseCors("DefaultPolicy");
 
             app.UseHttpsRedirection();
 
@@ -90,7 +101,8 @@ namespace MyApi
             app.UseAuthentication();
             app.UseAuthorization();
 
-            app.UseMiddleware<ExceptionMiddleware>();
+           // app.UseMiddleware<ExceptionMiddleware>();
+
 
             app.UseEndpoints(endpoints =>
             {

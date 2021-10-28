@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace MyApi.Configuration.Exceptions
@@ -10,28 +8,23 @@ namespace MyApi.Configuration.Exceptions
     {
         public async Task InvokeAsync(HttpContext context, RequestDelegate next)
         {
-            var errorId = context.TraceIdentifier;
             try
             {
                 await next.Invoke(context);
             }
             catch (Exception exception)
             {
-                HandleException(context, exception, errorId);
+                HandleException(context, exception);
             }
         }
 
-        public void HandleException(HttpContext context, Exception exception, string errorId)
+        public static void HandleException(HttpContext context, Exception exception)
         {
-            switch (exception)
+            context.Response.StatusCode = exception switch
             {
-                case ArgumentException:
-                    context.Response.StatusCode = 404;
-                    break;
-                default:
-                    context.Response.StatusCode = 401;
-                    break;
-            }
+                ArgumentException => StatusCodes.Status404NotFound,
+                _ => StatusCodes.Status400BadRequest,
+            };
         }
     }
 }

@@ -11,8 +11,8 @@ using System.Threading.Tasks;
 
 namespace MyApi.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/Product")]
     public class ProductController : Controller
     {
         private readonly IMediator _mediator;
@@ -25,14 +25,12 @@ namespace MyApi.Controllers
         [HttpGet("{id}")]
         public async Task<Product> Get(int id, CancellationToken token) =>  await _mediator.Send(new ReadProductByIdCommand { Id = id}, token);
         
-
         [HttpGet]
         public async Task<IEnumerable<Product>> GetAll(CancellationToken token) => await _mediator.Send(new ReadAllProductCommand(), token);
 
         [HttpPost]
         [ProducesResponseType(typeof(Product), StatusCodes.Status201Created)]
         [ProducesDefaultResponseType]
-
         public async Task<Product> Post([FromBody] AddProductCommand client, CancellationToken token) => await _mediator.Send(client, token);
     }
 }

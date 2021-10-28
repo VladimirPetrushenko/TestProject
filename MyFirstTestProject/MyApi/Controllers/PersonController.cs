@@ -11,7 +11,7 @@ using MyModelAndDatabase.Data.Interfaces;
 namespace MyApi.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/Person")]
     public class PersonController : Controller
     {
         private readonly ILogger<PersonController> _logger;

@@ -44,6 +44,11 @@ namespace MyModelAndDatabase.Data.Repositories
             return _context.People.Where(p => p.Id == id).FirstOrDefault();
         }
 
+        public bool Find(int id)
+        {
+            return _context.People.Any(x => x.Id == id);
+        }
+
         public void UpdateItem(Person person)
         {
             //nothing
