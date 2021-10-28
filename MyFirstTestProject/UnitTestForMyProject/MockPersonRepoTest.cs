@@ -1,9 +1,9 @@
-using AutoFixture;
-using MyFirstTestProject.Data;
-using MyFirstTestProject.Models;
+using MyModelAndDatabase.Data;
+using MyModelAndDatabase.Models;
 using System;
 using System.Linq;
 using Xunit;
+using MyModelAndDatabase.Data.Interfaces;
 
 namespace UnitTestForMyProject
 {
