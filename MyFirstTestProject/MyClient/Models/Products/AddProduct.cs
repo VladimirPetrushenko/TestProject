@@ -31,6 +31,7 @@ namespace MyClient.Models.Products
                 };
 
                 _repository.CreateItem(product);
+                _repository.SaveChanges();
                 return Task.FromResult(product);
             }
         }

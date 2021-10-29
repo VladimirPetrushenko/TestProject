@@ -18,11 +18,6 @@ namespace MyModelAndDatabase.Data.Repositories
 
         public void CreateItem(Product product)
         {
-            if(product == null)
-            {
-                throw new ArgumentException(null, nameof(product));
-            }
-
             _context.Products.Add(product);
         }
 
