@@ -58,5 +58,10 @@ namespace MyModelAndDatabase.Data.Repositories
         {
             return _context.SaveChanges() >= 0;
         }
+
+        public bool ItemExists(int id)
+        {
+            return _context.People.Any(x => x.Id == id);
+        }
     }
 }

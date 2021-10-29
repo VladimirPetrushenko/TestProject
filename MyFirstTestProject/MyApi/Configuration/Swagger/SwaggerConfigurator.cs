@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
-using MyApi.Configuration.Shared;
+using MyApi.ApiKey.Shared;
 using System;
 
 namespace MyApi.Configuration.Swagger

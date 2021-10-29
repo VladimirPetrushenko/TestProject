@@ -1,8 +1,4 @@
-﻿using MyModelAndDatabase.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace MyModelAndDatabase.Data.Interfaces
 {
@@ -14,5 +10,6 @@ namespace MyModelAndDatabase.Data.Interfaces
         void UpdateItem(T item);
         void DeleteItem(T item);
         bool SaveChanges();
+        bool ItemExists(int id);
     }
 }

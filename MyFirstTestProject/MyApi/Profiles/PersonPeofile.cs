@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
-using MyApi.Dtos;
+using MyClient.Models.Persons;
 using MyModelAndDatabase.Models;
 
-namespace MyApi.Configuration.Profiles
+namespace MyApi.Profiles
 {
     public class PersonPeofile : Profile
     {

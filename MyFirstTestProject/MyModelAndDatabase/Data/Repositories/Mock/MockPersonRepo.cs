@@ -55,7 +55,12 @@ namespace MyModelAndDatabase.Data
 
         public bool SaveChanges()
         {
-            throw new NotImplementedException();
+            return true;
+        }
+
+        public bool ItemExists(int id)
+        {
+            return People.Any(x => x.Id == id);
         }
     }
 }

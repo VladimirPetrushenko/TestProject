@@ -1,3 +1,4 @@
+using Common.Middleware;
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -7,18 +8,17 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using MyApi.Configuration.Authentication;
-using MyApi.Configuration.Authorization;
-using MyApi.Configuration.Exceptions;
+using MyApi.ApiKey.Authentication;
+using MyApi.ApiKey.Authorization;
 using MyApi.Configuration.Swagger;
-using MyMediatorModel.Configuration.Validation;
+using MyApi.Configuration.Validator;
+using MyModelAndDatabase.Data.Context;
 using MyModelAndDatabase.Data.Interfaces;
+using MyModelAndDatabase.Data.Repositories;
 using MyModelAndDatabase.Models;
 using System;
 using System.Reflection;
 using System.Text.Json;
-using MyModelAndDatabase.Data.Context;
-using MyModelAndDatabase.Data.Repositories;
 
 namespace MyApi
 {
@@ -101,7 +101,7 @@ namespace MyApi
             app.UseAuthentication();
             app.UseAuthorization();
 
-           // app.UseMiddleware<ExceptionMiddleware>();
+            app.UseMiddleware<ExceptionMiddleware>();
 
 
             app.UseEndpoints(endpoints =>

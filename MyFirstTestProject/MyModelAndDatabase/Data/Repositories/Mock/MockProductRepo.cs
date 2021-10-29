@@ -8,10 +8,10 @@ namespace MyModelAndDatabase.Data
 {
     public class MockProductRepo : IRepository<Product>
     {
-        public List<Product> products;
+        public List<Product> Products { get; set; }
         public MockProductRepo()
         {
-            products = new List<Product>
+            Products = new List<Product>
             {
                 new Product { Id = 0, Alias = "first product", Name = "milk", Type = ProductType.Main },
                 new Product { Id = 1, Alias = "Hot chocolate", Name = "Kakao", Type = ProductType.Main },
@@ -25,7 +25,7 @@ namespace MyModelAndDatabase.Data
             {
                 throw new ArgumentException(null, nameof(product));
             }
-            products.Add(product);
+            Products.Add(product);
         }
 
         public void DeleteItem(Product product)
@@ -34,22 +34,27 @@ namespace MyModelAndDatabase.Data
             {
                 throw new ArgumentException(null, nameof(product));
             }
-            products.Remove(product);
+            Products.Remove(product);
         }
 
         public IEnumerable<Product> GetAll()
         {
-            return products;
+            return Products;
         }
 
         public Product GetByID(int id)
         {
-            return products.Where(x => x.Id == id).FirstOrDefault();
+            return Products.Where(x => x.Id == id).FirstOrDefault();
+        }
+
+        public bool ItemExists(int id)
+        {
+            return Products.Any(x => x.Id == id);
         }
 
         public bool SaveChanges()
         {
-            throw new NotImplementedException();
+            return true;
         }
 
         public void UpdateItem(Product product)

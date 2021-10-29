@@ -1,87 +1,40 @@
 ﻿using AutoMapper;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using MyApi.Dtos;
+using MyClient.Models.Persons;
+using MyModelAndDatabase.Data.Interfaces;
 using MyModelAndDatabase.Models;
 using System;
 using System.Collections.Generic;
-using MyModelAndDatabase.Data.Interfaces;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace MyApi.Controllers
 {
     [ApiController]
     [Route("api/Person")]
-    public class PersonController : Controller
+    public class PersonController : BaseApiController
     {
-        private readonly ILogger<PersonController> _logger;
-        private readonly IRepository<Person> _personRepo;
-        private readonly IMapper _mapper;
-
-        public PersonController(ILogger<PersonController> logger, 
-            IRepository<Person> personRepo,
-            IMapper mapper)
+        public PersonController(IMediator mediator) : base(mediator)
         {
-            _logger = logger;
-            _personRepo = personRepo;
-            _mapper = mapper;
         }
-        
+
+        [HttpGet("{id}")]
+        public async Task<Person> Get(int id, CancellationToken token) => await _mediator.Send(new ReadPersonById { Id = id }, token);
+
         [HttpGet]
-        [Authorize]
-        public IEnumerable<PersonReadDto> GetAllPerson()
-        {
-            var people = _personRepo.GetAll();
-            return _mapper.Map<IEnumerable<PersonReadDto>>(people);
-        }
-
-        [HttpGet("{id}", Name = "GetPersonById")]
-        public PersonReadDto GetPersonById(int id) => _mapper.Map<PersonReadDto>(_personRepo.GetByID(id));
+        public async Task<IEnumerable<Person>> GetAll(CancellationToken token) => await _mediator.Send(new ReadAllPeople(), token);
 
         [HttpPost]
-        public ActionResult<PersonReadDto> CreatePerson(PersonCreateDto personCreateDto)
-        {
-            if (personCreateDto == null)
-            {
-                throw new ArgumentException(null, nameof(personCreateDto));
-            }
-            var person = _mapper.Map<Person>(personCreateDto);
-            _personRepo.CreateItem(person);
-
-            var personReadDto = _mapper.Map<PersonReadDto>(person);
-
-            return CreatedAtRoute(nameof(GetPersonById), new { personReadDto.Id }, personReadDto);
-        }
+        public async Task<Person> Post([FromBody] AddPerson client, CancellationToken token) => await _mediator.Send(client, token);
 
         [HttpPut]
-        public ActionResult<PersonReadDto> UpdatePerson(int id, PersonUpdateDto personUpdateDto)
-        {
-            var person = _personRepo.GetByID(id);
-            if (person == null) 
-            { 
-                return NotFound();
-            }
-
-            _mapper.Map(personUpdateDto, person);
-
-            _personRepo.UpdateItem(person);
-
-            var personReadDto = _mapper.Map<PersonReadDto>(person);
-
-            return CreatedAtRoute(nameof(GetPersonById), new { personReadDto.Id }, personReadDto);
-        }
+        public async Task<Person> Update([FromBody] UpdatePerson client, CancellationToken token) => await _mediator.Send(client, token);
 
         [HttpDelete]
-        public ActionResult DeletePerson(int id)
-        {
-            var person = _personRepo.GetByID(id);
-            if (person == null)
-            { 
-                return NotFound();
-            }
-            _personRepo.DeleteItem(person);
-
-            return NoContent();
-        }
+        public async Task<Person> Delete([FromBody] DeletePerson client, CancellationToken token) => await _mediator.Send(client, token);
     }
 }

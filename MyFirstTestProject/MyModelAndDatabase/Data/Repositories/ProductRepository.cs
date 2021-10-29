@@ -46,6 +46,11 @@ namespace MyModelAndDatabase.Data.Repositories
             return _context.Products.Where(p => p.Id == id).FirstOrDefault();
         }
 
+        public bool ItemExists(int id)
+        {
+            return _context.Products.Any(x => x.Id == id);
+        }
+
         public bool SaveChanges()
         {
             return _context.SaveChanges() >= 0;

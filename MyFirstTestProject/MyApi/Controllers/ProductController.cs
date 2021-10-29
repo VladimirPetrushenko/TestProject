@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using MyMediatorModel.Commands;
+using MyClient.Models.Products;
 using MyModelAndDatabase.Models;
 using System.Collections.Generic;
 using System.Threading;
@@ -13,24 +13,30 @@ namespace MyApi.Controllers
 {
     [ApiController]
     [Route("api/Product")]
-    public class ProductController : Controller
+    public class ProductController : BaseApiController
     {
-        private readonly IMediator _mediator;
-
-        public ProductController(IMediator mediator)
+        public ProductController(IMediator mediator) : base(mediator)
         {
-            _mediator = mediator;
         }
 
         [HttpGet("{id}")]
-        public async Task<Product> Get(int id, CancellationToken token) =>  await _mediator.Send(new ReadProductByIdCommand { Id = id}, token);
+        public async Task<Product> Get(int id, CancellationToken token) 
+            =>  await _mediator.Send(new ReadProductById { Id = id}, token);
         
         [HttpGet]
-        public async Task<IEnumerable<Product>> GetAll(CancellationToken token) => await _mediator.Send(new ReadAllProductCommand(), token);
+        public async Task<IEnumerable<Product>> GetAll(CancellationToken token) 
+            => await _mediator.Send(new ReadAllProducts(), token);
 
         [HttpPost]
-        [ProducesResponseType(typeof(Product), StatusCodes.Status201Created)]
-        [ProducesDefaultResponseType]
-        public async Task<Product> Post([FromBody] AddProductCommand client, CancellationToken token) => await _mediator.Send(client, token);
+        public async Task<Product> Post([FromBody] AddProduct client, CancellationToken token) 
+            => await _mediator.Send(client, token);
+
+        [HttpPut]
+        public async Task<Product> Update([FromBody] UpdateProduct client, CancellationToken token) 
+            => await _mediator.Send(client, token);
+
+        [HttpDelete]
+        public async Task<Product> Delete([FromBody] DeleteProduct client, CancellationToken token) 
+            => await _mediator.Send(client, token);
     }
 }
