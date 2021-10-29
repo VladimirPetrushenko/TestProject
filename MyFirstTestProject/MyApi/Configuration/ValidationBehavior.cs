@@ -26,28 +26,30 @@ namespace MyApi.Configuration
         public async Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken,
             RequestHandlerDelegate<TResponse> next)
         {
-            if (_validators.Any())
+            if (!_validators.Any())
             {
-                string typeName = request.ToString();
+                return await next();
+            }
 
-                _logger.LogInformation("----- Validating command {CommandType}", typeName);
+            string typeName = request.ToString();
+
+            _logger.LogInformation("----- Validating command {CommandType}", typeName);
 
 
-                var context = new ValidationContext<TRequest>(request);
-                ValidationResult[] validationResults =
-                    await Task.WhenAll(_validators.Select(v => v.ValidateAsync(context, cancellationToken)));
-                List<ValidationFailure> failures = validationResults.SelectMany(result => result.Errors)
-                    .Where(error => error != null).ToList();
-                if (failures.Any())
-                {
-                    _logger.LogWarning(
-                        "Validation errors - {CommandType} - Command: {@Command} - Errors: {@ValidationErrors}",
-                        typeName, request, failures);
+            var context = new ValidationContext<TRequest>(request);
+            ValidationResult[] validationResults =
+                await Task.WhenAll(_validators.Select(v => v.ValidateAsync(context, cancellationToken)));
+            List<ValidationFailure> failures = validationResults.SelectMany(result => result.Errors)
+                .Where(error => error != null).ToList();
+            if (failures.Any())
+            {
+                _logger.LogWarning(
+                    "Validation errors - {CommandType} - Command: {@Command} - Errors: {@ValidationErrors}",
+                    typeName, request, failures);
 
-                    throw new Exception(
-                        $"Command Validation Errors for type {typeof(TRequest).Name}",
-                        new ValidationException("Validation exception", failures));
-                }
+                throw new Exception(
+                    $"Command Validation Errors for type {typeof(TRequest).Name}",
+                    new ValidationException("Validation exception", failures));
             }
 
             return await next();

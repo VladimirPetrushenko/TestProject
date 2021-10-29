@@ -1,10 +1,11 @@
 ﻿using FluentValidation;
 using MyModelAndDatabase.Data.Interfaces;
 using MyModelAndDatabase.Models;
+using MyClient.Models.Products;
 
 namespace MyClient.Models.Products.Validators
 {
-    class ReadProductByIdValidator : AbstractValidator<ReadProductById>
+    public class ReadProductByIdValidator : AbstractValidator<ReadProductById>
     {
         private readonly IRepository<Product> _repository;
         public ReadProductByIdValidator(IRepository<Product> repository)

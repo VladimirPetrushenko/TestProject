@@ -1,4 +1,5 @@
 using FluentValidation;
+using FluentValidation.AspNetCore;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -15,6 +16,7 @@ using MyModelAndDatabase.Data.Interfaces;
 using MyModelAndDatabase.Data.Repositories;
 using MyModelAndDatabase.Models;
 using System;
+using System.Linq;
 using System.Reflection;
 using System.Text.Json;
 
@@ -33,7 +35,8 @@ namespace MyApi
         {
             services.AddScoped<IRepository<Person>, PersonRepository>();
             services.AddScoped<IRepository<Product>, ProductRepository>();
-            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
+
+
             services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
@@ -66,7 +69,22 @@ namespace MyApi
                 {
                     options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
                     options.JsonSerializerOptions.IgnoreNullValues = true;
-                });
+                }).AddFluentValidation();
+
+            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
+
+            foreach (var implementationType in typeof(Startup)
+            .Assembly
+            .ExportedTypes
+            .Where(t => t.IsClass && !t.IsAbstract))
+            {
+                foreach (var serviceType in implementationType
+                    .GetInterfaces()
+                    .Where(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IValidator<>)))
+                {
+                    services.Add(new ServiceDescriptor(serviceType, implementationType, ServiceLifetime.Transient));
+                }
+            }
 
             services.AddCors(options =>
             {

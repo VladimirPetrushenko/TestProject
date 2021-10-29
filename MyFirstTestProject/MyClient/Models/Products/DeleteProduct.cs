@@ -10,11 +10,11 @@ namespace MyClient.Models.Products
     {
         public int Id { get; set; }
 
-        public class UpdateProductHandler : IRequestHandler<DeleteProduct, Product>
+        public class DeleteProductHandler : IRequestHandler<DeleteProduct, Product>
         {
             private readonly IRepository<Product> _repository;
 
-            public UpdateProductHandler(IRepository<Product> repository)
+            public DeleteProductHandler(IRepository<Product> repository)
             {
                 _repository = repository;
             }
