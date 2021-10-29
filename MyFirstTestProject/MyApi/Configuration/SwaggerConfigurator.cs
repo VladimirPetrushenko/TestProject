@@ -3,7 +3,7 @@ using Microsoft.OpenApi.Models;
 using MyApi.ApiKey.Shared;
 using System;
 
-namespace MyApi.Configuration.Swagger
+namespace MyApi.Configuration
 {
     public static class SwaggerConfigurator
     {

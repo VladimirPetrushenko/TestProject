@@ -3,7 +3,6 @@ using MyModelAndDatabase.Models;
 using System;
 using System.Linq;
 using Xunit;
-using MyModelAndDatabase.Data.Interfaces;
 
 namespace UnitTestForMyProject
 {

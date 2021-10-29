@@ -1,9 +1,9 @@
 ﻿using MyModelAndDatabase.Data.Context;
+using MyModelAndDatabase.Data.Interfaces;
 using MyModelAndDatabase.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using MyModelAndDatabase.Data.Interfaces;
 
 namespace MyModelAndDatabase.Data.Repositories
 {

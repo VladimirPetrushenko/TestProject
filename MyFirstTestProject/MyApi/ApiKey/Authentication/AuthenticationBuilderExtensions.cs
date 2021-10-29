@@ -1,5 +1,5 @@
-﻿using System;
-using Microsoft.AspNetCore.Authentication;
+﻿using Microsoft.AspNetCore.Authentication;
+using System;
 
 namespace MyApi.ApiKey.Authentication
 {

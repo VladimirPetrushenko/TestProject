@@ -9,6 +9,7 @@ namespace MyClient.Models.Persons.Validators
         private readonly IRepository<Product> _repository;
         public UpdatePersonValidator(IRepository<Product> repository)
         {
+            RuleFor(c => c).NotNull();
             _repository = repository;
             RuleFor(p => p.Id).NotEmpty().WithMessage("Correct id").Must(ProductExist).WithMessage("Product is not found");
             RuleFor(p => p.FirstName).NotEmpty();

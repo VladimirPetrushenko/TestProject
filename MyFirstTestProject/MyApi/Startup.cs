@@ -1,4 +1,3 @@
-using Common.Middleware;
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -10,11 +9,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using MyApi.ApiKey.Authentication;
 using MyApi.ApiKey.Authorization;
-using MyApi.Configuration.Swagger;
-using MyApi.Configuration.Validator;
+using MyApi.Configuration;
+using MyModelAndDatabase.Data;
 using MyModelAndDatabase.Data.Context;
 using MyModelAndDatabase.Data.Interfaces;
-using MyModelAndDatabase.Data.Repositories;
 using MyModelAndDatabase.Models;
 using System;
 using System.Reflection;
@@ -33,9 +31,10 @@ namespace MyApi
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMediatR(Assembly.GetExecutingAssembly());
-            services.AddScoped<IRepository<Person>, PersonRepository>();
-            services.AddScoped<IRepository<Product>, ProductRepository>();
+            services.ConfigureMediator();
+
+            services.AddScoped<IRepository<Person>, MockPersonRepo>();
+            services.AddScoped<IRepository<Product>, MockProductRepo>();
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
             services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
@@ -101,7 +100,7 @@ namespace MyApi
             app.UseAuthentication();
             app.UseAuthorization();
 
-            app.UseMiddleware<ExceptionMiddleware>();
+            //app.UseMiddleware<ExceptionMiddleware>();
 
 
             app.UseEndpoints(endpoints =>

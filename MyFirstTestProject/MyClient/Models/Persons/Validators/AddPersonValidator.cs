@@ -6,6 +6,7 @@ namespace MyClient.Models.Persons.Validators
     {
         public AddPersonValidator()
         {
+            RuleFor(c => c).NotNull();
             RuleFor(c => c.FirstName).NotEmpty();
             RuleFor(c => c.LastName).NotEmpty();
         }
