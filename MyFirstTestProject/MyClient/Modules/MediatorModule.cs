@@ -1,6 +1,7 @@
 ﻿using MediatR.Pipeline;
 using MediatR;
 using Autofac;
+using FluentValidation;
 
 namespace MyClient.Modules
 {
@@ -30,6 +31,7 @@ namespace MyClient.Modules
             {
                 typeof(IRequestHandler<,>),
                 typeof(INotificationHandler<>),
+                typeof(IValidator<>),
             };
 
             foreach (var mediatorOpenType in mediatorOpenTypes)

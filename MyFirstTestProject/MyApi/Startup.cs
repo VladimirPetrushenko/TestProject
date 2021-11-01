@@ -11,6 +11,7 @@ using Microsoft.Extensions.Hosting;
 using MyApi.ApiKey.Authentication;
 using MyApi.ApiKey.Authorization;
 using MyApi.Configuration;
+using MyClient.Modules;
 using MyModelAndDatabase.Data.Context;
 using MyModelAndDatabase.Data.Interfaces;
 using MyModelAndDatabase.Data.Repositories;
@@ -69,22 +70,9 @@ namespace MyApi
                 {
                     options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
                     options.JsonSerializerOptions.IgnoreNullValues = true;
-                }).AddFluentValidation();
+                });
 
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
-
-            foreach (var implementationType in typeof(Startup)
-            .Assembly
-            .ExportedTypes
-            .Where(t => t.IsClass && !t.IsAbstract))
-            {
-                foreach (var serviceType in implementationType
-                    .GetInterfaces()
-                    .Where(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IValidator<>)))
-                {
-                    services.Add(new ServiceDescriptor(serviceType, implementationType, ServiceLifetime.Transient));
-                }
-            }
 
             services.AddCors(options =>
             {
