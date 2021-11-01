@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using MyClient.Models.Persons.Validators;
 using MyModelAndDatabase.Data.Interfaces;
 using MyModelAndDatabase.Models;
 
@@ -9,9 +10,8 @@ namespace MyClient.Models.Products.Validators
         private readonly IRepository<Product> _repository;
         public DeleteProductValidator(IRepository<Product> repository)
         {
-            RuleFor(c => c).NotNull();
             _repository = repository;
-            RuleFor(p => p.Id).NotEmpty().WithMessage("Correct id").Must(ProductExist).WithMessage("Product is not found");
+            RuleFor(p => p.Id).ShouldNotBeNegative().Must(ProductExist).WithMessage("Product is not found");
         }
 
         private bool ProductExist(int id)

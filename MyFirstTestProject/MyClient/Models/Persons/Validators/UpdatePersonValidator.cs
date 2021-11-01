@@ -6,14 +6,13 @@ namespace MyClient.Models.Persons.Validators
 {
     public class UpdatePersonValidator : AbstractValidator<UpdatePerson>
     {
-        private readonly IRepository<Product> _repository;
-        public UpdatePersonValidator(IRepository<Product> repository)
+        private readonly IRepository<Person> _repository;
+        public UpdatePersonValidator(IRepository<Person> repository)
         {
-            RuleFor(c => c).NotNull();
             _repository = repository;
-            RuleFor(p => p.Id).NotEmpty().WithMessage("Correct id").Must(ProductExist).WithMessage("Product is not found");
-            RuleFor(p => p.FirstName).NotEmpty();
-            RuleFor(p => p.LastName).NotEmpty();            
+            RuleFor(p => p.Id).ShouldNotBeNegative().Must(ProductExist).WithMessage("Product is not found");
+            RuleFor(p => p.FirstName).NotEmpty().WithMessage("First Name is not specified");
+            RuleFor(p => p.LastName).NotEmpty().WithMessage("Last Name is not specified");            
         }
 
         private bool ProductExist(int id)

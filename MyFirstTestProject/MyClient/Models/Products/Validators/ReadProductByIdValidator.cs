@@ -2,6 +2,7 @@
 using MyModelAndDatabase.Data.Interfaces;
 using MyModelAndDatabase.Models;
 using MyClient.Models.Products;
+using MyClient.Models.Persons.Validators;
 
 namespace MyClient.Models.Products.Validators
 {
@@ -10,9 +11,8 @@ namespace MyClient.Models.Products.Validators
         private readonly IRepository<Product> _repository;
         public ReadProductByIdValidator(IRepository<Product> repository)
         {
-            RuleFor(c => c).NotNull();
             _repository = repository;
-            RuleFor(p => p.Id).NotEmpty().WithMessage("Correct id").Must(ProductExist).WithMessage("Product is not found");
+            RuleFor(p => p.Id).ShouldNotBeNegative().Must(ProductExist).WithMessage("Product is not found");
         }
         
         private bool ProductExist(int id)

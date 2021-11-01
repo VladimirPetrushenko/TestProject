@@ -9,9 +9,8 @@ namespace MyClient.Models.Persons.Validators
         private readonly IRepository<Person> _repository;
         public DeletePersonValidator(IRepository<Person> repository)
         {
-            RuleFor(c => c).NotNull();
             _repository = repository;
-            RuleFor(p => p.Id).NotEmpty().WithMessage("Correct id").Must(ProductExist).WithMessage("Product is not found");
+            RuleFor(p => p.Id).ShouldNotBeNegative().Must(ProductExist).WithMessage("Person is not found");
         }
 
         private bool ProductExist(int id)

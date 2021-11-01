@@ -13,9 +13,9 @@ namespace MyModelAndDatabase.Data
         {
             Products = new List<Product>
             {
-                new Product { Id = 0, Alias = "first product", Name = "milk", Type = ProductType.Main },
-                new Product { Id = 1, Alias = "Hot chocolate", Name = "Kakao", Type = ProductType.Main },
-                new Product { Id = 2, Alias = "Chocolate and nuts", Name = "Nuts", Type = ProductType.Others },
+                new Product { Id = 1, Alias = "first product", Name = "milk", Type = ProductType.Main },
+                new Product { Id = 2, Alias = "Hot chocolate", Name = "Kakao", Type = ProductType.Main },
+                new Product { Id = 3, Alias = "Chocolate and nuts", Name = "Nuts", Type = ProductType.Others },
             };
             
         }

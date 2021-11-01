@@ -6,9 +6,8 @@ namespace MyClient.Models.Persons.Validators
     {
         public AddPersonValidator()
         {
-            RuleFor(c => c).NotNull();
-            RuleFor(c => c.FirstName).NotEmpty();
-            RuleFor(c => c.LastName).NotEmpty();
+            RuleFor(c => c.FirstName).NotEmpty().WithMessage("First Name is not specified");
+            RuleFor(c => c.LastName).NotEmpty().WithMessage("First Name is not specified");
         }
     }
 }

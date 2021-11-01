@@ -6,7 +6,6 @@ namespace MyClient.Models.Products.Validators
     {
         public AddProductValidator()
         {
-            RuleFor(c => c).NotNull();
             RuleFor(c => c.Name).NotEmpty();
             RuleFor(c => c.Alias).NotEmpty();
             RuleFor(c => c.Type).NotEqual(MyModelAndDatabase.Models.ProductType.None);
