@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using MyClient.ValidatorExtensions;
 using MyModelAndDatabase.Data.Interfaces;
 using MyModelAndDatabase.Models;
 

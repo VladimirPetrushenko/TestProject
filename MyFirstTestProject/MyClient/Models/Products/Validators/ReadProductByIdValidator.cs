@@ -1,8 +1,7 @@
 ﻿using FluentValidation;
+using MyClient.ValidatorExtensions;
 using MyModelAndDatabase.Data.Interfaces;
 using MyModelAndDatabase.Models;
-using MyClient.Models.Products;
-using MyClient.Models.Persons.Validators;
 
 namespace MyClient.Models.Products.Validators
 {

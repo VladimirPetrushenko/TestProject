@@ -1,17 +1,17 @@
 ﻿using FluentValidation;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace MyClient.Models.Persons.Validators
+namespace MyClient.ValidatorExtensions
 {
     public static class ValidatorExtension
     {
         public static IRuleBuilderOptions<T, int> ShouldNotBeNegative<T>(this IRuleBuilder<T, int> rule)
         {
             return rule.Must(IsNotNegative).WithMessage("Id is negative");
+        }
+
+        public static IRuleBuilderOptions<T, string> MustHasLengthBetween<T>(this IRuleBuilder<T, string> rule, int min, int max)
+        {
+            return rule.Length(min, max).WithMessage("Too long string");
         }
 
         private static bool IsNotNegative(int id)

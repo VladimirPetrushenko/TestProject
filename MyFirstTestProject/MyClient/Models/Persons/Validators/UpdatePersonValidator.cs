@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using MyClient.ValidatorExtensions;
 using MyModelAndDatabase.Data.Interfaces;
 using MyModelAndDatabase.Models;
 
@@ -11,8 +12,8 @@ namespace MyClient.Models.Persons.Validators
         {
             _repository = repository;
             RuleFor(p => p.Id).ShouldNotBeNegative().Must(ProductExist).WithMessage("Product is not found");
-            RuleFor(p => p.FirstName).NotEmpty().WithMessage("First Name is not specified");
-            RuleFor(p => p.LastName).NotEmpty().WithMessage("Last Name is not specified");            
+            RuleFor(p => p.FirstName).NotEmpty().WithMessage("First Name is not specified").MustHasLengthBetween(1, 20);
+            RuleFor(p => p.LastName).NotEmpty().WithMessage("Last Name is not specified").MustHasLengthBetween(1, 20);            
         }
 
         private bool ProductExist(int id)
