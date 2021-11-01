@@ -3,6 +3,8 @@ using MyModelAndDatabase.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace MyModelAndDatabase.Data
 {
@@ -14,9 +16,14 @@ namespace MyModelAndDatabase.Data
         {
             People = new()
             {
-                new Person { Id = 1, FirstName = "Vladimir", LastName = "Petrushenko" },
-                new Person { Id = 2, FirstName = "Igor", LastName = "Ivanov" },
-                new Person { Id = 3, FirstName = "Ivan", LastName = "Britva" },
+                new Person { Id = 1, FirstName = "Vladimir", LastName = "Petrushenko", IsActive = true },
+                new Person { Id = 2, FirstName = "Igor", LastName = "Ivanov", Email = "someemail@mail.ru", IsActive = true },
+                new Person { Id = 3, FirstName = "Ivan", LastName = "Britva", IsActive = true, IsBlock = true },
+                new Person { Id = 4, FirstName = "Servei", LastName = "Britva", IsActive = false, IsBlock = true },
+                new Person { Id = 5, FirstName = "Marina", LastName = "Britva", IsActive = true, IsBlock = false },
+                new Person { Id = 6, FirstName = "Hanna", LastName = "Britva", IsActive = true, IsBlock = false },
+                new Person { Id = 7, FirstName = "Anton", LastName = "Britva", IsActive = true, IsBlock = false },
+                new Person { Id = 8, FirstName = "Boris", LastName = "Britva", IsActive = true, IsBlock = false },
             };
         }
 
@@ -43,9 +50,9 @@ namespace MyModelAndDatabase.Data
             return People;
         }
 
-        public Person GetByID(int id)
+        public Task<Person> GetByID(int id)
         {
-            return People.Where(x => x.Id == id).FirstOrDefault();
+            return Task.FromResult(People.Where(x => x.Id == id).FirstOrDefault());
         }
 
         public void UpdateItem(Person person)
@@ -53,14 +60,14 @@ namespace MyModelAndDatabase.Data
             //nothing
         }
 
-        public bool SaveChanges()
+        public Task<bool> SaveChanges()
         {
-            return true;
+            return Task.FromResult(true);
         }
 
-        public bool ItemExists(int id)
+        public Task<bool> ItemExists(int id)
         {
-            return People.Any(x => x.Id == id);
+            return Task.FromResult(People.Any(x => x.Id == id));
         }
     }
 }

@@ -16,6 +16,12 @@ namespace MyModelAndDatabase.Models
         [MaxLength(20)]
         public string LastName { get; set; }
 
+        public string Email { get; set; }
+
+        public bool IsActive { get; set; }
+
+        public bool IsBlock { get; set; }
+
         public object Clone()
         {
             return new Person { Id = this.Id, FirstName = this.FirstName, LastName = this.LastName };

@@ -19,14 +19,14 @@ namespace MyClient.Models.Products
                 _repository = repository;
             }
 
-            public Task<Product> Handle(DeleteProduct request, CancellationToken cancellationToken)
+            public async Task<Product> Handle(DeleteProduct request, CancellationToken cancellationToken)
             {
-                var product = _repository.GetByID(request.Id);
+                var product = await _repository.GetByID(request.Id);
 
                 _repository.DeleteItem(product);
-                _repository.SaveChanges();
+                await _repository.SaveChanges();
 
-                return Task.FromResult(product);
+                return product;
             }
         }
     }

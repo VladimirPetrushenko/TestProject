@@ -11,14 +11,29 @@ namespace MyClient.Models.Persons.Validators
         public UpdatePersonValidator(IRepository<Person> repository)
         {
             _repository = repository;
-            RuleFor(p => p.Id).ShouldNotBeNegative().Must(ProductExist).WithMessage("Product is not found");
-            RuleFor(p => p.FirstName).NotEmpty().WithMessage("First Name is not specified").MustHasLengthBetween(1, 20);
-            RuleFor(p => p.LastName).NotEmpty().WithMessage("Last Name is not specified").MustHasLengthBetween(1, 20);            
+            RuleFor(p => p.Id)
+                .ShouldNotBeNegative()
+                .Must(PersonExist).WithMessage("Person is not found")
+                .DependentRules(() =>
+                {
+                    RuleFor(p => p.Id).Must(PersonIsActive).WithMessage("Person is not active yet")
+                    .DependentRules(() =>
+                    {
+                        RuleFor(p => p.FirstName).NotEmpty().WithMessage("First Name is not specified").MustHasLengthBetween(1, 20);
+                        RuleFor(p => p.LastName).NotEmpty().WithMessage("Last Name is not specified").MustHasLengthBetween(1, 20);
+                    });
+                });
+
         }
 
-        private bool ProductExist(int id)
+        private bool PersonExist(int id)
         {
-            return _repository.ItemExists(id);
+            return _repository.ItemExists(id).Result;
+        }
+
+        private bool PersonIsActive(int id)
+        {
+            return _repository.GetByID(id).Result.IsActive;
         }
     }
 }

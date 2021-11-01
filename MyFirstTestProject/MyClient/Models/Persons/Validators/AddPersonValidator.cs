@@ -7,8 +7,8 @@ namespace MyClient.Models.Persons.Validators
     {
         public AddPersonValidator()
         {
-            RuleFor(c => c.FirstName).NotEmpty().WithMessage("First Name is not specified").MustHasLengthBetween(1,20);
-            RuleFor(c => c.LastName).NotEmpty().WithMessage("First Name is not specified").MustHasLengthBetween(1, 20);
+            RuleFor(p => p.FirstName).NotEmpty().WithMessage("First Name is not specified").MustHasLengthBetween(1, 20);
+            RuleFor(p => p.LastName).NotEmpty().WithMessage("First Name is not specified").MustHasLengthBetween(1, 20);
         }
     }
 }

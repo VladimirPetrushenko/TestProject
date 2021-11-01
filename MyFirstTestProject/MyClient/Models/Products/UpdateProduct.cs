@@ -22,18 +22,18 @@ namespace MyClient.Models.Products
                 _repository = repository;
             }
 
-            public Task<Product> Handle(UpdateProduct request, CancellationToken cancellationToken)
+            public async Task<Product> Handle(UpdateProduct request, CancellationToken cancellationToken)
             {
-                var product = _repository.GetByID(request.Id);
+                var product = await _repository.GetByID(request.Id);
 
                 product.Alias = request.Alias;
                 product.Name = request.Name;
                 product.Type = request.Type;
 
                 _repository.UpdateItem(product);
-                _repository.SaveChanges();
+                await _repository.SaveChanges();
 
-                return Task.FromResult(product);
+                return product;
             }
         }
     }

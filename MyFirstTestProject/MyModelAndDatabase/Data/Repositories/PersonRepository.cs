@@ -1,9 +1,11 @@
-﻿using MyModelAndDatabase.Data.Context;
+﻿using Microsoft.EntityFrameworkCore;
+using MyModelAndDatabase.Data.Context;
 using MyModelAndDatabase.Data.Interfaces;
 using MyModelAndDatabase.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace MyModelAndDatabase.Data.Repositories
 {
@@ -18,19 +20,11 @@ namespace MyModelAndDatabase.Data.Repositories
 
         public void CreateItem(Person person)
         {
-            if (person == null)
-            {
-                throw new ArgumentException(null, nameof(person));
-            }
             _context.People.Add(person);
         }
 
         public void DeleteItem(Person person)
         {
-            if (person == null)
-            {
-                throw new ArgumentException(null, nameof(person));
-            }
             _context.People.Remove(person);
         }
 
@@ -39,14 +33,9 @@ namespace MyModelAndDatabase.Data.Repositories
             return _context.People;
         }
 
-        public Person GetByID(int id)
+        public Task<Person> GetByID(int id)
         {
-            return _context.People.Where(p => p.Id == id).FirstOrDefault();
-        }
-
-        public bool Find(int id)
-        {
-            return _context.People.Any(x => x.Id == id);
+            return _context.People.Where(p => p.Id == id).FirstOrDefaultAsync();
         }
 
         public void UpdateItem(Person person)
@@ -54,14 +43,14 @@ namespace MyModelAndDatabase.Data.Repositories
             //nothing
         }
 
-        public bool SaveChanges()
+        public async Task<bool> SaveChanges()
         {
-            return _context.SaveChanges() >= 0;
+            return await _context.SaveChangesAsync() >= 0;
         }
 
-        public bool ItemExists(int id)
+        public Task<bool> ItemExists(int id)
         {
-            return _context.People.Any(x => x.Id == id);
+            return _context.People.AnyAsync(x => x.Id == id);
         }
     }
 }

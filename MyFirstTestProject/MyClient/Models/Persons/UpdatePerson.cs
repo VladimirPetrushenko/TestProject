@@ -21,16 +21,16 @@ namespace MyClient.Models.Persons
                 _repository = repository;
             }
 
-            public Task<Person> Handle(UpdatePerson request, CancellationToken cancellationToken)
+            public async Task<Person> Handle(UpdatePerson request, CancellationToken cancellationToken)
             {
-                var person = _repository.GetByID(request.Id);
+                var person = await _repository.GetByID(request.Id);
 
                 person.FirstName = request.FirstName;
                 person.LastName = request.LastName;
 
                 _repository.UpdateItem(person);
-                _repository.SaveChanges();
-                return Task.FromResult(person);
+                await _repository.SaveChanges();
+                return person;
             }
         }
     }

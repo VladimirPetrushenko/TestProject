@@ -25,13 +25,13 @@ namespace UnitTestForMyProject
         {
             var validEntity = new MockPersonRepo();
 
-            var person = validEntity.GetByID(1);
+            var person = validEntity.GetByID(1).Result;
 
             person.LastName = "lastName";
 
             validEntity.UpdateItem(person);
 
-            Assert.Equal("lastName", validEntity.GetByID(person.Id).LastName);
+            Assert.Equal("lastName", validEntity.GetByID(person.Id).Result.LastName);
         }
 
         [Theory]
@@ -43,7 +43,7 @@ namespace UnitTestForMyProject
 
             var expected = validEntity.GetAll().Count() - 1;
 
-            validEntity.DeleteItem(validEntity.GetByID(id));
+            validEntity.DeleteItem(validEntity.GetByID(id).Result);
 
             Assert.Equal(expected, validEntity.GetAll().Count());
         }
@@ -55,7 +55,7 @@ namespace UnitTestForMyProject
         {
             var validEntity = new MockPersonRepo();
 
-            var person = validEntity.GetByID(id);
+            var person = validEntity.GetByID(id).Result;
 
             Assert.Throws<ArgumentException>(nameof(person), ()=>validEntity.DeleteItem(person));
         }

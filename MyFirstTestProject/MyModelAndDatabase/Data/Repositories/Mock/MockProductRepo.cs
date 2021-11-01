@@ -3,6 +3,7 @@ using MyModelAndDatabase.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace MyModelAndDatabase.Data
 {
@@ -42,19 +43,19 @@ namespace MyModelAndDatabase.Data
             return Products;
         }
 
-        public Product GetByID(int id)
+        public Task<Product> GetByID(int id)
         {
-            return Products.Where(x => x.Id == id).FirstOrDefault();
+            return Task.FromResult(Products.Where(x => x.Id == id).FirstOrDefault());
         }
 
-        public bool ItemExists(int id)
+        public Task<bool> ItemExists(int id)
         {
-            return Products.Any(x => x.Id == id);
+            return Task.FromResult(Products.Any(x => x.Id == id));
         }
 
-        public bool SaveChanges()
+        public Task<bool> SaveChanges()
         {
-            return true;
+            return Task.FromResult(true);
         }
 
         public void UpdateItem(Product product)

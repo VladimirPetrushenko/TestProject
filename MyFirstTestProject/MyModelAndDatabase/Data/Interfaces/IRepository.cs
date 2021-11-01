@@ -1,15 +1,16 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace MyModelAndDatabase.Data.Interfaces
 {
     public interface IRepository<T>
     {
         IEnumerable<T> GetAll();
-        T GetByID(int id);
+        Task<T> GetByID(int id);
         void CreateItem(T item);
         void UpdateItem(T item);
         void DeleteItem(T item);
-        bool SaveChanges();
-        bool ItemExists(int id);
+        Task<bool> SaveChanges();
+        Task<bool> ItemExists(int id);
     }
 }

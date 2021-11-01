@@ -10,13 +10,25 @@ namespace MyClient.Models.Persons.Validators
         private readonly IRepository<Person> _repository;
         public DeletePersonValidator(IRepository<Person> repository)
         {
+            CascadeMode = CascadeMode.StopOnFirstFailure;
             _repository = repository;
-            RuleFor(p => p.Id).ShouldNotBeNegative().Must(ProductExist).WithMessage("Person is not found");
+            RuleFor(p => p.Id)
+                .ShouldNotBeNegative()
+                .Must(PersonExist).WithMessage("Person is not found")
+                .DependentRules(() =>
+                {
+                    RuleFor(p => p.Id).Must(PersonIsActive).WithMessage("Person is not active yet");
+                });
         }
 
-        private bool ProductExist(int id)
+        private bool PersonExist(int id)
         {
-            return _repository.ItemExists(id);
+            return _repository.ItemExists(id).Result;
+        }
+
+        private bool PersonIsActive(int id)
+        {
+            return _repository.GetByID(id).Result.IsActive;
         }
     }
 }

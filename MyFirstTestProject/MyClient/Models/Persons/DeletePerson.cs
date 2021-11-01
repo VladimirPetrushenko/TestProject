@@ -9,6 +9,7 @@ namespace MyClient.Models.Persons
     public class DeletePerson : IRequest<Person>
     {
         public int Id { get; set; }
+        public bool IsActive { get; set; }
 
         public class DeletePersonHandler : IRequestHandler<DeletePerson, Person>
         {
@@ -19,13 +20,14 @@ namespace MyClient.Models.Persons
                 _repository = repository;
             }
 
-            public Task<Person> Handle(DeletePerson request, CancellationToken cancellationToken)
+            public async Task<Person> Handle(DeletePerson request, CancellationToken cancellationToken)
             {
-                var person = _repository.GetByID(request.Id);
+                var person = await _repository.GetByID(request.Id);
 
                 _repository.DeleteItem(person);
-                _repository.SaveChanges();
-                return Task.FromResult(person);
+                await _repository.SaveChanges();
+
+                return person;
             }
         }
     }

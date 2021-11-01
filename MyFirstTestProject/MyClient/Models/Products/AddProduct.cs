@@ -21,7 +21,7 @@ namespace MyClient.Models.Products
                 _repository = repository;
             }
 
-            public Task<Product> Handle(AddProduct request, CancellationToken cancellationToken)
+            public async Task<Product> Handle(AddProduct request, CancellationToken cancellationToken)
             {
                 var product = new Product
                 {
@@ -31,8 +31,8 @@ namespace MyClient.Models.Products
                 };
 
                 _repository.CreateItem(product);
-                _repository.SaveChanges();
-                return Task.FromResult(product);
+                await _repository.SaveChanges();
+                return product;
             }
         }
     }

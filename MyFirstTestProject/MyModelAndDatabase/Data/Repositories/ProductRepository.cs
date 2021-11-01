@@ -1,9 +1,11 @@
-﻿using MyModelAndDatabase.Data.Context;
+﻿using Microsoft.EntityFrameworkCore;
+using MyModelAndDatabase.Data.Context;
 using MyModelAndDatabase.Data.Interfaces;
 using MyModelAndDatabase.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace MyModelAndDatabase.Data.Repositories
 {
@@ -23,11 +25,6 @@ namespace MyModelAndDatabase.Data.Repositories
 
         public void DeleteItem(Product product)
         {
-            if (product == null)
-            {
-                throw new ArgumentException(null, nameof(product));
-            }
-
             _context.Products.Remove(product);
         }
 
@@ -36,19 +33,19 @@ namespace MyModelAndDatabase.Data.Repositories
             return _context.Products;
         }
 
-        public Product GetByID(int id)
+        public Task<Product> GetByID(int id)
         {
-            return _context.Products.Where(p => p.Id == id).FirstOrDefault();
+            return _context.Products.Where(p => p.Id == id).FirstOrDefaultAsync();
         }
 
-        public bool ItemExists(int id)
+        public Task<bool> ItemExists(int id)
         {
-            return _context.Products.Any(x => x.Id == id);
+            return _context.Products.AnyAsync(x => x.Id == id);
         }
 
-        public bool SaveChanges()
+        public async Task<bool> SaveChanges()
         {
-            return _context.SaveChanges() >= 0;
+            return await _context.SaveChangesAsync() >= 0;
         }
 
         public void UpdateItem(Product product)

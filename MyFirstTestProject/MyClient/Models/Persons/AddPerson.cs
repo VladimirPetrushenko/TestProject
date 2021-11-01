@@ -10,6 +10,8 @@ namespace MyClient.Models.Persons
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
+        public string Email { get; set; }
+        public bool IsActive { get; set; }
 
         public class AddPersonHandler : IRequestHandler<AddPerson, Person>
         {
@@ -20,18 +22,20 @@ namespace MyClient.Models.Persons
                 _repository = repository;
             }
 
-            public Task<Person> Handle(AddPerson request, CancellationToken cancellationToken)
+            public async Task<Person> Handle(AddPerson request, CancellationToken cancellationToken)
             {
                 var person = new Person
                 {
                     FirstName = request.FirstName,
-                    LastName = request.LastName
+                    LastName = request.LastName,
+                    IsActive = request.IsActive,
+                    Email = request.Email,
                 };
 
                 _repository.CreateItem(person);
-                _repository.SaveChanges();
+                await _repository.SaveChanges();
 
-                return Task.FromResult(person);
+                return person;
             }
         }
     }

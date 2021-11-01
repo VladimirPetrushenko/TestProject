@@ -19,7 +19,7 @@ namespace MyClient.Models.Products.Validators
 
         private bool ProductExist(int id)
         {
-            return _repository.ItemExists(id);
+            return _repository.ItemExists(id).Result;
         }
     }
 }

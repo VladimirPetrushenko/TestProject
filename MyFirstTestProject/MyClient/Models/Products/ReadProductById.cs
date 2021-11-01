@@ -19,11 +19,11 @@ namespace MyClient.Models.Products
                 _repository = repository;
             }
 
-            public Task<Product> Handle(ReadProductById request, CancellationToken cancellationToken)
+            public async Task<Product> Handle(ReadProductById request, CancellationToken cancellationToken)
             {
-                var product = _repository.GetByID(request.Id);
+                var product = await _repository.GetByID(request.Id);
 
-                return Task.FromResult(product);
+                return product;
             }
         }
     }

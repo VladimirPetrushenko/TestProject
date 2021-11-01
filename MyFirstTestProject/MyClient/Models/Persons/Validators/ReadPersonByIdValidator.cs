@@ -11,12 +11,19 @@ namespace MyClient.Models.Persons.Validators
         public ReadPersonByIdValidator(IRepository<Person> repository)
         {
             _repository = repository;
-            RuleFor(p => p.Id).ShouldNotBeNegative().WithMessage("Id is negative").Must(ProductExist).WithMessage("Person is not found");
+            RuleFor(p => p.Id)
+                .ShouldNotBeNegative().WithMessage("Id is negative")
+                .Must(PersonExist).WithMessage("Person is not found")
+                .DependentRules(() =>
+                {
+                    RuleFor(p => p.IsBlock).NotEqual(true).WithMessage("Person was blocked");
+                });
+
         }
         
-        private bool ProductExist(int id)
+        private bool PersonExist(int id)
         {
-            return _repository.ItemExists(id);
+            return _repository.ItemExists(id).Result;
         }
     }
 }
