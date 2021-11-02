@@ -11,7 +11,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyModelAndDatabase", "MyMod
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnitTestForMyProject", "UnitTestForMyProject\UnitTestForMyProject.csproj", "{CB64E350-FF02-4518-826E-5746142460F3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyClient", "MyClient\MyClient.csproj", "{AEDCAF74-0C6B-4650-A9D5-7F71F72A534A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyClient", "MyClient\MyClient.csproj", "{AEDCAF74-0C6B-4650-A9D5-7F71F72A534A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntegrationTestForMyApi", "IntegrationTestForMyApi\IntegrationTestForMyApi.csproj", "{31C10A27-9436-44AE-ADF1-9D23ED02E854}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{AEDCAF74-0C6B-4650-A9D5-7F71F72A534A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AEDCAF74-0C6B-4650-A9D5-7F71F72A534A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AEDCAF74-0C6B-4650-A9D5-7F71F72A534A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{31C10A27-9436-44AE-ADF1-9D23ED02E854}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{31C10A27-9436-44AE-ADF1-9D23ED02E854}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{31C10A27-9436-44AE-ADF1-9D23ED02E854}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{31C10A27-9436-44AE-ADF1-9D23ED02E854}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

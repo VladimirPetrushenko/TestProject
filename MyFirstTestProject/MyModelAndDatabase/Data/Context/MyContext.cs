@@ -8,7 +8,6 @@ namespace MyModelAndDatabase.Data.Context
         public MyContext(DbContextOptions<MyContext> options)
             :base(options)
         {
-            Database.EnsureCreated();
         }
 
         public DbSet<Person> People { get; set; }
