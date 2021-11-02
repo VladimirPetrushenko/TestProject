@@ -15,12 +15,12 @@ namespace MyClient.DataAccess
         Task<List<Product>> GetProducts();
 
         [Post("/Product/")]
-        Task CreateProduct([Body] AddProduct product);
+        Task<Product> CreateProduct([Body] AddProduct product);
 
         [Put("/Product/")]
         Task<Product> UpdateProduct([Body] UpdateProduct product);
 
         [Delete("/Product/")]
-        Task<List<Product>> DeleteProducts([Body] DeleteProduct  product);
+        Task<Product> DeleteProducts([Body] DeleteProduct  product);
     }
 }

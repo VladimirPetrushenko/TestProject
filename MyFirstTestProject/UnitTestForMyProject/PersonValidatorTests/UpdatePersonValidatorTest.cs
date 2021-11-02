@@ -12,20 +12,25 @@ namespace UnitTestForMyProject.PersonValidatorTests
 {
     public class UpdatePersonValidatorTest
     {
-        private readonly UpdatePersonValidator _validator;
+        private UpdatePersonValidator _validator;
         private readonly MockPersonRepo _repository;
+        private readonly Fixture fixture;
+
+        public const int RecordsCount = 30;
+        public const int PeopleCount = 10000;
 
         public UpdatePersonValidatorTest()
         {
-            _repository = new MockPersonRepo();
+            fixture = new Fixture { RepeatCount = RecordsCount };
+            _repository = fixture.Create<MockPersonRepo>();
             _validator = new UpdatePersonValidator(_repository);
         }
 
         [Theory, AutoData]
-        public void UpdatePersonTest(Generator<UpdatePerson> readPeopleArray)
+        public void UpdatePersonTest(Generator<UpdatePerson> updatePeopleArray)
         {
-            var count = 10000;
-            var people = readPeopleArray.Take(count).ToList();
+            var people = updatePeopleArray.Take(PeopleCount).ToList();
+
             foreach (var person in people)
             {
                 var result = _validator.TestValidate(person);
@@ -47,7 +52,7 @@ namespace UnitTestForMyProject.PersonValidatorTests
             }
         }
 
-        private void CheckingFirstName(TestValidationResult<UpdatePerson> result, UpdatePerson person)
+        private static void CheckingFirstName(TestValidationResult<UpdatePerson> result, UpdatePerson person)
         {
             if(string.IsNullOrEmpty(person.FirstName) || person.FirstName.Length > 20)
                 result.ShouldHaveValidationErrorFor(person => person.FirstName);
@@ -55,7 +60,7 @@ namespace UnitTestForMyProject.PersonValidatorTests
                 result.ShouldNotHaveValidationErrorFor(person => person.FirstName);
         }
 
-        private void CheckingLastName(TestValidationResult<UpdatePerson> result, UpdatePerson person)
+        private static void CheckingLastName(TestValidationResult<UpdatePerson> result, UpdatePerson person)
         {
             if (string.IsNullOrEmpty(person.LastName) || person.LastName.Length > 20)
                 result.ShouldHaveValidationErrorFor(person => person.LastName);

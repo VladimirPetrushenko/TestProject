@@ -1,7 +1,11 @@
-﻿using FluentValidation.TestHelper;
+﻿using AutoFixture;
+using AutoFixture.Xunit2;
+using FluentValidation.TestHelper;
 using MyClient.Models.Persons;
 using MyClient.Models.Persons.Validators;
+using MyModelAndDatabase.Data;
 using System;
+using System.Linq;
 using Xunit;
 
 namespace UnitTestForMyProject.PersonValidatorTests
@@ -15,70 +19,33 @@ namespace UnitTestForMyProject.PersonValidatorTests
             _validator = new AddPersonValidator();
         }
 
-        [Fact]
-        public void AddNewPerson_ShouldWork()
+        [Theory, AutoData]
+        public void AddPersonTest(Generator<AddPerson> addPeopleArray)
         {
-            var person = new AddPerson { FirstName = "Valeriya", LastName = "Mayakova" };
-
-            var result = _validator.TestValidate(person);
-
-            result.ShouldNotHaveValidationErrorFor(person => person.FirstName);
-            result.ShouldNotHaveValidationErrorFor(person => person.LastName);
+            var count = 10000;
+            var people = addPeopleArray.Take(count).ToList();
+            foreach (var person in people)
+            {
+                var result = _validator.TestValidate(person);
+                CheckingFirstName(result, person);
+                CheckingLastName(result, person);
+            }
         }
 
-        [Fact]
-        public void ShouldHaveErrorWhenFirstNameIsTooLong()
+        private static void CheckingFirstName(TestValidationResult<AddPerson> result, AddPerson person)
         {
-            var person = new AddPerson { FirstName = "This is string more than 20 symbols", LastName = "Mayakova" };
-
-            var result = _validator.TestValidate(person);
-
-            result.ShouldHaveValidationErrorFor(person => person.FirstName);
-            result.ShouldNotHaveValidationErrorFor(person => person.LastName);
+            if (string.IsNullOrEmpty(person.FirstName) || person.FirstName.Length > 20)
+                result.ShouldHaveValidationErrorFor(person => person.FirstName);
+            else
+                result.ShouldNotHaveValidationErrorFor(person => person.FirstName);
         }
 
-        [Fact]
-        public void ShouldHaveErrorWhenLastNameIsTooLong()
+        private static void CheckingLastName(TestValidationResult<AddPerson> result, AddPerson person)
         {
-            var person = new AddPerson { FirstName = "Valeriya", LastName = "This is string more than 20 symbols" };
-
-            var result = _validator.TestValidate(person);
-
-            result.ShouldNotHaveValidationErrorFor(person => person.FirstName);
-            result.ShouldHaveValidationErrorFor(person => person.LastName);
-        }
-
-        [Fact]
-        public void ShouldHaveErrorWhenFirstNameIsNullOrEmpty()
-        {
-            var person = new AddPerson { FirstName = null, LastName = "Mayakova" };
-
-            var result = _validator.TestValidate(person);
-
-            result.ShouldHaveValidationErrorFor(person => person.FirstName);
-            result.ShouldNotHaveValidationErrorFor(person => person.LastName);
-        }
-
-        [Fact]
-        public void ShouldHaveErrorWhenLastNameIsNullOrEmpty()
-        {
-            var person = new AddPerson { FirstName = "Valeriya", LastName = null };
-
-            var result = _validator.TestValidate(person);
-
-            result.ShouldNotHaveValidationErrorFor(person => person.FirstName);
-            result.ShouldHaveValidationErrorFor(person => person.LastName);
-        }
-
-        [Fact]
-        public void ShouldHaveErrorWhenLastNameAndFirstNameAreNullOrEmpty()
-        {
-            var person = new AddPerson();
-
-            var result = _validator.TestValidate(person);
-
-            result.ShouldHaveValidationErrorFor(person => person.FirstName);
-            result.ShouldHaveValidationErrorFor(person => person.LastName);
+            if (string.IsNullOrEmpty(person.LastName) || person.LastName.Length > 20)
+                result.ShouldHaveValidationErrorFor(person => person.LastName);
+            else
+                result.ShouldNotHaveValidationErrorFor(person => person.LastName);
         }
     }
 }

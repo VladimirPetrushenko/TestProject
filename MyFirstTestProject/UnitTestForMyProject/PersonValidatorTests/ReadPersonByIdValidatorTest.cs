@@ -12,28 +12,32 @@ namespace UnitTestForMyProject.PersonValidatorTests
 {
     public class ReadPersonByIdValidatorTest
     {
-        private readonly ReadPersonByIdValidator _validator;
-        private readonly MockPersonRepo _repository;
+        public const int RecordsCount = 30;
+        public const int PeopleCount = 10000;
+
+        private ReadPersonByIdValidator _validator;
+        private readonly Fixture fixture;
 
         public ReadPersonByIdValidatorTest()
         {
-            _repository = new MockPersonRepo();
-            _validator = new ReadPersonByIdValidator(_repository);
+            fixture = new Fixture { RepeatCount = RecordsCount };
         }
-
+        
         [Theory, AutoData]
         public void ReadPersonByIdTest(Generator<ReadPersonById> readPeopleArray)
         {
-            var count = 100;
-            var people = readPeopleArray.Take(count).ToList();
+            var people = readPeopleArray.Take(PeopleCount).ToList();
+            var repository = fixture.Create<MockPersonRepo>();
+
+            _validator = new ReadPersonByIdValidator(repository);
             foreach (var person in people)
             {
                 var result = _validator.TestValidate(person);
-                if (_repository.ItemExists(person.Id).Result && !person.IsBlock)
+                if (repository.ItemExists(person.Id).Result && !person.IsBlock)
                 {
                     result.ShouldNotHaveValidationErrorFor(person => person.Id);
                 }
-                else if(_repository.ItemExists(person.Id).Result)
+                else if(repository.ItemExists(person.Id).Result)
                 {
                     result.ShouldHaveValidationErrorFor(person => person.IsBlock);
                 }

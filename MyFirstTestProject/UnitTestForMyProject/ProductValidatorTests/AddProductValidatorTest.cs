@@ -1,8 +1,11 @@
-﻿using FluentValidation.TestHelper;
+﻿using AutoFixture;
+using AutoFixture.Xunit2;
+using FluentValidation.TestHelper;
 using MyClient.Models.Products;
 using MyClient.Models.Products.Validators;
 using MyModelAndDatabase.Models;
 using System;
+using System.Linq;
 using Xunit;
 
 namespace UnitTestForMyProject.ProductValidatorTests
@@ -11,69 +14,49 @@ namespace UnitTestForMyProject.ProductValidatorTests
     {
         private readonly AddProductValidator _validator;
 
+        public const int RecordsCount = 30;
+        public const int ProductCount = 10000;
+
         public AddProductValidatorTest()
         {
             _validator = new AddProductValidator();
         }
 
-        [Fact]
-        public void AddNewProduct_ShouldWork()
+        [Theory, AutoData]
+        public void AddProductTest(Generator<AddProduct> addProductArray)
         {
-            var product = new AddProduct { Alias = "Milk", Name = "Saw product", Type = ProductType.Main };
-
-            var result = _validator.TestValidate(product);
-
-            result.ShouldNotHaveValidationErrorFor(Product => Product.Alias);
-            result.ShouldNotHaveValidationErrorFor(Product => Product.Name);
-            result.ShouldNotHaveValidationErrorFor(Product => Product.Type);
+            var products = addProductArray.Take(ProductCount).ToList();
+            foreach (var product in products)
+            {
+                var result = _validator.TestValidate(product);
+                CheckingAlias(result, product);
+                CheckingName(result, product);
+                CheckingType(result, product);
+            }
         }
 
-        [Fact]
-        public void ShouldHaveErrorWhenAliasIsNullOrEmpty()
+        private static void CheckingAlias(TestValidationResult<AddProduct> result, AddProduct product)
         {
-            var product = new AddProduct { Alias = null, Name = "Saw product", Type = ProductType.Main };
-
-            var result = _validator.TestValidate(product);
-
-            result.ShouldHaveValidationErrorFor(Product => Product.Alias);
-            result.ShouldNotHaveValidationErrorFor(Product => Product.Name);
-            result.ShouldNotHaveValidationErrorFor(Product => Product.Type);
+            if (string.IsNullOrEmpty(product.Alias))
+                result.ShouldHaveValidationErrorFor(product => product.Alias);
+            else
+                result.ShouldNotHaveValidationErrorFor(product => product.Alias);
         }
 
-        [Fact]
-        public void ShouldHaveErrorWhenNameIsNullOrEmpty()
+        private static void CheckingName(TestValidationResult<AddProduct> result, AddProduct product)
         {
-            var product = new AddProduct { Alias = "Milk", Name = null, Type = ProductType.Main };
-
-            var result = _validator.TestValidate(product);
-
-            result.ShouldNotHaveValidationErrorFor(Product => Product.Alias);
-            result.ShouldHaveValidationErrorFor(Product => Product.Name);
-            result.ShouldNotHaveValidationErrorFor(Product => Product.Type);
+            if (string.IsNullOrEmpty(product.Name))
+                result.ShouldHaveValidationErrorFor(product => product.Name);
+            else
+                result.ShouldNotHaveValidationErrorFor(product => product.Name);
         }
 
-        [Fact]
-        public void ShouldHaveErrorWhenTypeIsNone()
+        private static void CheckingType(TestValidationResult<AddProduct> result, AddProduct product)
         {
-            var product = new AddProduct { Alias = "Milk", Name = "Saw product", Type = 0 };
-
-            var result = _validator.TestValidate(product);
-
-            result.ShouldNotHaveValidationErrorFor(Product => Product.Alias);
-            result.ShouldNotHaveValidationErrorFor(Product => Product.Name);
-            result.ShouldHaveValidationErrorFor(Product => Product.Type);
-        }
-
-        [Fact]
-        public void ShouldHaveErrorWhenNameAndAliasAreNullOrEmpty()
-        {
-            var Product = new AddProduct();
-
-            var result = _validator.TestValidate(Product);
-
-            result.ShouldHaveValidationErrorFor(Product => Product.Alias);
-            result.ShouldHaveValidationErrorFor(Product => Product.Name);
-            result.ShouldHaveValidationErrorFor(Product => Product.Type);
+            if (product.Type == ProductType.None)
+                result.ShouldHaveValidationErrorFor(product => product.Type);
+            else
+                result.ShouldNotHaveValidationErrorFor(product => product.Type);
         }
     }
 }

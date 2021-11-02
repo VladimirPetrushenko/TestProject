@@ -1,49 +1,48 @@
-﻿using FluentValidation.TestHelper;
+﻿using AutoFixture;
+using AutoFixture.Xunit2;
+using FluentValidation.TestHelper;
 using MyClient.Models.Products;
 using MyClient.Models.Products.Validators;
 using MyModelAndDatabase.Data;
 using System;
+using System.Linq;
 using Xunit;
 
 namespace UnitTestForMyProject.ProductValidatorTests
 {
     public class DeleteProductValidatorTest
     {
-        private readonly DeleteProductValidator _validator;
+        public const int RecordsCount = 30;
+        public const int ProductCount = 10000;
+
+        private DeleteProductValidator _validator;
+        private readonly Fixture fixture;
 
         public DeleteProductValidatorTest()
         {
-            _validator = new DeleteProductValidator(new MockProductRepo());
+            fixture = new Fixture { RepeatCount = RecordsCount };
         }
 
-        [Fact]
-        public void DeleteProduct_ShouldWork()
+        [Theory, AutoData]
+        public void DeleteProductTest(Generator<DeleteProduct> deleteProductsArray)
         {
-            var product = new DeleteProduct { Id = 1 };
+            var products = deleteProductsArray.Take(ProductCount).ToList();
+            var repo = fixture.Create<MockProductRepo>();
 
-            var result = _validator.TestValidate(product);
+            _validator = new DeleteProductValidator(repo);
 
-            result.ShouldNotHaveValidationErrorFor(Product => Product.Id);
-        }
-
-        [Fact]
-        public void ShouldHaveErrorWhenIdIsNegative()
-        {
-            var product = new DeleteProduct { Id = -1 };
-
-            var result = _validator.TestValidate(product);
-
-            result.ShouldHaveValidationErrorFor(Product => Product.Id);
-        }
-
-        [Fact]
-        public void ShouldHaveErrorWhenIdIsNotFound()
-        {
-            var product = new DeleteProduct { Id = 0 };
-
-            var result = _validator.TestValidate(product);
-
-            result.ShouldHaveValidationErrorFor(Product => Product.Id);
+            foreach (var product in products)
+            {
+                var result = _validator.TestValidate(product);
+                if (repo.ItemExists(product.Id).Result)
+                {
+                    result.ShouldNotHaveValidationErrorFor(product => product.Id);
+                }
+                else
+                {
+                    result.ShouldHaveValidationErrorFor(product => product.Id);
+                }
+            }
         }
     }
 }
