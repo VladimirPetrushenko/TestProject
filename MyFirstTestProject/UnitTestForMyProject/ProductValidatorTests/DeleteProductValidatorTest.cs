@@ -10,7 +10,7 @@ namespace UnitTestForMyProject.ProductValidatorTests
 {
     public class DeleteProductValidatorTest : ProductValidatorTest
     {
-        private DeleteProductValidator _validator;
+        private readonly DeleteProductValidator _validator;
 
         public DeleteProductValidatorTest()
             : base()

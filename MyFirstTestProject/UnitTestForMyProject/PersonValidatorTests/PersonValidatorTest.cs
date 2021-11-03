@@ -16,8 +16,6 @@ namespace UnitTestForMyProject.PersonValidatorTests
         {
             fixture = new Fixture { RepeatCount = RecordsCount };
         }
-        protected static bool PersonNameCheck(string value) => 
-            string.IsNullOrEmpty(value) || value.Length > 20;
 
         protected static void CheckingFirstName<T>(TestValidationResult<T> result, T person)
             where T : IFullName
@@ -44,5 +42,8 @@ namespace UnitTestForMyProject.PersonValidatorTests
                 result.ShouldNotHaveValidationErrorFor(person => person.LastName);
             }
         }
+
+        protected static bool PersonNameCheck(string value) =>
+            string.IsNullOrEmpty(value) || value.Length > 20;
     }
 }

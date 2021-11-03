@@ -10,7 +10,7 @@ namespace UnitTestForMyProject.ProductValidatorTests
 {
     public class ReadProductByIdValidatorTest : ProductValidatorTest
     {
-        private ReadProductByIdValidator _validator;
+        private readonly ReadProductByIdValidator _validator;
 
         public ReadProductByIdValidatorTest()
             : base()

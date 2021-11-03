@@ -24,8 +24,9 @@ namespace IntegrationTestForMyApi.PersonControllerTests
             var person = await response.Content.ReadAsAsync<Person>();
 
             response = await DeletePersonAsync(new DeletePerson { Id = person.Id });
-            CheckResponse(response, HttpStatusCode.OK);
             var returnResult = await response.Content.ReadAsAsync<Person>();
+
+            CheckResponse(response, HttpStatusCode.OK);
             CheckReturnResult(returnResult, person);
         }
 
@@ -42,9 +43,7 @@ namespace IntegrationTestForMyApi.PersonControllerTests
 
             person.IsActive = true;
             await UpdatePersonAsync(CreateUpdatePersonFromPerson(person));
-            
-            response = await DeletePersonAsync(new DeletePerson { Id = person.Id });
-            CheckResponse(response, HttpStatusCode.OK);
+            await EndPersonTest(person);
         }
     }
 }

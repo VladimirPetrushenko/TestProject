@@ -10,7 +10,6 @@ namespace MyClient.Models.Persons.Validators
         private readonly IRepository<Person> _repository;
         public DeletePersonValidator(IRepository<Person> repository)
         {
-            CascadeMode = CascadeMode.StopOnFirstFailure;
             _repository = repository;
             RuleFor(p => p.Id)
                 .ShouldNotBeNegative()

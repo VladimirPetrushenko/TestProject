@@ -13,11 +13,6 @@ namespace IntegrationTestForMyApi.PersonControllerTests
     {
         protected string controllerName = "person/";
 
-        protected static void CheckResponse(HttpResponseMessage response, HttpStatusCode code)
-        {
-            response.StatusCode.Should().Be(code);
-        }
-
         protected static void CheckReturnResult(Person returnResult, Person person)
         {
             returnResult.Id.Should().Be(person.Id);
@@ -27,38 +22,34 @@ namespace IntegrationTestForMyApi.PersonControllerTests
             returnResult.IsBlock.Should().Be(person.IsBlock);
         }
 
-        protected async Task<HttpResponseMessage> CreatePersonAsync(AddPerson person)
-        {
-            var response = await TestClient.PostAsJsonAsync(baseRoute + controllerName, person);
-            return response;
-        }
-
         protected async Task<HttpResponseMessage> DeletePersonAsync(DeletePerson person)
         {
-            HttpRequestMessage request = new HttpRequestMessage
+            HttpRequestMessage request = new()
             {
                 Content = JsonContent.Create(person),
                 Method = HttpMethod.Delete,
                 RequestUri = new Uri(baseRoute + controllerName)
             };
-            var response = await TestClient.SendAsync(request);
-            return response;
+
+            return await TestClient.SendAsync(request);
         }
 
-        protected async Task<HttpResponseMessage> UpdatePersonAsync(UpdatePerson person)
-        {
-            var response = await TestClient.PutAsJsonAsync(baseRoute + controllerName, person);
-            return response;
-        }
+        protected async Task<HttpResponseMessage> CreatePersonAsync(AddPerson person) => 
+            await TestClient.PostAsJsonAsync(baseRoute + controllerName, person);
+        
+        protected async Task<HttpResponseMessage> UpdatePersonAsync(UpdatePerson person) =>
+            await TestClient.PutAsJsonAsync(baseRoute + controllerName, person);
 
-        protected static AddPerson CreateValideAddModel()
-        {
-            return new AddPerson { FirstName = "Vladimir", LastName = "Petrusneko", Email = "someEmail@mail", IsActive = true };
-        }
+        protected static AddPerson CreateValideAddModel() => 
+            new() { FirstName = "Vladimir", LastName = "Petrusneko", Email = "someEmail@mail", IsActive = true };
 
-        protected static UpdatePerson CreateUpdatePersonFromPerson(Person person)
-        {
-            return new UpdatePerson { Id = person.Id, FirstName = person.FirstName, LastName = person.LastName, IsActive = person.IsActive, IsBlock = person.IsBlock };
-        }
+        protected static UpdatePerson CreateUpdatePersonFromPerson(Person person) => 
+            new() { Id = person.Id, FirstName = person.FirstName, LastName = person.LastName, IsActive = person.IsActive, IsBlock = person.IsBlock };
+
+        protected static void CheckResponse(HttpResponseMessage response, HttpStatusCode code) =>
+            response.StatusCode.Should().Be(code);
+
+        protected async Task EndPersonTest(Person person) => 
+            await DeletePersonAsync(new DeletePerson { Id = person.Id });
     }
 }

@@ -20,12 +20,13 @@ namespace IntegrationTestForMyApi.ProductControllerTests
         [Fact]
         public async Task Delete_ReturnDeletedProduct_StatusCode200()
         {
-            var response = await CreateProductAsync(new AddProduct { Alias = "milk", Name = "Saw product", Type = ProductType.Others });
+            var response = await CreateProductAsync(CreateValideAddProduct());
             var product = await response.Content.ReadAsAsync<Product>();
 
             response = await DeleteProductAsync(new DeleteProduct { Id = product.Id });
-            CheckResponse(response, HttpStatusCode.OK);
             var returnResult = await response.Content.ReadAsAsync<Product>();
+
+            CheckResponse(response, HttpStatusCode.OK);
             CheckReturnResult(returnResult, product);
         }
     }

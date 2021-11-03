@@ -15,7 +15,7 @@ namespace MyClient.Modules
                 .InstancePerLifetimeScope();
 
             this.RegisterMessageHandlers(builder);
-            this.RegisterPipeline(builder);
+            RegisterPipeline(builder);
 
             builder.Register<ServiceFactory>(
                 ctx =>
@@ -44,9 +44,8 @@ namespace MyClient.Modules
             }
         }
 
-        private void RegisterPipeline(ContainerBuilder builder)
+        private static void RegisterPipeline(ContainerBuilder builder)
         {
-            //// register Mediator pre- and post-processor pipelines to activate custom IRequestPreProcessor<> and IRequestPostProcessor<>
             builder
                 .RegisterGeneric(typeof(RequestPreProcessorBehavior<,>))
                 .As(typeof(IPipelineBehavior<,>))

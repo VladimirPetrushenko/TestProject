@@ -1,5 +1,4 @@
 ﻿using FluentAssertions;
-using MyClient.Models.Products;
 using MyModelAndDatabase.Models;
 using System.Collections.Generic;
 using System.Net;
@@ -14,24 +13,26 @@ namespace IntegrationTestForMyApi.ProductControllerTests
         [Fact]
         public async Task Get_ReturnsProduct_WhenPostExistInDataBase_StatusCode200()
         {
-            var response = await CreateProductAsync(new AddProduct { Alias = "Milk", Name = "Saw product", Type = ProductType.Main });
+            var response = await CreateProductAsync(CreateValideAddProduct());
             var product = await response.Content.ReadAsAsync<Product>();
 
             response = await TestClient.GetAsync(baseRoute + controllerName + product.Id);
-            CheckResponse(response, HttpStatusCode.OK);
             var returnResult = await response.Content.ReadAsAsync<Product>();
+
+            CheckResponse(response, HttpStatusCode.OK);
             CheckReturnResult(returnResult, product);
 
-            await DeleteProductAsync(new DeleteProduct { Id = product.Id });
+            await EndProductTest(product);
         }
 
         [Fact]
         public async Task Get_WithoutAnyPost_ReturnEmptyResponce_StatusCode200()
         {
             var response = await TestClient.GetAsync(baseRoute + controllerName);
+            var returnResult = await response.Content.ReadAsAsync<List<Product>>();
 
             CheckResponse(response, HttpStatusCode.OK);
-            (await response.Content.ReadAsAsync<List<Product>>()).Should().BeEmpty();
+            returnResult.Should().BeEmpty();
         }
 
         [Fact]

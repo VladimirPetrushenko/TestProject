@@ -12,12 +12,7 @@ namespace IntegrationTestForMyApi.ProductControllerTests
     public class ProductControllerTest : IntegrationTest
     {
         protected string controllerName = "Product/";
-
-        protected static void CheckResponse(HttpResponseMessage response, HttpStatusCode code)
-        {
-            response.StatusCode.Should().Be(code);
-        }
-
+        
         protected static void CheckReturnResult(Product returnResult, Product product)
         {
             returnResult.Id.Should().Be(product.Id);
@@ -25,29 +20,35 @@ namespace IntegrationTestForMyApi.ProductControllerTests
             returnResult.Name.Should().Be(product.Name);
             returnResult.Type.Should().Be(product.Type);
         }
-
-        protected async Task<HttpResponseMessage> CreateProductAsync(AddProduct product)
-        {
-            var response = await TestClient.PostAsJsonAsync(baseRoute + controllerName, product);
-            return response;
-        }
-
+        
         protected async Task<HttpResponseMessage> DeleteProductAsync(DeleteProduct product)
         {
-            HttpRequestMessage request = new HttpRequestMessage
+            HttpRequestMessage request = new()
             {
                 Content = JsonContent.Create(product),
                 Method = HttpMethod.Delete,
                 RequestUri = new Uri(baseRoute + controllerName)
             };
-            var response = await TestClient.SendAsync(request);
-            return response;
+
+            return await TestClient.SendAsync(request);
         }
 
-        protected async Task<HttpResponseMessage> UpdateProductAsync(UpdateProduct product)
-        {
-            var response = await TestClient.PutAsJsonAsync(baseRoute + controllerName, product);
-            return response;
-        }
+        protected static void CheckResponse(HttpResponseMessage response, HttpStatusCode code) =>
+            response.StatusCode.Should().Be(code);
+
+        protected async Task<HttpResponseMessage> CreateProductAsync(AddProduct product) =>
+            await TestClient.PostAsJsonAsync(baseRoute + controllerName, product);
+
+        protected async Task<HttpResponseMessage> UpdateProductAsync(UpdateProduct product) =>
+            await TestClient.PutAsJsonAsync(baseRoute + controllerName, product);
+
+        protected async Task EndProductTest(Product product) =>
+            await DeleteProductAsync(new DeleteProduct { Id = product.Id });
+
+        protected static AddProduct CreateValideAddProduct() =>
+            new() { Alias = "milk", Name = "Saw product", Type = ProductType.Others };
+
+        protected static UpdateProduct CreateUpdateProductFromProduct(Product product) => 
+            new() { Id = product.Id, Alias = product.Alias, Name = product.Name, Type = product.Type };
     }
 }

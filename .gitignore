@@ -78,3 +78,4 @@ _[Ss]cripts
 *.testlog
 *.manifest
 MyFirstTestProject/.vs/MyFirstProject/DesignTimeBuild/.dtbcache.v2
+MyFirstTestProject/.vs/**

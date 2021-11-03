@@ -12,34 +12,38 @@ namespace IntegrationTestForMyApi.ProductControllerTests
         [Fact]
         public async Task Put_ReturnsProduct_WhenPostExistInDataBase_StatusCode200()
         {
-            var response = await CreateProductAsync(new AddProduct { Alias = "Milk", Name = "Saw product", Type = ProductType.Main });
+            var response = await CreateProductAsync(CreateValideAddProduct());
             var product = await response.Content.ReadAsAsync<Product>();
             product.Name = "New name";
-            response = await UpdateProductAsync(new UpdateProduct { Id = product.Id, Alias = product.Alias, Name = product.Name, Type = product.Type });
+
+            response = await UpdateProductAsync(CreateUpdateProductFromProduct(product));
+            var returnResult = await response.Content.ReadAsAsync<Product>();
 
             CheckResponse(response, HttpStatusCode.OK);
-            var returnResult = await response.Content.ReadAsAsync<Product>();
             CheckReturnResult(returnResult, product);
-            await DeleteProductAsync(new DeleteProduct { Id = product.Id });
+
+            await EndProductTest(product);
         }
 
         [Fact]
         public async Task Put_BadModel_WhenPostExistInDataBase_StatusCode400()
         {
-            var response = await CreateProductAsync(new AddProduct { Alias = "Milk", Name = "Saw product", Type = ProductType.Main });
+            var response = await CreateProductAsync(CreateValideAddProduct());
             var product = await response.Content.ReadAsAsync<Product>();
-
             product.Type = ProductType.None;
-            response = await UpdateProductAsync(new UpdateProduct { Id = product.Id, Alias = product.Alias, Name = product.Name, Type = product.Type });
+
+            response = await UpdateProductAsync(CreateUpdateProductFromProduct(product));
 
             CheckResponse(response, HttpStatusCode.BadRequest);
-            await DeleteProductAsync(new DeleteProduct { Id = product.Id });
+
+            await EndProductTest(product);
         }
 
         [Fact]
         public async Task Put_WhenPostNotExistInDataBase_StatusCode404()
         {
             var response = await UpdateProductAsync(new UpdateProduct { Id = 0, Alias = "Milk", Name = "Saw product", Type = ProductType.Main });
+
             CheckResponse(response, HttpStatusCode.NotFound);
         }
 

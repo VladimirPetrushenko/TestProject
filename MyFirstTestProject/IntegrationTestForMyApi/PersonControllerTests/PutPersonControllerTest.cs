@@ -1,11 +1,7 @@
 ﻿using MyClient.Models.Persons;
 using MyModelAndDatabase.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -21,12 +17,12 @@ namespace IntegrationTestForMyApi.PersonControllerTests
             person.FirstName = "NewFirstName";
 
             response = await UpdatePersonAsync(CreateUpdatePersonFromPerson(person));
+            var returnResult = await response.Content.ReadAsAsync<Person>();
 
             CheckResponse(response, HttpStatusCode.OK);
-            var returnResult = await response.Content.ReadAsAsync<Person>();
             CheckReturnResult(returnResult, person);
 
-            await DeletePersonAsync(new DeletePerson { Id = person.Id });
+            await EndPersonTest(person);
         }
 
         [Fact]
@@ -39,13 +35,15 @@ namespace IntegrationTestForMyApi.PersonControllerTests
             response = await UpdatePersonAsync(CreateUpdatePersonFromPerson(person));
 
             CheckResponse(response, HttpStatusCode.BadRequest);
-            await DeletePersonAsync(new DeletePerson { Id = person.Id });
+
+            await EndPersonTest(person);
         }
 
         [Fact]
         public async Task Put_WhenPostNotExistInDataBase_StatusCode404()
         {
             var response = await UpdatePersonAsync(new UpdatePerson { Id = 0 });
+
             CheckResponse(response, HttpStatusCode.NotFound);
         }
 

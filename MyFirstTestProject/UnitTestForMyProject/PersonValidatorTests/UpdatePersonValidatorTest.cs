@@ -10,7 +10,7 @@ namespace UnitTestForMyProject.PersonValidatorTests
 {
     public class UpdatePersonValidatorTest : PersonValidatorTest
     {
-        private UpdatePersonValidator _validator;
+        private readonly UpdatePersonValidator _validator;
 
         public UpdatePersonValidatorTest() 
             : base()

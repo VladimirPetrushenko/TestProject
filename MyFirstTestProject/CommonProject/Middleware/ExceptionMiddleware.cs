@@ -39,7 +39,7 @@ namespace Common.Middleware
             else
             {
                 context.Response.StatusCode = ((ValidationException)exception.InnerException).Errors
-                                                .Where(e => e.ErrorMessage.Contains("not found")).Count() > 0  
+                                                .Where(e => e.ErrorMessage.Contains("not found")).Any()  
                     ? StatusCodes.Status404NotFound
                     : StatusCodes.Status400BadRequest;
             }

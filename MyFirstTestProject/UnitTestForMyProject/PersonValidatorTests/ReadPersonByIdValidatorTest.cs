@@ -10,7 +10,7 @@ namespace UnitTestForMyProject.PersonValidatorTests
 {
     public class ReadPersonByIdValidatorTest : PersonValidatorTest
     {
-        private ReadPersonByIdValidator _validator;
+        private readonly ReadPersonByIdValidator _validator;
 
         public ReadPersonByIdValidatorTest()
             : base()
