@@ -3,43 +3,37 @@ using AutoFixture.Xunit2;
 using FluentValidation.TestHelper;
 using MyClient.Models.Persons;
 using MyClient.Models.Persons.Validators;
-using MyModelAndDatabase.Data;
-using System;
 using System.Linq;
 using Xunit;
 
 namespace UnitTestForMyProject.PersonValidatorTests
 {
-    public class ReadPersonByIdValidatorTest
+    public class ReadPersonByIdValidatorTest : PersonValidatorTest
     {
-        public const int RecordsCount = 30;
-        public const int PeopleCount = 10000;
-
         private ReadPersonByIdValidator _validator;
-        private readonly Fixture fixture;
 
         public ReadPersonByIdValidatorTest()
+            : base()
         {
-            fixture = new Fixture { RepeatCount = RecordsCount };
+            _validator = new ReadPersonByIdValidator(_repository);
         }
         
         [Theory, AutoData]
         public void ReadPersonByIdTest(Generator<ReadPersonById> readPeopleArray)
         {
             var people = readPeopleArray.Take(PeopleCount).ToList();
-            var repository = fixture.Create<MockPersonRepo>();
 
-            _validator = new ReadPersonByIdValidator(repository);
             foreach (var person in people)
             {
                 var result = _validator.TestValidate(person);
-                if (repository.ItemExists(person.Id).Result && !person.IsBlock)
+
+                if (_repository.ItemExists(person.Id).Result && !_repository.GetByID(person.Id).Result.IsBlock)
                 {
                     result.ShouldNotHaveValidationErrorFor(person => person.Id);
                 }
-                else if(repository.ItemExists(person.Id).Result)
+                else if(_repository.ItemExists(person.Id).Result)
                 {
-                    result.ShouldHaveValidationErrorFor(person => person.IsBlock);
+                    result.ShouldHaveValidationErrorFor(person => person.Id);
                 }
                 else
                 {

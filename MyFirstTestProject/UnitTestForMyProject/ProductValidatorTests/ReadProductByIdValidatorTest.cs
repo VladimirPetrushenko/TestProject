@@ -3,38 +3,31 @@ using AutoFixture.Xunit2;
 using FluentValidation.TestHelper;
 using MyClient.Models.Products;
 using MyClient.Models.Products.Validators;
-using MyModelAndDatabase.Data;
-using System;
 using System.Linq;
 using Xunit;
 
 namespace UnitTestForMyProject.ProductValidatorTests
 {
-    public class ReadProductByIdValidatorTest
+    public class ReadProductByIdValidatorTest : ProductValidatorTest
     {
-        public const int RecordsCount = 30;
-        public const int ProductCount = 10000;
-
         private ReadProductByIdValidator _validator;
-        private readonly Fixture fixture;
 
         public ReadProductByIdValidatorTest()
+            : base()
         {
-            fixture = new Fixture { RepeatCount = RecordsCount };
+            _validator = new ReadProductByIdValidator(_repository);
         }
 
         [Theory, AutoData]
         public void ReadProductTest(Generator<ReadProductById> readProductsArray)
         {
             var products = readProductsArray.Take(ProductCount).ToList();
-            var repo = fixture.Create<MockProductRepo>();
-
-            _validator = new ReadProductByIdValidator(repo);
 
             foreach (var product in products)
             {
                 var result = _validator.TestValidate(product);
-                if (repo.ItemExists(product.Id).Result)
+
+                if (_repository.ItemExists(product.Id).Result)
                 {
                     result.ShouldNotHaveValidationErrorFor(product => product.Id);
                 }

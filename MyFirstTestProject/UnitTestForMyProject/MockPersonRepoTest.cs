@@ -1,3 +1,5 @@
+using AutoFixture;
+using AutoFixture.Xunit2;
 using MyModelAndDatabase.Data;
 using MyModelAndDatabase.Models;
 using System;
@@ -8,11 +10,43 @@ namespace UnitTestForMyProject
 {
     public class MockPersonRepoTest
     {
+        public int RecordsCount = 30;
+        public int ProductCount = 10000;
+        private readonly MockPersonRepo validEntity;
+
+        private readonly Fixture fixture;
+
+        public MockPersonRepoTest()
+        {
+            fixture = new Fixture { RepeatCount = RecordsCount };
+            validEntity = fixture.Create<MockPersonRepo>();
+        }
+
+
+        [Theory, AutoData]
+        public void UpdateProductTest(Generator<UpdateProduct> updateProductsArray)
+        {
+            var products = updateProductsArray.Take(ProductCount).ToList();
+            var repo = fixture.Create<MockProductRepo>();
+
+            _validator = new UpdateProductValidator(repo);
+
+            foreach (var product in products)
+            {
+                var result = _validator.TestValidate(product);
+                CheckingId(result, product, repo);
+                CheckingAlias(result, product);
+                CheckingName(result, product);
+                CheckingType(result, product);
+            }
+        }
+
+        
+
+
         [Fact]
         public void CreateNewPerson_ShouldWork()
         {
-            var validEntity = new MockPersonRepo();
-
             var expected = validEntity.GetAll().Count() + 1;
 
             validEntity.CreateItem(new Person { Id = 0, FirstName = "firstName", LastName = "lastName" });
@@ -22,9 +56,7 @@ namespace UnitTestForMyProject
 
         [Fact]
         public void UpdatePerson_ShouldWork()
-        {
-            var validEntity = new MockPersonRepo();
-
+        { 
             var person = validEntity.GetByID(1).Result;
 
             person.LastName = "lastName";
@@ -39,8 +71,6 @@ namespace UnitTestForMyProject
         [InlineData(2)]
         public void DeletePeople_ShouldWork(int id)
         {
-            var validEntity = new MockPersonRepo();
-
             var expected = validEntity.GetAll().Count() - 1;
 
             validEntity.DeleteItem(validEntity.GetByID(id).Result);
@@ -53,13 +83,28 @@ namespace UnitTestForMyProject
         [InlineData(int.MaxValue)]
         public void DeletePeople_ShouldFail(int id)
         {
-            var validEntity = new MockPersonRepo();
-
             var person = validEntity.GetByID(id).Result;
+
 
             Assert.Throws<ArgumentException>(nameof(person), ()=>validEntity.DeleteItem(person));
         }
 
+        [Theory, AutoData]
+        public void UpdateProductTest(Generator<UpdateProduct> updateProductsArray)
+        {
+            var products = updateProductsArray.Take(ProductCount).ToList();
+            var repo = fixture.Create<MockProductRepo>();
 
+            _validator = new UpdateProductValidator(repo);
+
+            foreach (var product in products)
+            {
+                var result = _validator.TestValidate(product);
+                CheckingId(result, product, repo);
+                CheckingAlias(result, product);
+                CheckingName(result, product);
+                CheckingType(result, product);
+            }
+        }
     }
 }

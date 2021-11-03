@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using MyClient.Models.Products.Interfaces;
 using MyModelAndDatabase.Data.Interfaces;
 using MyModelAndDatabase.Models;
 using System.Threading;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MyClient.Models.Products
 {
-    public class UpdateProduct : IRequest<Product>
+    public class UpdateProduct : IRequest<Product>, IProduct
     {
         public int Id { get; set; }
         public string Alias { get; set; }

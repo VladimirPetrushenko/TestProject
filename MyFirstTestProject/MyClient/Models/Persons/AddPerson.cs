@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using MyClient.Models.Persons.Interfaces;
 using MyModelAndDatabase.Data.Interfaces;
 using MyModelAndDatabase.Models;
 using System.Threading;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MyClient.Models.Persons
 {
-    public class AddPerson : IRequest<Person>
+    public class AddPerson : IRequest<Person>, IFullName
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
