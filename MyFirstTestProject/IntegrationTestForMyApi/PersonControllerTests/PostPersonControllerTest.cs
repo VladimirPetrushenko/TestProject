@@ -16,7 +16,9 @@ namespace IntegrationTestForMyApi.PersonControllerTests
         [Fact]
         public async Task Post_BadModel_StatusCode400()
         {
-            var response = await CreatePersonAsync(new AddPerson { FirstName = "Vladimir", LastName = null, Email = "someEmail@mail", IsActive = true });
+            var model = CreateValideAddModel();
+            model.LastName = null;
+            var response = await CreatePersonAsync(model);
 
             CheckResponse(response, HttpStatusCode.BadRequest);
         }
@@ -24,7 +26,7 @@ namespace IntegrationTestForMyApi.PersonControllerTests
         [Fact]
         public async Task Post_NormalModelt_ReturnsPerson_StatusCode200()
         {
-            var response = await CreatePersonAsync(new AddPerson { FirstName = "Vladimir", LastName = "Petrushenko", Email = "someEmail@mail", IsActive = true });
+            var response = await CreatePersonAsync(CreateValideAddModel());
             var person = await response.Content.ReadAsAsync<Person>();
             CheckResponse(response, HttpStatusCode.OK);
 

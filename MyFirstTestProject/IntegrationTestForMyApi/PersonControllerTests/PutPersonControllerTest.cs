@@ -16,11 +16,11 @@ namespace IntegrationTestForMyApi.PersonControllerTests
         [Fact]
         public async Task Put_ReturnsProduct_WhenPostExistInDataBase_StatusCode200()
         {
-            var response = await CreatePersonAsync(new AddPerson { FirstName = "Vladimir", LastName = "Petrushenko", Email = "someEmail@mail", IsActive = true });
+            var response = await CreatePersonAsync(CreateValideAddModel());
             var person = await response.Content.ReadAsAsync<Person>();
             person.FirstName = "NewFirstName";
 
-            response = await UpdatePersonAsync(new UpdatePerson { Id = person.Id, FirstName = person.FirstName, LastName = person.LastName, IsActive = person.IsActive, IsBlock = person.IsBlock });
+            response = await UpdatePersonAsync(CreateUpdatePersonFromPerson(person));
 
             CheckResponse(response, HttpStatusCode.OK);
             var returnResult = await response.Content.ReadAsAsync<Person>();
@@ -32,11 +32,11 @@ namespace IntegrationTestForMyApi.PersonControllerTests
         [Fact]
         public async Task Put_BadModel_WhenPostExistInDataBase_StatusCode400()
         {
-            var response = await CreatePersonAsync(new AddPerson { FirstName = "Vladimir", LastName = "Petrushenko", Email = "someEmail@mail", IsActive = true });
+            var response = await CreatePersonAsync(CreateValideAddModel());
             var person = await response.Content.ReadAsAsync<Person>();
 
             person.FirstName = "This string is more than 20 symbols"; 
-            response = await UpdatePersonAsync(new UpdatePerson { Id = person.Id, FirstName = person.FirstName, LastName = person.LastName, IsActive = person.IsActive, IsBlock = person.IsBlock });
+            response = await UpdatePersonAsync(CreateUpdatePersonFromPerson(person));
 
             CheckResponse(response, HttpStatusCode.BadRequest);
             await DeletePersonAsync(new DeletePerson { Id = person.Id });
@@ -45,7 +45,7 @@ namespace IntegrationTestForMyApi.PersonControllerTests
         [Fact]
         public async Task Put_WhenPostNotExistInDataBase_StatusCode404()
         {
-            var response = await UpdatePersonAsync(new UpdatePerson { Id = 0, FirstName = "Vladimir", LastName = "Petrushenko", IsBlock = true, IsActive = true });
+            var response = await UpdatePersonAsync(new UpdatePerson { Id = 0 });
             CheckResponse(response, HttpStatusCode.NotFound);
         }
 

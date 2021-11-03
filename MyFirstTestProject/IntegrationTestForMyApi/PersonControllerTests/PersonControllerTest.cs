@@ -50,5 +50,15 @@ namespace IntegrationTestForMyApi.PersonControllerTests
             var response = await TestClient.PutAsJsonAsync(baseRoute + controllerName, person);
             return response;
         }
+
+        protected static AddPerson CreateValideAddModel()
+        {
+            return new AddPerson { FirstName = "Vladimir", LastName = "Petrusneko", Email = "someEmail@mail", IsActive = true };
+        }
+
+        protected static UpdatePerson CreateUpdatePersonFromPerson(Person person)
+        {
+            return new UpdatePerson { Id = person.Id, FirstName = person.FirstName, LastName = person.LastName, IsActive = person.IsActive, IsBlock = person.IsBlock };
+        }
     }
 }

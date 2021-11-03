@@ -20,7 +20,7 @@ namespace IntegrationTestForMyApi.PersonControllerTests
         [Fact]
         public async Task Delete_ReturnDeletedPerson_StatusCode200()
         {
-            var response = await CreatePersonAsync(new AddPerson { FirstName = "Vladimir", LastName = "Petrushenko", Email = "someEmail@mail", IsActive = true});
+            var response = await CreatePersonAsync(CreateValideAddModel());
             var person = await response.Content.ReadAsAsync<Person>();
 
             response = await DeletePersonAsync(new DeletePerson { Id = person.Id });
@@ -32,13 +32,16 @@ namespace IntegrationTestForMyApi.PersonControllerTests
         [Fact]
         public async Task Delete_WhenPersonIsActiveFalse_StatusCode400()
         {
-            var response = await CreatePersonAsync(new AddPerson { FirstName = "Vladimir", LastName = "Petrushenko", Email = "someEmail@mail", IsActive = false });
+            var model = CreateValideAddModel();
+            model.IsActive = false;
+            var response = await CreatePersonAsync(model);
             var person = await response.Content.ReadAsAsync<Person>();
 
             response = await DeletePersonAsync(new DeletePerson { Id = person.Id });
             CheckResponse(response, HttpStatusCode.BadRequest);
 
-            await UpdatePersonAsync(new UpdatePerson { Id = person.Id, FirstName = person.FirstName, LastName = person.LastName, IsActive = true });
+            person.IsActive = true;
+            await UpdatePersonAsync(CreateUpdatePersonFromPerson(person));
             
             response = await DeletePersonAsync(new DeletePerson { Id = person.Id });
             CheckResponse(response, HttpStatusCode.OK);

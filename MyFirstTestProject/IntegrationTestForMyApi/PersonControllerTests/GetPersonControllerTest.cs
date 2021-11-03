@@ -14,7 +14,7 @@ namespace IntegrationTestForMyApi.PersonControllerTests
         [Fact]
         public async Task Get_ReturnsPerson_WhenPostExistInDataBase_StatusCode200()
         {
-            var response = await CreatePersonAsync(new AddPerson { FirstName = "Vladimir", LastName = "Petrushenko", Email = "someEmail@mail", IsActive = true });
+            var response = await CreatePersonAsync(CreateValideAddModel());
             var person = await response.Content.ReadAsAsync<Person>();
 
             response = await TestClient.GetAsync(baseRoute + controllerName + person.Id);
@@ -45,7 +45,7 @@ namespace IntegrationTestForMyApi.PersonControllerTests
         [Fact]
         public async Task Get_WhenPersonExistInDataBaseAndPersonIsBlock_StatusCode400()
         {
-            var response = await CreatePersonAsync(new AddPerson { FirstName = "Vladimir", LastName = "Petrushenko", Email = "someEmail@mail", IsActive = true });
+            var response = await CreatePersonAsync(CreateValideAddModel());
             var person = await response.Content.ReadAsAsync<Person>();
 
             await UpdatePersonAsync(new UpdatePerson { Id = person.Id, FirstName = person.FirstName, LastName = person.LastName, IsActive = person.IsActive, IsBlock = true });
