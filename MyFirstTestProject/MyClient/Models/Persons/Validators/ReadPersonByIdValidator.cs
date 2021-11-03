@@ -16,14 +16,18 @@ namespace MyClient.Models.Persons.Validators
                 .Must(PersonExist).WithMessage("Person is not found")
                 .DependentRules(() =>
                 {
-                    RuleFor(p => p.IsBlock).NotEqual(true).WithMessage("Person was blocked");
+                    RuleFor(p => p.Id).Must(PersonIsNotBlock).WithMessage("Person was blocked");
                 });
-
         }
         
         private bool PersonExist(int id)
         {
             return _repository.ItemExists(id).Result;
+        }
+
+        private bool PersonIsNotBlock(int id)
+        {
+            return !_repository.GetByID(id).Result.IsBlock;
         }
     }
 }

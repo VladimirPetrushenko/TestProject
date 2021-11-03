@@ -9,7 +9,6 @@ namespace MyClient.Models.Persons
     public class ReadPersonById : IRequest<Person>
     {
         public int Id { get; set; }
-        public bool IsBlock { get; set; }
 
         public class ReadPersonByIdHandler : IRequestHandler<ReadPersonById, Person>
         {

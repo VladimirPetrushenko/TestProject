@@ -11,6 +11,8 @@ namespace MyClient.Models.Persons
         public int Id { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
+        public bool IsBlock { get; set; }
+        public bool IsActive { get; set; }
 
         public class UpdatePersonHandler : IRequestHandler<UpdatePerson, Person>
         {
@@ -27,6 +29,8 @@ namespace MyClient.Models.Persons
 
                 person.FirstName = request.FirstName;
                 person.LastName = request.LastName;
+                person.IsBlock = request.IsBlock;
+                person.IsActive = request.IsActive;
 
                 _repository.UpdateItem(person);
                 await _repository.SaveChanges();

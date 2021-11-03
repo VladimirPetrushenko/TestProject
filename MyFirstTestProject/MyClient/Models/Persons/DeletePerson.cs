@@ -9,7 +9,6 @@ namespace MyClient.Models.Persons
     public class DeletePerson : IRequest<Person>
     {
         public int Id { get; set; }
-        public bool IsActive { get; set; }
 
         public class DeletePersonHandler : IRequestHandler<DeletePerson, Person>
         {
