@@ -1,16 +1,24 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using FluentValidation;
+using Microsoft.AspNetCore.Http;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Common.Middleware
 {
-    public class ExceptionMiddleware : IMiddleware
+    public class ExceptionMiddleware
     {
-        public async Task InvokeAsync(HttpContext context, RequestDelegate next)
+        private readonly RequestDelegate _next;
+        public ExceptionMiddleware(RequestDelegate next)
+        {
+            _next = next;
+        }
+
+        public async Task InvokeAsync(HttpContext context)
         {
             try
             {
-                await next.Invoke(context);
+                await _next.Invoke(context);
             }
             catch (Exception exception)
             {
@@ -20,11 +28,21 @@ namespace Common.Middleware
 
         public static void HandleException(HttpContext context, Exception exception)
         {
-            context.Response.StatusCode = exception switch
+            if(exception.InnerException == null) 
             {
-                ArgumentException => StatusCodes.Status404NotFound,
-                _ => StatusCodes.Status400BadRequest,
-            };
+                context.Response.StatusCode = exception switch
+                {
+                    ArgumentException => StatusCodes.Status404NotFound,
+                    _ => StatusCodes.Status400BadRequest,
+                };
+            }
+            else
+            {
+                context.Response.StatusCode = ((ValidationException)exception.InnerException).Errors
+                                                .Where(e => e.ErrorMessage.Contains("not found")).Count() > 0  
+                    ? StatusCodes.Status404NotFound
+                    : StatusCodes.Status400BadRequest;
+            }
         }
     }
 }

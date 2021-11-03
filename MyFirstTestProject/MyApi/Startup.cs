@@ -1,5 +1,5 @@
+using Common.Middleware;
 using FluentValidation;
-using FluentValidation.AspNetCore;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -11,13 +11,11 @@ using Microsoft.Extensions.Hosting;
 using MyApi.ApiKey.Authentication;
 using MyApi.ApiKey.Authorization;
 using MyApi.Configuration;
-using MyClient.Modules;
 using MyModelAndDatabase.Data.Context;
 using MyModelAndDatabase.Data.Interfaces;
 using MyModelAndDatabase.Data.Repositories;
 using MyModelAndDatabase.Models;
 using System;
-using System.Linq;
 using System.Reflection;
 using System.Text.Json;
 
@@ -36,7 +34,6 @@ namespace MyApi
         {
             services.AddScoped<IRepository<Person>, PersonRepository>();
             services.AddScoped<IRepository<Product>, ProductRepository>();
-
 
             services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
@@ -83,7 +80,6 @@ namespace MyApi
                     opt.AllowAnyMethod();
                 });
             });
-
             services.ConfigureSwaggerFeature();
         }
 
@@ -97,15 +93,14 @@ namespace MyApi
             }
             app.UseCors("DefaultPolicy");
 
+            app.UseMiddleware<ExceptionMiddleware>();
+
             app.UseHttpsRedirection();
 
             app.UseRouting();
 
             app.UseAuthentication();
             app.UseAuthorization();
-
-            //app.UseMiddleware<ExceptionMiddleware>();
-
 
             app.UseEndpoints(endpoints =>
             {
