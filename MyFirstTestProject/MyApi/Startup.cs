@@ -71,6 +71,8 @@ namespace MyApi
 
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
 
+            services.AddTransient<ExceptionMiddleware>();
+
             services.AddCors(options =>
             {
                 options.AddPolicy("DefaultPolicy", opt =>

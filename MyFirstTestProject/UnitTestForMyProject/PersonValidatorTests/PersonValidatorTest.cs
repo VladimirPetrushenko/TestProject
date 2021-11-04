@@ -15,6 +15,7 @@ namespace UnitTestForMyProject.PersonValidatorTests
         public PersonValidatorTest()
         {
             fixture = new Fixture { RepeatCount = RecordsCount };
+            _repository = fixture.Create<MockPersonRepo>();
         }
 
         protected static void CheckingFirstName<T>(TestValidationResult<T> result, T person)

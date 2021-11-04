@@ -38,7 +38,7 @@ namespace UnitTestForMyProject
         [Theory, AutoData]
         public void UpdatePerson_ShouldWork(Person somePerson)
         { 
-            var person = validEntity.GetByID(1).Result;
+            var person = validEntity.GetAll().FirstOrDefault();
             person.LastName = somePerson.LastName;
 
             validEntity.UpdateItem(person);

@@ -6,19 +6,13 @@ using System.Threading.Tasks;
 
 namespace Common.Middleware
 {
-    public class ExceptionMiddleware
+    public class ExceptionMiddleware : IMiddleware
     {
-        private readonly RequestDelegate _next;
-        public ExceptionMiddleware(RequestDelegate next)
-        {
-            _next = next;
-        }
-
-        public async Task InvokeAsync(HttpContext context)
+        public async Task InvokeAsync(HttpContext context, RequestDelegate next)
         {
             try
             {
-                await _next.Invoke(context);
+                await next.Invoke(context);
             }
             catch (Exception exception)
             {
