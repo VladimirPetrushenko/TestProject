@@ -33,9 +33,8 @@ namespace IntegrationTestForMyApi.PersonControllerTests
         [Fact]
         public async Task Delete_WhenPersonIsActiveFalse_StatusCode400()
         {
-            var addPersonModel = CreateValideAddModel();
-            addPersonModel.IsActive = false;
-            var response = await CreatePersonAsync(addPersonModel);
+            var model = CreateAddModelWhithoutIsActive();
+            var response = await CreatePersonAsync(model);
             var person = await response.Content.ReadAsAsync<Person>();
 
             response = await DeletePersonAsync(new DeletePerson { Id = person.Id });

@@ -6,6 +6,7 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
+using AutoFixture;
 
 namespace IntegrationTestForMyApi.PersonControllerTests
 {
@@ -34,14 +35,32 @@ namespace IntegrationTestForMyApi.PersonControllerTests
             return await TestClient.SendAsync(request);
         }
 
-        protected async Task<HttpResponseMessage> CreatePersonAsync(AddPerson person) => 
+        protected async Task<HttpResponseMessage> CreatePersonAsync(AddPerson person) =>
             await TestClient.PostAsJsonAsync(baseRoute + controllerName, person);
-        
+
         protected async Task<HttpResponseMessage> UpdatePersonAsync(UpdatePerson person) =>
             await TestClient.PutAsJsonAsync(baseRoute + controllerName, person);
 
-        protected static AddPerson CreateValideAddModel() => 
-            new() { FirstName = "Vladimir", LastName = "Petrusneko", Email = "someEmail@mail", IsActive = true };
+        protected AddPerson CreateValideAddModel() =>
+            fixture.Build<AddPerson>()
+                .With(p => p.FirstName, "Vladimir")
+                .With(p => p.LastName, "Petrushenko")
+                .With(p => p.IsActive, true)
+                .Create();
+
+        protected AddPerson CreateAddModelWhithoutLastName() =>
+            fixture.Build<AddPerson>()
+                .With(p => p.FirstName, "Vladimir")
+                .Without(p => p.LastName)
+                .With(p => p.IsActive, true)
+                .Create();
+
+        protected AddPerson CreateAddModelWhithoutIsActive() =>
+            fixture.Build<AddPerson>()
+                .With(p => p.FirstName, "Vladimir")
+                .With(p => p.LastName, "Petrushenko")
+                .With(p => p.IsActive, false)
+                .Create();
 
         protected static UpdatePerson CreateUpdatePersonFromPerson(Person person) => 
             new() { Id = person.Id, FirstName = person.FirstName, LastName = person.LastName, IsActive = person.IsActive, IsBlock = person.IsBlock };

@@ -1,4 +1,5 @@
-﻿using FluentAssertions;
+﻿using AutoFixture;
+using FluentAssertions;
 using MyClient.Models.Products;
 using MyModelAndDatabase.Models;
 using System;
@@ -45,8 +46,16 @@ namespace IntegrationTestForMyApi.ProductControllerTests
         protected async Task EndProductTest(Product product) =>
             await DeleteProductAsync(new DeleteProduct { Id = product.Id });
 
-        protected static AddProduct CreateValideAddProduct() =>
-            new() { Alias = "milk", Name = "Saw product", Type = ProductType.Others };
+        protected AddProduct CreateValideAddProduct() =>
+            fixture.Build<AddProduct>()
+                .With(p => p.Type, ProductType.Others)
+                .Create();
+
+        protected AddProduct CreateAddProductWithoutAlias() =>
+            fixture.Build<AddProduct>()
+                .With(p => p.Type, ProductType.Others)
+                .Without(p => p.Alias)
+                .Create();
 
         protected static UpdateProduct CreateUpdateProductFromProduct(Product product) => 
             new() { Id = product.Id, Alias = product.Alias, Name = product.Name, Type = product.Type };

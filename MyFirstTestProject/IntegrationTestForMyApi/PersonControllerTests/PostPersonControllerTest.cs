@@ -11,8 +11,7 @@ namespace IntegrationTestForMyApi.PersonControllerTests
         [Fact]
         public async Task Post_BadModel_StatusCode400()
         {
-            var model = CreateValideAddModel();
-            model.LastName = null;
+            var model = CreateAddModelWhithoutLastName();
 
             var response = await CreatePersonAsync(model);
 

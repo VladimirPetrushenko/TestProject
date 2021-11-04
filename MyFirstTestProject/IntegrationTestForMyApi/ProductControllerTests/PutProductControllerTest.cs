@@ -42,7 +42,7 @@ namespace IntegrationTestForMyApi.ProductControllerTests
         [Fact]
         public async Task Put_WhenPostNotExistInDataBase_StatusCode404()
         {
-            var response = await UpdateProductAsync(new UpdateProduct { Id = 0, Alias = "Milk", Name = "Saw product", Type = ProductType.Main });
+            var response = await UpdateProductAsync(new UpdateProduct { Id = 0 });
 
             CheckResponse(response, HttpStatusCode.NotFound);
         }

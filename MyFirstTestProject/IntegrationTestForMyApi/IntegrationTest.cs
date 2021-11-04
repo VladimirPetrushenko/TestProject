@@ -1,13 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc.Testing;
+﻿using AutoFixture;
+using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using MyApi;
-using MyClient.Models.Products;
 using MyModelAndDatabase.Data.Context;
-using MyModelAndDatabase.Models;
 using System.Net.Http;
-using System.Threading.Tasks;
 
 namespace IntegrationTestForMyApi
 {
@@ -15,6 +13,7 @@ namespace IntegrationTestForMyApi
     {
         protected readonly HttpClient TestClient;
         protected string baseRoute = "https://localhost/api/";
+        public Fixture fixture;
         public IntegrationTest()
         {
             var apiFactory = new WebApplicationFactory<Startup>()
@@ -31,6 +30,7 @@ namespace IntegrationTestForMyApi
                     });
                 });
             TestClient = apiFactory.CreateClient();
+            fixture = new Fixture();
         }
 
     }

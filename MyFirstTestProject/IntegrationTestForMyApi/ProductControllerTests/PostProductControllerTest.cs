@@ -11,8 +11,7 @@ namespace IntegrationTestForMyApi.ProductControllerTests
         [Fact]
         public async Task Post_BadModel_StatusCode400()
         {
-            var addProductModel = CreateValideAddProduct();
-            addProductModel.Alias = null;
+            var addProductModel = CreateAddProductWithoutAlias();
 
             var response = await CreateProductAsync(addProductModel);
 
