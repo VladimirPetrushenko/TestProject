@@ -45,6 +45,7 @@ namespace IntegrationTestForMyApi
         {
             var firstName = fixture.Create<string>().Substring(0, 15);
             var lastName = fixture.Create<string>().Substring(0, 15);
+            var price = fixture.Create<decimal>();
 
             return fixture.Build<AddPerson>()
                 .With(p => p.FirstName, firstName)
@@ -53,10 +54,14 @@ namespace IntegrationTestForMyApi
                 .Create();
         }
 
-        public AddProduct CreateValideAddProduct() =>
-            fixture.Build<AddProduct>()
+        public AddProduct CreateValideAddProduct()
+        {
+            var price = fixture.Create<decimal>() + 1;
+            return fixture.Build<AddProduct>()
                 .With(p => p.Type, ProductType.Others)
+                .With(p => p.Price, price)
                 .Create();
+        }
         
         protected async Task<HttpResponseMessage> DeleteAsync<T>(T item, string controllerName)
         {

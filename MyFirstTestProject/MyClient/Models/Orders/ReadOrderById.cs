@@ -14,9 +14,9 @@ namespace MyClient.Models.Orders
         public class ReadOrderByIdHandler : IRequestHandler<ReadOrderById, OrderReadDto>
         {
             private readonly IRepository<Order> _repository;
-            private readonly Mapper _mapper;
+            private readonly IMapper _mapper;
 
-            public ReadOrderByIdHandler(IRepository<Order> repository, Mapper mapper)
+            public ReadOrderByIdHandler(IRepository<Order> repository, IMapper mapper)
             {
                 _repository = repository;
                 _mapper = mapper;

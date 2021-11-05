@@ -40,6 +40,13 @@ namespace IntegrationTestForMyApi.ProductControllerTests
                 .Create();
 
         protected static UpdateProduct CreateUpdateProductFromProduct(Product product) => 
-            new() { Id = product.Id, Alias = product.Alias, Name = product.Name, Type = product.Type };
+            new UpdateProduct()  
+            { 
+                Id = product.Id, 
+                Alias = product.Alias, 
+                Name = product.Name, 
+                Type = product.Type, 
+                Price = product.Price 
+            };
     }
 }

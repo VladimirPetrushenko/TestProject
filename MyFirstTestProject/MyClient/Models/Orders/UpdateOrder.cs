@@ -18,9 +18,9 @@ namespace MyClient.Models.Orders
             private readonly IRepository<Product> _repoProduct;
             private readonly IRepository<Person> _repoPerson;
 
-            private readonly Mapper _mapper;
-            public UpdateOrderHandler(IRepository<Order> repository, 
-                Mapper mapper, 
+            private readonly IMapper _mapper;
+            public UpdateOrderHandler(IRepository<Order> repository,
+                IMapper mapper, 
                 IRepository<Person> repoPerson, 
                 IRepository<Product> repoProduct)
             {

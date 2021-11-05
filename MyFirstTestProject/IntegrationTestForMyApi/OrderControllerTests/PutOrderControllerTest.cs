@@ -1,10 +1,10 @@
 ﻿using MyClient.Models.Dtos.Orders;
 using MyClient.Models.Orders;
-using System;
+using MyModelAndDatabase.Models;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -18,42 +18,47 @@ namespace IntegrationTestForMyApi.OrderControllerTests
             var response = await Initialize();
             var order = await response.Content.ReadAsAsync<OrderReadDto>();
             response = await TestClient.GetAsync(baseRoute + personController);
-            var person = 
-
+            var person = await response.Content.ReadAsAsync<List<Person>>();
 
             var updateOrder = new UpdateOrder
             {
                 Id = order.Id,
+                Person = person.Last().Id,
+                Products = order.Products.Select(p => p.Id).ToList()
+            };
 
-            }
-
-            response = await UpdateProductAsync(CreateUpdateProductFromProduct(product));
-            var returnResult = await response.Content.ReadAsAsync<Product>();
+            response = await TestClient.PutAsJsonAsync(baseRoute + orderController, updateOrder);
+            var returnResult = await response.Content.ReadAsAsync<OrderReadDto>();
 
             CheckResponse(response, HttpStatusCode.OK);
-            CheckReturnResult(returnResult, product);
 
-            await EndProductTest(product);
+            await EndOrderTest();
         }
 
         [Fact]
         public async Task Put_BadModel_WhenPostExistInDataBase_StatusCode400()
         {
-            var response = await CreateProductAsync(CreateValideAddProduct());
-            var product = await response.Content.ReadAsAsync<Product>();
-            product.Type = ProductType.None;
+            var response = await Initialize();
+            var order = await response.Content.ReadAsAsync<OrderReadDto>();
 
-            response = await UpdateProductAsync(CreateUpdateProductFromProduct(product));
+            var updateOrder = new UpdateOrder
+            {
+                Id = order.Id,
+                Person = 0,
+                Products = order.Products.Select(p => p.Id).ToList()
+            };
+
+            response = await TestClient.PutAsJsonAsync(baseRoute + orderController, updateOrder);
 
             CheckResponse(response, HttpStatusCode.BadRequest);
 
-            await EndProductTest(product);
+            await EndOrderTest();
         }
 
         [Fact]
         public async Task Put_WhenPostNotExistInDataBase_StatusCode404()
         {
-            var response = await UpdateProductAsync(new UpdateProduct { Id = 0 });
+            var response = await TestClient.PutAsJsonAsync(baseRoute + orderController, new UpdateOrder { Id = 0 });
 
             CheckResponse(response, HttpStatusCode.NotFound);
         }
@@ -61,7 +66,7 @@ namespace IntegrationTestForMyApi.OrderControllerTests
         [Fact]
         public async Task Put_RequestForWrongRoute_StatusCode404()
         {
-            var response = await TestClient.PutAsJsonAsync(baseRoute + "something", new UpdateProduct());
+            var response = await TestClient.PutAsJsonAsync(baseRoute + "something", new UpdateOrder());
 
             CheckResponse(response, HttpStatusCode.NotFound);
         }
