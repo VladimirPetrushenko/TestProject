@@ -19,7 +19,7 @@ namespace IntegrationTestForMyApi.PersonControllerTests
         }
 
         [Fact]
-        public async Task Post_NormalModelt_ReturnsPerson_StatusCode200()
+        public async Task Post_NormalModelt_StatusCode200()
         {
             var response = await CreatePersonAsync(CreateValideAddPerson());
             var person = await response.Content.ReadAsAsync<Person>();

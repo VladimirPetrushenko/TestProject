@@ -2,8 +2,6 @@
 using FluentAssertions;
 using MyClient.Models.Products;
 using MyModelAndDatabase.Models;
-using System;
-using System.Net;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
@@ -12,7 +10,7 @@ namespace IntegrationTestForMyApi.ProductControllerTests
 {
     public class ProductControllerTest : IntegrationTest
     {
-        protected string controllerName = "Product/";
+        protected string controllerName = "product/";
         
         protected static void CheckReturnResult(Product returnResult, Product product)
         {
@@ -25,9 +23,6 @@ namespace IntegrationTestForMyApi.ProductControllerTests
         
         protected async Task<HttpResponseMessage> DeleteProductAsync(DeleteProduct product) =>
             await DeleteAsync(product, controllerName);
-
-        protected static void CheckResponse(HttpResponseMessage response, HttpStatusCode code) =>
-            response.StatusCode.Should().Be(code);
 
         protected async Task<HttpResponseMessage> CreateProductAsync(AddProduct product) =>
             await TestClient.PostAsJsonAsync(baseRoute + controllerName, product);

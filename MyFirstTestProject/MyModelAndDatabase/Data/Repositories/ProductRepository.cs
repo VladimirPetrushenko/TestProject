@@ -2,7 +2,6 @@
 using MyModelAndDatabase.Data.Context;
 using MyModelAndDatabase.Data.Interfaces;
 using MyModelAndDatabase.Models;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -18,35 +17,23 @@ namespace MyModelAndDatabase.Data.Repositories
             _context = context;
         }
 
-        public void CreateItem(Product product)
-        {
+        public void CreateItem(Product product) =>
             _context.Products.Add(product);
-        }
 
-        public void DeleteItem(Product product)
-        {
+        public void DeleteItem(Product product) =>
             _context.Products.Remove(product);
-        }
 
-        public IEnumerable<Product> GetAll()
-        {
-            return _context.Products;
-        }
+        public IEnumerable<Product> GetAll() => 
+            _context.Products;
 
-        public Task<Product> GetByID(int id)
-        {
-            return _context.Products.Where(p => p.Id == id).FirstOrDefaultAsync();
-        }
+        public Task<Product> GetByID(int id) => 
+            _context.Products.Where(p => p.Id == id).FirstOrDefaultAsync();
 
-        public Task<bool> ItemExists(int id)
-        {
-            return _context.Products.AnyAsync(x => x.Id == id);
-        }
+        public Task<bool> ItemExists(int id) => 
+            _context.Products.AnyAsync(x => x.Id == id);
 
-        public async Task<bool> SaveChanges()
-        {
-            return await _context.SaveChangesAsync() >= 0;
-        }
+        public async Task<bool> SaveChanges() => 
+            await _context.SaveChangesAsync() >= 0;
 
         public void UpdateItem(Product product)
         {

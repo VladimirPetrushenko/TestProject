@@ -17,42 +17,30 @@ namespace MyModelAndDatabase.Data.Repositories
             _context = context;
         }
 
-        public void CreateItem(Order item)
-        {
+        public void CreateItem(Order item) =>
             _context.Add(item);
-        }
 
-        public void DeleteItem(Order item)
-        {
+        public void DeleteItem(Order item) => 
             _context.Remove(item);
-        }
 
-        public IEnumerable<Order> GetAll()
-        {
-            return _context.Orders
+        public IEnumerable<Order> GetAll() =>
+            _context.Orders
                 .Include(x => x.Person)
                 .Include(x => x.Products);
-        }
 
-        public Task<Order> GetByID(int id)
-        {
-            return _context.Orders.Where(x => x.Id == id)
+        public Task<Order> GetByID(int id) => 
+            _context.Orders.Where(x => x.Id == id)
                 .Include(x=>x.Person)
                 .Include(x=>x.Products)
                 .FirstOrDefaultAsync();
-        }
 
-        public Task<bool> ItemExists(int id)
-        {
-            return _context.Orders.AnyAsync(x => x.Id == id);
-        }
+        public Task<bool> ItemExists(int id) => 
+            _context.Orders.AnyAsync(x => x.Id == id);
 
-        public async Task<bool> SaveChanges()
-        {
-            return await _context.SaveChangesAsync() >= 0;
-        }
+        public async Task<bool> SaveChanges() => 
+            await _context.SaveChangesAsync() >= 0;
 
-        public void UpdateItem(Order item)
+        public void UpdateItem(Order item) 
         {
             // Nothing
         }

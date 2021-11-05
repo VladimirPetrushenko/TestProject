@@ -1,12 +1,10 @@
-﻿using FluentAssertions;
+﻿using AutoFixture;
+using FluentAssertions;
 using MyClient.Models.Persons;
 using MyModelAndDatabase.Models;
-using System;
-using System.Net;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
-using AutoFixture;
 
 namespace IntegrationTestForMyApi.PersonControllerTests
 {
@@ -48,9 +46,6 @@ namespace IntegrationTestForMyApi.PersonControllerTests
 
         protected static UpdatePerson CreateUpdatePersonFromPerson(Person person) => 
             new() { Id = person.Id, FirstName = person.FirstName, LastName = person.LastName, IsActive = person.IsActive, IsBlock = person.IsBlock };
-
-        protected static void CheckResponse(HttpResponseMessage response, HttpStatusCode code) =>
-            response.StatusCode.Should().Be(code);
 
         protected async Task EndPersonTest(Person person) => 
             await DeletePersonAsync(new DeletePerson { Id = person.Id });

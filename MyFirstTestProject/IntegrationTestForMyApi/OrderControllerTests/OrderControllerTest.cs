@@ -5,8 +5,8 @@ using MyClient.Models.Persons;
 using MyClient.Models.Products;
 using MyModelAndDatabase.Models;
 using MyModelAndDatabase.Models.Interfaces;
-using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
@@ -15,8 +15,10 @@ namespace IntegrationTestForMyApi.OrderControllerTests
 {
     public class OrderControllerTest : IntegrationTest
     {
-        protected string controllerName = "person/";
-        private int RowCount = 100;
+        protected string orderController = "order/";
+        protected string productController = "product/";
+        protected string personController = "person/";
+        protected int RowCount = 100;
 
         protected static void CheckReturnResult(OrderReadDto returnResult, OrderReadDto order)
         {
@@ -34,11 +36,35 @@ namespace IntegrationTestForMyApi.OrderControllerTests
             }
         }
 
+        protected async Task<HttpResponseMessage> CreateOrderAsync(AddOrder order) =>
+            await TestClient.PostAsJsonAsync(baseRoute + orderController, order);
+
         protected async Task<HttpResponseMessage> CreatePersonAsync(AddPerson person) =>
-            await TestClient.PostAsJsonAsync(baseRoute + controllerName, person);
+            await TestClient.PostAsJsonAsync(baseRoute + personController, person);
 
         protected async Task<HttpResponseMessage> CreateProductAsync(AddProduct product) =>
-            await TestClient.PostAsJsonAsync(baseRoute + controllerName, product);
+            await TestClient.PostAsJsonAsync(baseRoute + productController, product);
+
+        protected async Task<HttpResponseMessage> DeleteOrderAsync(DeleteOrder order) =>
+            await DeleteAsync(order, orderController);
+
+        protected async Task<HttpResponseMessage> Initialize()
+        {
+            await InitializeDatabases();
+
+            var response = await TestClient.GetAsync(baseRoute + personController);
+            var person = (await response.Content.ReadAsAsync<List<Person>>()).First();
+            response = await TestClient.GetAsync(baseRoute + productController); ;
+            var product = await response.Content.ReadAsAsync<List<Product>>();
+
+            var order = new AddOrder
+            {
+                Person = person.Id,
+                Products = product.Take(5).Select(p => p.Id).ToList(),
+            };
+
+            return await CreateOrderAsync(order);
+        }
 
         protected async Task InitializeDatabases()
         {
@@ -54,9 +80,9 @@ namespace IntegrationTestForMyApi.OrderControllerTests
 
         protected async Task EndOrderTest()
         {
-            await DeleteItems<Order, DeleteOrder>("order/");
-            await DeleteItems<Person, DeletePerson>("person/");
-            await DeleteItems<Product, DeleteProduct>("product/");
+            await DeleteItems<Order, DeleteOrder>(orderController);
+            await DeleteItems<Person, DeletePerson>(personController);
+            await DeleteItems<Product, DeleteProduct>(productController);
         }
 
         private async Task DeleteItems<T, Y>(string controller)

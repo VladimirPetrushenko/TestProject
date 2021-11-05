@@ -1,4 +1,5 @@
 ﻿using AutoFixture;
+using FluentAssertions;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -9,6 +10,7 @@ using MyClient.Models.Products;
 using MyModelAndDatabase.Data.Context;
 using MyModelAndDatabase.Models;
 using System;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
@@ -67,5 +69,8 @@ namespace IntegrationTestForMyApi
 
             return await TestClient.SendAsync(request);
         }
+
+        protected static void CheckResponse(HttpResponseMessage response, HttpStatusCode code) =>
+            response.StatusCode.Should().Be(code);
     }
 }

@@ -19,7 +19,7 @@ namespace IntegrationTestForMyApi.ProductControllerTests
         }
 
         [Fact]
-        public async Task Post_NormalModelt_ReturnsProduct_StatusCode200()
+        public async Task Post_NormalModelt_StatusCode200()
         {
             var response = await CreateProductAsync(CreateValideAddProduct());
             var product = await response.Content.ReadAsAsync<Product>();
