@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using MediatR;
 using MyClient.Models.Dtos.Orders;
+using MyClient.Models.Orders.Interfaces;
 using MyModelAndDatabase.Data.Interfaces;
 using MyModelAndDatabase.Models;
 using System.Linq;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace MyClient.Models.Orders
 {
-    public class AddOrder : OrderCreatDto, IRequest<OrderReadDto>
+    public class AddOrder : OrderCreatDto, IRequest<OrderReadDto>, IOrder
     {
         public class AddOrderHandler : IRequestHandler<AddOrder, OrderReadDto>
         {

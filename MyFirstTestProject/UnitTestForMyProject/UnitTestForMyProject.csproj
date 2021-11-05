@@ -25,6 +25,7 @@
   <ItemGroup>
     <ProjectReference Include="..\CommonProject\Common.csproj" />
     <ProjectReference Include="..\MyApi\MyApi.csproj" />
+    <ProjectReference Include="..\MyClient\MyClient.csproj" />
     <ProjectReference Include="..\MyFirstTestProject\MyApi.csproj" />
     <ProjectReference Include="..\MyModelAndDatabase\MyModelAndDatabase.csproj" />
   </ItemGroup>

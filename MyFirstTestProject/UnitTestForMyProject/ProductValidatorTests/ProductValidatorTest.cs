@@ -57,5 +57,18 @@ namespace UnitTestForMyProject.ProductValidatorTests
                 result.ShouldNotHaveValidationErrorFor(product => product.Type);
             }
         }
+
+        protected static void CheckingPrice<T>(TestValidationResult<T> result, T product)
+            where T : IProduct
+        {
+            if (product.Price < 0)
+            {
+                result.ShouldHaveValidationErrorFor(product => product.Price);
+            }
+            else
+            {
+                result.ShouldNotHaveValidationErrorFor(product => product.Price);
+            }
+        }
     }
 }

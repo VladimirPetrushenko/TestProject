@@ -1,4 +1,5 @@
 ﻿using MyModelAndDatabase.Data.Interfaces;
+using MyModelAndDatabase.Data.Repositories.Mock;
 using MyModelAndDatabase.Models;
 using System;
 using System.Collections.Generic;
@@ -7,18 +8,10 @@ using System.Threading.Tasks;
 
 namespace MyModelAndDatabase.Data
 {
-    public class MockProductRepo : IRepository<Product>
+    public class MockProductRepo : MockRepo, IRepository<Product>
     {
-        public List<Product> Products { get; set; }
-        public MockProductRepo()
-        {
-            Products = new List<Product>
-            {
-                new Product { Id = 1, Alias = "first product", Name = "milk", Type = ProductType.Main },
-                new Product { Id = 2, Alias = "Hot chocolate", Name = "Kakao", Type = ProductType.Main },
-                new Product { Id = 3, Alias = "Chocolate and nuts", Name = "Nuts", Type = ProductType.Others },
-            };
-            
+        public MockProductRepo() : base()
+        {            
         }
         public void CreateItem(Product product)
         {

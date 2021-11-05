@@ -9,15 +9,15 @@ namespace MyClient.Models.Orders.Validators
 {
     public class UpdateOrderValidator : AbstractValidator<UpdateOrder>
     {
-        private readonly IRepository<Person> _repository;
+        private readonly IRepository<Order> _repoOrder;
         private readonly IRepository<Person> _repoPerson;
         private readonly IRepository<Product> _repoProduct;
 
-        public UpdateOrderValidator(IRepository<Person> repository, 
+        public UpdateOrderValidator(IRepository<Order> repoOrder, 
             IRepository<Person> repoPerson, 
             IRepository<Product> repoProduct)
         {
-            _repository = repository;
+            _repoOrder = repoOrder;
             _repoPerson = repoPerson;
             _repoProduct = repoProduct;
             RuleFor(p => p.Id)
@@ -31,7 +31,7 @@ namespace MyClient.Models.Orders.Validators
 
         }
 
-        private bool OrderExist(int id) => _repository.ItemExists(id).Result;
+        private bool OrderExist(int id) => _repoOrder.ItemExists(id).Result;
 
         private bool PersonExist(int id) => _repoPerson.ItemExists(id).Result;
 

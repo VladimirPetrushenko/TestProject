@@ -30,6 +30,7 @@ namespace UnitTestForMyProject.ProductValidatorTests
                 CheckingAlias(result, product);
                 CheckingName(result, product);
                 CheckingType(result, product);
+                CheckingPrice(result, product);
             }
         }
     }

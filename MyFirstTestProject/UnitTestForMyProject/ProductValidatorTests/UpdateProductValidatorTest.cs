@@ -28,22 +28,27 @@ namespace UnitTestForMyProject.ProductValidatorTests
             {
                 var result = _validator.TestValidate(product);
 
-                CheckingId(result, product, _repository);
-                CheckingAlias(result, product);
-                CheckingName(result, product);
-                CheckingType(result, product);
+                if(CheckingId(result, product, _repository)) 
+                { 
+                    CheckingAlias(result, product);
+                    CheckingName(result, product);
+                    CheckingType(result, product);
+                    CheckingPrice(result, product);
+                }
             }
         }
 
-        private static void CheckingId(TestValidationResult<UpdateProduct> result, UpdateProduct product, MockProductRepo repository)
+        private static bool CheckingId(TestValidationResult<UpdateProduct> result, UpdateProduct product, MockProductRepo repository)
         {
             if (repository.ItemExists(product.Id).Result) 
             { 
                 result.ShouldNotHaveValidationErrorFor(product => product.Id);
+                return true;
             }
             else
             {
                 result.ShouldHaveValidationErrorFor(product => product.Id);
+                return false;
             }
         }
     }

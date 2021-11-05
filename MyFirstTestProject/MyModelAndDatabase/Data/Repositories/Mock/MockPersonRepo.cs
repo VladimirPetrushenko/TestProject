@@ -1,4 +1,5 @@
 ﻿using MyModelAndDatabase.Data.Interfaces;
+using MyModelAndDatabase.Data.Repositories.Mock;
 using MyModelAndDatabase.Models;
 using System;
 using System.Collections.Generic;
@@ -7,23 +8,10 @@ using System.Threading.Tasks;
 
 namespace MyModelAndDatabase.Data
 {
-    public class MockPersonRepo : IRepository<Person>
+    public class MockPersonRepo : MockRepo, IRepository<Person>
     {
-        public List<Person> People { get; set; }
-
-        public MockPersonRepo()
+        public MockPersonRepo() : base()
         {
-            People = new()
-            {
-                new Person { Id = 1, FirstName = "Vladimir", LastName = "Petrushenko", IsActive = true },
-                new Person { Id = 2, FirstName = "Igor", LastName = "Ivanov", Email = "someemail@mail.ru", IsActive = true },
-                new Person { Id = 3, FirstName = "Ivan", LastName = "Britva", IsActive = true, IsBlock = true },
-                new Person { Id = 4, FirstName = "Servei", LastName = "Britva", IsActive = false, IsBlock = true },
-                new Person { Id = 5, FirstName = "Marina", LastName = "Britva", IsActive = true, IsBlock = false },
-                new Person { Id = 6, FirstName = "Hanna", LastName = "Britva", IsActive = true, IsBlock = false },
-                new Person { Id = 7, FirstName = "Anton", LastName = "Britva", IsActive = true, IsBlock = false },
-                new Person { Id = 8, FirstName = "Boris", LastName = "Britva", IsActive = true, IsBlock = false },
-            };
         }
 
         public void CreateItem(Person person)
