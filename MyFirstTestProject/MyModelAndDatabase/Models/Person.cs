@@ -1,9 +1,10 @@
-﻿using System;
+﻿using MyModelAndDatabase.Models.Interfaces;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace MyModelAndDatabase.Models
 {
-    public class Person : ICloneable
+    public class Person : ICloneable, IId
     {
         [Key]
         public int Id { get; set; }

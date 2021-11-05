@@ -1,12 +1,13 @@
 ﻿using MediatR;
 using MyModelAndDatabase.Data.Interfaces;
 using MyModelAndDatabase.Models;
+using MyModelAndDatabase.Models.Interfaces;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace MyClient.Models.Persons
 {
-    public class DeletePerson : IRequest<Person>
+    public class DeletePerson : IRequest<Person>, IId
     {
         public int Id { get; set; }
 

@@ -23,30 +23,14 @@ namespace IntegrationTestForMyApi.PersonControllerTests
             returnResult.IsBlock.Should().Be(person.IsBlock);
         }
 
-        protected async Task<HttpResponseMessage> DeletePersonAsync(DeletePerson person)
-        {
-            HttpRequestMessage request = new()
-            {
-                Content = JsonContent.Create(person),
-                Method = HttpMethod.Delete,
-                RequestUri = new Uri(baseRoute + controllerName)
-            };
-
-            return await TestClient.SendAsync(request);
-        }
+        protected async Task<HttpResponseMessage> DeletePersonAsync(DeletePerson person) =>
+            await DeleteAsync(person, controllerName);
 
         protected async Task<HttpResponseMessage> CreatePersonAsync(AddPerson person) =>
             await TestClient.PostAsJsonAsync(baseRoute + controllerName, person);
 
         protected async Task<HttpResponseMessage> UpdatePersonAsync(UpdatePerson person) =>
             await TestClient.PutAsJsonAsync(baseRoute + controllerName, person);
-
-        protected AddPerson CreateValideAddModel() =>
-            fixture.Build<AddPerson>()
-                .With(p => p.FirstName, "Vladimir")
-                .With(p => p.LastName, "Petrushenko")
-                .With(p => p.IsActive, true)
-                .Create();
 
         protected AddPerson CreateAddModelWhithoutLastName() =>
             fixture.Build<AddPerson>()

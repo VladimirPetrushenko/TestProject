@@ -3,12 +3,13 @@ using MediatR;
 using MyClient.Models.Dtos.Orders;
 using MyModelAndDatabase.Data.Interfaces;
 using MyModelAndDatabase.Models;
+using MyModelAndDatabase.Models.Interfaces;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace MyClient.Models.Orders
 {
-    public class DeleteOrder : IRequest<OrderReadDto>
+    public class DeleteOrder : IRequest<OrderReadDto>, IId
     {
         public int Id { get; set; }
         public class DeleteOrderHandler : IRequestHandler<DeleteOrder, OrderReadDto>

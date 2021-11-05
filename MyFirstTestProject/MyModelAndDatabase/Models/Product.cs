@@ -1,6 +1,8 @@
-﻿namespace MyModelAndDatabase.Models
+﻿using MyModelAndDatabase.Models.Interfaces;
+
+namespace MyModelAndDatabase.Models
 {
-    public class Product
+    public class Product : IId
     {
         public int Id { get; set; }
         public string Alias { get; set; }

@@ -1,12 +1,13 @@
 ﻿using MediatR;
 using MyModelAndDatabase.Data.Interfaces;
 using MyModelAndDatabase.Models;
+using MyModelAndDatabase.Models.Interfaces;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace MyClient.Models.Products
 {
-    public class DeleteProduct : IRequest<Product>
+    public class DeleteProduct : IRequest<Product>, IId
     {
         public int Id { get; set; }
 

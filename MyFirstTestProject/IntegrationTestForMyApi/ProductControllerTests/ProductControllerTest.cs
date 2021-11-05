@@ -20,19 +20,11 @@ namespace IntegrationTestForMyApi.ProductControllerTests
             returnResult.Alias.Should().Be(product.Alias);
             returnResult.Name.Should().Be(product.Name);
             returnResult.Type.Should().Be(product.Type);
+            returnResult.Price.Should().Be(product.Price);
         }
         
-        protected async Task<HttpResponseMessage> DeleteProductAsync(DeleteProduct product)
-        {
-            HttpRequestMessage request = new()
-            {
-                Content = JsonContent.Create(product),
-                Method = HttpMethod.Delete,
-                RequestUri = new Uri(baseRoute + controllerName)
-            };
-
-            return await TestClient.SendAsync(request);
-        }
+        protected async Task<HttpResponseMessage> DeleteProductAsync(DeleteProduct product) =>
+            await DeleteAsync(product, controllerName);
 
         protected static void CheckResponse(HttpResponseMessage response, HttpStatusCode code) =>
             response.StatusCode.Should().Be(code);
@@ -45,11 +37,6 @@ namespace IntegrationTestForMyApi.ProductControllerTests
 
         protected async Task EndProductTest(Product product) =>
             await DeleteProductAsync(new DeleteProduct { Id = product.Id });
-
-        protected AddProduct CreateValideAddProduct() =>
-            fixture.Build<AddProduct>()
-                .With(p => p.Type, ProductType.Others)
-                .Create();
 
         protected AddProduct CreateAddProductWithoutAlias() =>
             fixture.Build<AddProduct>()

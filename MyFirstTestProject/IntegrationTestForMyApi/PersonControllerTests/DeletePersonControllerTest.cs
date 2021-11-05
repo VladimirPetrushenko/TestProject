@@ -20,7 +20,7 @@ namespace IntegrationTestForMyApi.PersonControllerTests
         [Fact]
         public async Task Delete_ReturnDeletedPerson_StatusCode200()
         {
-            var response = await CreatePersonAsync(CreateValideAddModel());
+            var response = await CreatePersonAsync(CreateValideAddPerson());
             var person = await response.Content.ReadAsAsync<Person>();
 
             response = await DeletePersonAsync(new DeletePerson { Id = person.Id });
