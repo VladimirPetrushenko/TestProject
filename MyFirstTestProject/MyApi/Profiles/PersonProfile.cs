@@ -4,9 +4,9 @@ using MyModelAndDatabase.Models;
 
 namespace MyApi.Profiles
 {
-    public class PersonPeofile : Profile
+    public class PersonProfile : Profile
     {
-        public PersonPeofile()
+        public PersonProfile()
         {
             CreateMap<Person, PersonReadDto>();
             CreateMap<PersonCreateDto, Person>();

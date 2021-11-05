@@ -6,6 +6,7 @@ namespace MyApi.Controllers
     public class BaseApiController : Controller
     {
         protected readonly IMediator _mediator;
+       // 
 
         public BaseApiController(IMediator mediator)
         {

@@ -15,7 +15,6 @@ using MyModelAndDatabase.Data.Context;
 using MyModelAndDatabase.Data.Interfaces;
 using MyModelAndDatabase.Data.Repositories;
 using MyModelAndDatabase.Models;
-using System;
 using System.Reflection;
 using System.Text.Json;
 
@@ -34,9 +33,9 @@ namespace MyApi
         {
             services.AddScoped<IRepository<Person>, PersonRepository>();
             services.AddScoped<IRepository<Product>, ProductRepository>();
+            services.AddScoped<IRepository<Order>, OrderRepository>();
 
             services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
-            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             services.AddDbContext<MyContext>(options => 
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"))
@@ -83,6 +82,8 @@ namespace MyApi
                 });
             });
             services.ConfigureSwaggerFeature();
+
+            services.AddAutoMapper(typeof(Startup));
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using MyClient.Models.Dtos.Products;
 using MyClient.Models.Products.Interfaces;
 using MyModelAndDatabase.Data.Interfaces;
 using MyModelAndDatabase.Models;
@@ -7,12 +8,8 @@ using System.Threading.Tasks;
 
 namespace MyClient.Models.Products
 {
-    public class AddProduct : IRequest<Product>, IProduct
+    public class AddProduct : ProductCreateDto, IRequest<Product>, IProduct
     {
-        public string Alias { get; set; }
-        public string Name { get; set; }
-        public ProductType Type { get; set; }
-
         public class AddProductHandler : IRequestHandler<AddProduct, Product>
         {
             private readonly IRepository<Product> _repository;
@@ -28,7 +25,8 @@ namespace MyClient.Models.Products
                 {
                     Alias = request.Alias,
                     Name = request.Name,
-                    Type = request.Type
+                    Type = request.Type,
+                    Price = request.Price,
                 };
 
                 _repository.CreateItem(product);

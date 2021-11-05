@@ -11,10 +11,14 @@ namespace MyClient.Models.Products.Validators
         public UpdateProductValidator(IRepository<Product> repository)
         {
             _repository = repository;
-            RuleFor(p => p.Id).ShouldNotBeNegative().Must(ProductExist).WithMessage("Product is not found");
-            RuleFor(p => p.Alias).NotEmpty();
-            RuleFor(p => p.Name).NotEmpty();
-            RuleFor(c => c.Type).NotEqual(ProductType.None);
+            RuleFor(p => p.Id).ShouldNotBeNegative().Must(ProductExist).WithMessage("Product is not found")
+                .DependentRules(() =>
+                {
+                    RuleFor(p => p.Alias).NotEmpty();
+                    RuleFor(p => p.Name).NotEmpty();
+                    RuleFor(c => c.Type).NotEqual(ProductType.None);
+                    RuleFor(c => c.Price).Must(x => x >= 0).WithMessage("Price is not correct");
+                });
         }
 
         private bool ProductExist(int id)
