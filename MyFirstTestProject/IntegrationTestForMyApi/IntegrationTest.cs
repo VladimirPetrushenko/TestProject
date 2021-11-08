@@ -1,6 +1,7 @@
 ﻿using AutoFixture;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -22,22 +23,14 @@ namespace IntegrationTestForMyApi
         protected readonly HttpClient TestClient;
         protected string baseRoute = "https://localhost/api/";
         public Fixture fixture;
+        protected MyContext context;
         public IntegrationTest()
         {
-            var apiFactory = new WebApplicationFactory<Startup>()
-                .WithWebHostBuilder(builder =>
-                {
-                    builder.ConfigureServices(servises =>
-                    {
-                        servises.RemoveAll(typeof(MyContext));
-                        servises.AddDbContext<MyContext>(options =>
-                        {
-                            options.UseInMemoryDatabase("TestDb");
-                        });
-
-                    });
-                });
-            TestClient = apiFactory.CreateClient();
+            var apiFactory = new WebApplicationFactory<Startup>();
+            var testServer = new TestServer(apiFactory.Services);
+            var services = testServer.Host.Services;
+            context = (MyContext)services.GetService(typeof(MyContext));
+            TestClient = testServer.CreateClient();
             fixture = new Fixture();
         }
 
