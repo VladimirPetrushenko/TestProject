@@ -9,9 +9,7 @@ using System.Threading.Tasks;
 namespace IntegrationTestForMyApi.ProductControllerTests
 {
     public class ProductControllerTest : IntegrationTest
-    {
-        protected string controllerName = "product/";
-        
+    {        
         protected static void CheckReturnResult(Product returnResult, Product product)
         {
             returnResult.Id.Should().Be(product.Id);
@@ -22,13 +20,13 @@ namespace IntegrationTestForMyApi.ProductControllerTests
         }
         
         protected async Task<HttpResponseMessage> DeleteProductAsync(DeleteProduct product) =>
-            await DeleteAsync(product, controllerName);
+            await DeleteAsync(product, Routs.Product);
 
         protected async Task<HttpResponseMessage> CreateProductAsync(AddProduct product) =>
-            await TestClient.PostAsJsonAsync(baseRoute + controllerName, product);
+            await TestClient.PostAsJsonAsync(Routs.Product, product);
 
         protected async Task<HttpResponseMessage> UpdateProductAsync(UpdateProduct product) =>
-            await TestClient.PutAsJsonAsync(baseRoute + controllerName, product);
+            await TestClient.PutAsJsonAsync(Routs.Product, product);
 
         protected AddProduct CreateAddProductWithoutAlias() =>
             fixture.Build<AddProduct>()

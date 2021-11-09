@@ -15,9 +15,6 @@ namespace IntegrationTestForMyApi.OrderControllerTests
 {
     public class OrderControllerTest : IntegrationTest
     {
-        protected string orderController = "order/";
-        protected string productController = "product/";
-        protected string personController = "person/";
         protected int RowCount = 100;
 
         protected static void CheckReturnResult(OrderReadDto returnResult, OrderReadDto order)
@@ -37,24 +34,24 @@ namespace IntegrationTestForMyApi.OrderControllerTests
         }
 
         protected async Task<HttpResponseMessage> CreateOrderAsync(AddOrder order) =>
-            await TestClient.PostAsJsonAsync(baseRoute + orderController, order);
+            await TestClient.PostAsJsonAsync(Routs.Order, order);
 
         protected async Task<HttpResponseMessage> CreatePersonAsync(AddPerson person) =>
-            await TestClient.PostAsJsonAsync(baseRoute + personController, person);
+            await TestClient.PostAsJsonAsync(Routs.Person, person);
 
         protected async Task<HttpResponseMessage> CreateProductAsync(AddProduct product) =>
-            await TestClient.PostAsJsonAsync(baseRoute + productController, product);
+            await TestClient.PostAsJsonAsync(Routs.Product, product);
 
         protected async Task<HttpResponseMessage> DeleteOrderAsync(DeleteOrder order) =>
-            await DeleteAsync(order, orderController);
+            await DeleteAsync(order, Routs.Order);
 
         protected async Task<HttpResponseMessage> Initialize()
         {
             await InitializeDatabases();
 
-            var response = await TestClient.GetAsync(baseRoute + personController);
+            var response = await TestClient.GetAsync(Routs.Person);
             var person = (await response.Content.ReadAsAsync<List<Person>>()).First();
-            response = await TestClient.GetAsync(baseRoute + productController); ;
+            response = await TestClient.GetAsync(Routs.Product); ;
             var product = await response.Content.ReadAsAsync<List<Product>>();
 
             var order = new AddOrder

@@ -17,7 +17,7 @@ namespace IntegrationTestForMyApi.OrderControllerTests
         {
             var response = await Initialize();
             var order = await response.Content.ReadAsAsync<OrderReadDto>();
-            response = await TestClient.GetAsync(baseRoute + personController);
+            response = await TestClient.GetAsync(Routs.Person);
             var person = await response.Content.ReadAsAsync<List<Person>>();
 
             var updateOrder = new UpdateOrder
@@ -27,7 +27,7 @@ namespace IntegrationTestForMyApi.OrderControllerTests
                 Products = order.Products.Select(p => p.Id).ToList()
             };
 
-            response = await TestClient.PutAsJsonAsync(baseRoute + orderController, updateOrder);
+            response = await TestClient.PutAsJsonAsync(Routs.Order, updateOrder);
             var returnResult = await response.Content.ReadAsAsync<OrderReadDto>();
 
             CheckResponse(response, HttpStatusCode.OK);
@@ -46,7 +46,7 @@ namespace IntegrationTestForMyApi.OrderControllerTests
                 Products = order.Products.Select(p => p.Id).ToList()
             };
 
-            response = await TestClient.PutAsJsonAsync(baseRoute + orderController, updateOrder);
+            response = await TestClient.PutAsJsonAsync(Routs.Order, updateOrder);
 
             CheckResponse(response, HttpStatusCode.BadRequest);
         }
@@ -54,7 +54,7 @@ namespace IntegrationTestForMyApi.OrderControllerTests
         [Fact]
         public async Task Put_WhenPostNotExistInDataBase_StatusCode404()
         {
-            var response = await TestClient.PutAsJsonAsync(baseRoute + orderController, new UpdateOrder { Id = 0 });
+            var response = await TestClient.PutAsJsonAsync(Routs.Order, new UpdateOrder { Id = 0 });
 
             CheckResponse(response, HttpStatusCode.NotFound);
         }
@@ -62,7 +62,7 @@ namespace IntegrationTestForMyApi.OrderControllerTests
         [Fact]
         public async Task Put_RequestForWrongRoute_StatusCode404()
         {
-            var response = await TestClient.PutAsJsonAsync(baseRoute + "something", new UpdateOrder());
+            var response = await TestClient.PutAsJsonAsync(Routs.BadRoute, new UpdateOrder());
 
             CheckResponse(response, HttpStatusCode.NotFound);
         }

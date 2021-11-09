@@ -10,8 +10,6 @@ namespace IntegrationTestForMyApi.PersonControllerTests
 {
     public class PersonControllerTest : IntegrationTest
     {
-        protected string controllerName = "person/";
-
         protected static void CheckReturnResult(Person returnResult, Person person)
         {
             returnResult.Id.Should().Be(person.Id);
@@ -22,13 +20,13 @@ namespace IntegrationTestForMyApi.PersonControllerTests
         }
 
         protected async Task<HttpResponseMessage> DeletePersonAsync(DeletePerson person) =>
-            await DeleteAsync(person, controllerName);
+            await DeleteAsync(person, Routs.Person);
 
         protected async Task<HttpResponseMessage> CreatePersonAsync(AddPerson person) =>
-            await TestClient.PostAsJsonAsync(baseRoute + controllerName, person);
+            await TestClient.PostAsJsonAsync(Routs.Person, person);
 
         protected async Task<HttpResponseMessage> UpdatePersonAsync(UpdatePerson person) =>
-            await TestClient.PutAsJsonAsync(baseRoute + controllerName, person);
+            await TestClient.PutAsJsonAsync(Routs.Person, person);
 
         protected AddPerson CreateAddModelWhithoutLastName() =>
             fixture.Build<AddPerson>()

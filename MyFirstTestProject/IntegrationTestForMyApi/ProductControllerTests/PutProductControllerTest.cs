@@ -47,7 +47,7 @@ namespace IntegrationTestForMyApi.ProductControllerTests
         [Fact] 
         public async Task Put_RequestForWrongRoute_StatusCode404()
         {
-            var response = await TestClient.PutAsJsonAsync(baseRoute + "something", new UpdateProduct());
+            var response = await TestClient.PutAsJsonAsync(Routs.BadRoute, new UpdateProduct());
 
             CheckResponse(response, HttpStatusCode.NotFound);
         }

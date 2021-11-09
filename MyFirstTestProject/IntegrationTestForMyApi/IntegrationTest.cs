@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using MyApi;
 using MyModelAndDatabase.Data.Context;
 using System;
+using System.Configuration;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Json;
@@ -18,7 +19,6 @@ namespace IntegrationTestForMyApi
     public class IntegrationTest : IDisposable
     { 
         protected readonly HttpClient TestClient;
-        protected string baseRoute = "https://localhost/api/";
         public Fixture fixture = new();
         protected IDbContextTransaction Transaction { get; }
 
@@ -31,7 +31,7 @@ namespace IntegrationTestForMyApi
                     {
                         services.RemoveAll(typeof(MyContext));
                         services.AddDbContext<MyContext>(options =>
-                            options.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=MyApi;Trusted_Connection=True;MultipleActiveResultSets=true"),
+                            options.UseSqlServer(Routs.ConnectionStrings),
                             ServiceLifetime.Singleton
                         );
                     });
@@ -41,13 +41,13 @@ namespace IntegrationTestForMyApi
             Transaction = DbContext.Database.BeginTransaction();
         }
 
-        protected async Task<HttpResponseMessage> DeleteAsync<T>(T item, string controllerName)
+        protected async Task<HttpResponseMessage> DeleteAsync<T>(T item, string route)
         {
             HttpRequestMessage request = new()
             {
                 Content = JsonContent.Create(item),
                 Method = HttpMethod.Delete,
-                RequestUri = new Uri(baseRoute + controllerName)
+                RequestUri = new Uri(route)
             };
 
             return await TestClient.SendAsync(request);

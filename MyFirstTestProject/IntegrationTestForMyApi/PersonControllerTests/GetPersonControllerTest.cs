@@ -17,7 +17,7 @@ namespace IntegrationTestForMyApi.PersonControllerTests
             var response = await CreatePersonAsync(fixture.CreateValideAddPerson());
             var person = await response.Content.ReadAsAsync<Person>();
 
-            response = await TestClient.GetAsync(baseRoute + controllerName + person.Id);
+            response = await TestClient.GetAsync(Routs.Person + person.Id);
             var returnResult = await response.Content.ReadAsAsync<Person>();
 
             CheckResponse(response, HttpStatusCode.OK);
@@ -27,7 +27,7 @@ namespace IntegrationTestForMyApi.PersonControllerTests
         [Fact]
         public async Task Get_WithoutAnyPost_ReturnEmptyResponce_StatusCode200()
         {
-            var response = await TestClient.GetAsync(baseRoute + controllerName);
+            var response = await TestClient.GetAsync(Routs.Person);
             var returnResult = await response.Content.ReadAsAsync<List<Product>>();
 
             CheckResponse(response, HttpStatusCode.OK);
@@ -37,7 +37,7 @@ namespace IntegrationTestForMyApi.PersonControllerTests
         [Fact]
         public async Task Get_WhenPostNotExistInDataBase_StatusCode404()
         {
-            var response = await TestClient.GetAsync(baseRoute + controllerName + 0);
+            var response = await TestClient.GetAsync(Routs.Person + 0);
 
             CheckResponse(response, HttpStatusCode.NotFound);
         }
@@ -50,7 +50,7 @@ namespace IntegrationTestForMyApi.PersonControllerTests
             person.IsBlock = true;
             await UpdatePersonAsync(CreateUpdatePersonFromPerson(person));
             
-            response = await TestClient.GetAsync(baseRoute + controllerName + person.Id);
+            response = await TestClient.GetAsync(Routs.Person + person.Id);
 
             CheckResponse(response, HttpStatusCode.BadRequest);
         }
