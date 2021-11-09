@@ -1,4 +1,4 @@
-﻿using IntegrationTestForMyApi.Extentions;
+﻿using IntegrationTest.Extentions;
 using MyClient.Models.Persons;
 using MyModelAndDatabase.Models;
 using System.Net;
@@ -6,7 +6,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace IntegrationTestForMyApi.PersonControllerTests
+namespace IntegrationTest.PersonControllerTests
 {
     public class PutPersonControllerTest : PersonControllerTest
     {
@@ -22,6 +22,8 @@ namespace IntegrationTestForMyApi.PersonControllerTests
 
             CheckResponse(response, HttpStatusCode.OK);
             CheckReturnResult(returnResult, person);
+
+            await EndPersonTest(person);
         }
 
         [Fact]
@@ -34,6 +36,8 @@ namespace IntegrationTestForMyApi.PersonControllerTests
             response = await UpdatePersonAsync(CreateUpdatePersonFromPerson(person));
 
             CheckResponse(response, HttpStatusCode.BadRequest);
+
+            await EndPersonTest(person);
         }
 
         [Fact]

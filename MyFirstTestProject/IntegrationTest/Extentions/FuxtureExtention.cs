@@ -3,7 +3,7 @@ using MyClient.Models.Persons;
 using MyClient.Models.Products;
 using MyModelAndDatabase.Models;
 
-namespace IntegrationTestForMyApi.Extentions
+namespace IntegrationTest.Extentions
 {
     public static class FuxtureExtention
     {

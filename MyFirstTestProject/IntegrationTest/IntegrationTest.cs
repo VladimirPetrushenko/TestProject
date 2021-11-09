@@ -1,11 +1,6 @@
 ﻿using AutoFixture;
 using FluentAssertions;
-using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
-using MyApi;
 using MyModelAndDatabase.Data.Context;
 using System;
 using System.Net;
@@ -13,7 +8,7 @@ using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
 
-namespace IntegrationTestForMyApi
+namespace IntegrationTest
 {
     public class IntegrationTest : IDisposable
     { 
@@ -21,21 +16,9 @@ namespace IntegrationTestForMyApi
         protected string baseRoute = "https://localhost/api/";
         public Fixture fixture = new();
         protected IDbContextTransaction Transaction { get; }
-
         public IntegrationTest()
         {
-            var apiFactory = new WebApplicationFactory<Startup>()
-                .WithWebHostBuilder(builder =>
-                {
-                    builder.ConfigureServices(services =>
-                    {
-                        services.RemoveAll(typeof(MyContext));
-                        services.AddDbContext<MyContext>(options =>
-                            options.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=MyApi;Trusted_Connection=True;MultipleActiveResultSets=true"),
-                            ServiceLifetime.Singleton
-                        );
-                    });
-                });
+            var apiFactory = new WebApplicationFactory<Startup>();
             TestClient = apiFactory.CreateClient();
             var DbContext = (MyContext)apiFactory.Services.GetService(typeof(MyContext));
             Transaction = DbContext.Database.BeginTransaction();
@@ -65,4 +48,22 @@ namespace IntegrationTestForMyApi
             }
         }
     }
+
+    //private readonly TestServer _server;
+    //private readonly IServiceProvider _services;
+    //protected IDbContextTransaction Transaction { get; }
+
+    //protected readonly HttpClient TestClient;
+    //public IntegrationTest()
+    //{
+    //    var builder = WebHost.CreateDefaultBuilder()
+    //        .UseStartup<TestStartup>();
+    //    _server = new TestServer(builder);
+    //    _services = _server.Host.Services;
+    //    TestClient = _server.CreateClient();
+    //    var DbContext = GetService<MyContext>();
+    //    Transaction = DbContext.Database.BeginTransaction();
+    //}
+
+    //protected T GetService<T>() => (T)_services.GetService(typeof(T));
 }

@@ -1,17 +1,18 @@
 ﻿using FluentAssertions;
-using IntegrationTestForMyApi.Extentions;
+using IntegrationTest.Extentions;
 using MyClient.Models.Dtos.Orders;
 using MyClient.Models.Orders;
 using MyClient.Models.Persons;
 using MyClient.Models.Products;
 using MyModelAndDatabase.Models;
+using MyModelAndDatabase.Models.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
 
-namespace IntegrationTestForMyApi.OrderControllerTests
+namespace IntegrationTest.OrderControllerTests
 {
     public class OrderControllerTest : IntegrationTest
     {
@@ -75,6 +76,25 @@ namespace IntegrationTestForMyApi.OrderControllerTests
 
                 await CreatePersonAsync(person);
                 await CreateProductAsync(product);
+            }
+        }
+
+        protected async Task EndOrderTest()
+        {
+            await DeleteItems<Order, DeleteOrder>(orderController);
+            await DeleteItems<Person, DeletePerson>(personController);
+            await DeleteItems<Product, DeleteProduct>(productController);
+        }
+
+        private async Task DeleteItems<T, Y>(string controller)
+            where T : IId
+            where Y : IId, new()
+        {
+            var response = await TestClient.GetAsync(baseRoute + controller);
+            var returnResult = await response.Content.ReadAsAsync<List<T>>();
+
+            foreach (var item in returnResult) { 
+                await DeleteAsync(new Y() { Id = item.Id }, controller);
             }
         }
     }

@@ -1,4 +1,4 @@
-﻿using IntegrationTestForMyApi.Extentions;
+﻿using IntegrationTest.Extentions;
 using MyClient.Models.Persons;
 using MyModelAndDatabase.Models;
 using System.Net;
@@ -6,7 +6,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace IntegrationTestForMyApi.PersonControllerTests
+namespace IntegrationTest.PersonControllerTests
 {
     public class DeletePersonControllerTest : PersonControllerTest
     {
@@ -40,6 +40,10 @@ namespace IntegrationTestForMyApi.PersonControllerTests
 
             response = await DeletePersonAsync(new DeletePerson { Id = person.Id });
             CheckResponse(response, HttpStatusCode.BadRequest);
+
+            person.IsActive = true;
+            await UpdatePersonAsync(CreateUpdatePersonFromPerson(person));
+            await EndPersonTest(person);
         }
     }
 }

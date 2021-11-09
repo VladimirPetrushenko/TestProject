@@ -1,4 +1,4 @@
-﻿using IntegrationTestForMyApi.Extentions;
+﻿using IntegrationTest.Extentions;
 using MyClient.Models.Products;
 using MyModelAndDatabase.Models;
 using System.Net;
@@ -6,7 +6,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace IntegrationTestForMyApi.ProductControllerTests
+namespace IntegrationTest.ProductControllerTests
 {
     public class PutProductControllerTest : ProductControllerTest
     {
@@ -22,6 +22,8 @@ namespace IntegrationTestForMyApi.ProductControllerTests
 
             CheckResponse(response, HttpStatusCode.OK);
             CheckReturnResult(returnResult, product);
+
+            await EndProductTest(product);
         }
 
         [Fact]
@@ -34,6 +36,8 @@ namespace IntegrationTestForMyApi.ProductControllerTests
             response = await UpdateProductAsync(CreateUpdateProductFromProduct(product));
 
             CheckResponse(response, HttpStatusCode.BadRequest);
+
+            await EndProductTest(product);
         }
 
         [Fact]

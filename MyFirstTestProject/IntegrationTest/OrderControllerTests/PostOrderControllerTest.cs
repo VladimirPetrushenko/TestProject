@@ -7,7 +7,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace IntegrationTestForMyApi.OrderControllerTests
+namespace IntegrationTest.OrderControllerTests
 {
     public class PostOrderControllerTest : OrderControllerTest
     {
@@ -37,6 +37,8 @@ namespace IntegrationTestForMyApi.OrderControllerTests
 
             response = await CreateOrderAsync(order);
             CheckResponse(response, HttpStatusCode.OK);
+
+            await EndOrderTest();
         }
     }
 }

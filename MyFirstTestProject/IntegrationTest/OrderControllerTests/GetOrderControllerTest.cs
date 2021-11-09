@@ -6,7 +6,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace IntegrationTestForMyApi.OrderControllerTests
+namespace IntegrationTest.OrderControllerTests
 {
     public class GetOrderControllerTest : OrderControllerTest
     {
@@ -22,6 +22,8 @@ namespace IntegrationTestForMyApi.OrderControllerTests
 
             CheckResponse(response, HttpStatusCode.OK);
             CheckReturnResult(returnResult, order);
+
+            await EndOrderTest();
         }
 
         [Fact]

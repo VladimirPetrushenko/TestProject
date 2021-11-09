@@ -6,7 +6,7 @@ using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
 
-namespace IntegrationTestForMyApi.PersonControllerTests
+namespace IntegrationTest.PersonControllerTests
 {
     public class PersonControllerTest : IntegrationTest
     {
@@ -46,5 +46,8 @@ namespace IntegrationTestForMyApi.PersonControllerTests
 
         protected static UpdatePerson CreateUpdatePersonFromPerson(Person person) => 
             new() { Id = person.Id, FirstName = person.FirstName, LastName = person.LastName, IsActive = person.IsActive, IsBlock = person.IsBlock };
+
+        protected async Task EndPersonTest(Person person) => 
+            await DeletePersonAsync(new DeletePerson { Id = person.Id });
     }
 }

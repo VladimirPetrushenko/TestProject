@@ -1,11 +1,11 @@
-﻿using IntegrationTestForMyApi.Extentions;
+﻿using IntegrationTest.Extentions;
 using MyModelAndDatabase.Models;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace IntegrationTestForMyApi.PersonControllerTests
+namespace IntegrationTest.PersonControllerTests
 {
     public class PostPersonControllerTest : PersonControllerTest
     {
@@ -26,6 +26,8 @@ namespace IntegrationTestForMyApi.PersonControllerTests
             var person = await response.Content.ReadAsAsync<Person>();
 
             CheckResponse(response, HttpStatusCode.OK);
+
+            await EndPersonTest(person);
         }
     }
 }

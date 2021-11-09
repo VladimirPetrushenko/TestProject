@@ -5,7 +5,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace IntegrationTestForMyApi.OrderControllerTests
+namespace IntegrationTest.OrderControllerTests
 {
     public class DeleteOrderControllerTest : OrderControllerTest
     {

@@ -8,7 +8,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace IntegrationTestForMyApi.OrderControllerTests
+namespace IntegrationTest.OrderControllerTests
 {
     public class PutOrderControllerTest : OrderControllerTest
     {
@@ -31,6 +31,8 @@ namespace IntegrationTestForMyApi.OrderControllerTests
             var returnResult = await response.Content.ReadAsAsync<OrderReadDto>();
 
             CheckResponse(response, HttpStatusCode.OK);
+
+            await EndOrderTest();
         }
 
         [Fact]
@@ -49,6 +51,8 @@ namespace IntegrationTestForMyApi.OrderControllerTests
             response = await TestClient.PutAsJsonAsync(baseRoute + orderController, updateOrder);
 
             CheckResponse(response, HttpStatusCode.BadRequest);
+
+            await EndOrderTest();
         }
 
         [Fact]

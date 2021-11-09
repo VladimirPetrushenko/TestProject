@@ -1,11 +1,11 @@
-﻿using IntegrationTestForMyApi.Extentions;
+﻿using IntegrationTest.Extentions;
 using MyModelAndDatabase.Models;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace IntegrationTestForMyApi.ProductControllerTests
+namespace IntegrationTest.ProductControllerTests
 {
     public class PostProductControllerTest : ProductControllerTest
     {
@@ -26,6 +26,8 @@ namespace IntegrationTestForMyApi.ProductControllerTests
             var product = await response.Content.ReadAsAsync<Product>();
 
             CheckResponse(response, HttpStatusCode.OK);
+
+            await EndProductTest(product);
         }
     }
 }

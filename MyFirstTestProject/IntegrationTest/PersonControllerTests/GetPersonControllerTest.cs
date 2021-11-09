@@ -1,5 +1,5 @@
 ﻿using FluentAssertions;
-using IntegrationTestForMyApi.Extentions;
+using IntegrationTest.Extentions;
 using MyModelAndDatabase.Models;
 using System.Collections.Generic;
 using System.Net;
@@ -7,7 +7,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace IntegrationTestForMyApi.PersonControllerTests
+namespace IntegrationTest.PersonControllerTests
 {
     public class GetPersonControllerTest : PersonControllerTest
     {
@@ -22,6 +22,8 @@ namespace IntegrationTestForMyApi.PersonControllerTests
 
             CheckResponse(response, HttpStatusCode.OK);
             CheckReturnResult(returnResult, person);
+
+            await EndPersonTest(person);
         }
 
         [Fact]
@@ -53,6 +55,8 @@ namespace IntegrationTestForMyApi.PersonControllerTests
             response = await TestClient.GetAsync(baseRoute + controllerName + person.Id);
 
             CheckResponse(response, HttpStatusCode.BadRequest);
+
+            await EndPersonTest(person);
         }
     }
 }

@@ -6,7 +6,7 @@ using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
 
-namespace IntegrationTestForMyApi.ProductControllerTests
+namespace IntegrationTest.ProductControllerTests
 {
     public class ProductControllerTest : IntegrationTest
     {
@@ -29,6 +29,9 @@ namespace IntegrationTestForMyApi.ProductControllerTests
 
         protected async Task<HttpResponseMessage> UpdateProductAsync(UpdateProduct product) =>
             await TestClient.PutAsJsonAsync(baseRoute + controllerName, product);
+
+        protected async Task EndProductTest(Product product) =>
+            await DeleteProductAsync(new DeleteProduct { Id = product.Id });
 
         protected AddProduct CreateAddProductWithoutAlias() =>
             fixture.Build<AddProduct>()

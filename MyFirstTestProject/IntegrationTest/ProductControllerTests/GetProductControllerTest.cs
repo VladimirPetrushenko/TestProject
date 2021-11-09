@@ -1,5 +1,5 @@
 ﻿using FluentAssertions;
-using IntegrationTestForMyApi.Extentions;
+using IntegrationTest.Extentions;
 using MyModelAndDatabase.Models;
 using System.Collections.Generic;
 using System.Net;
@@ -7,7 +7,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace IntegrationTestForMyApi.ProductControllerTests
+namespace IntegrationTest.ProductControllerTests
 {
     public class GetProductControllerTest : ProductControllerTest
     {
@@ -22,6 +22,8 @@ namespace IntegrationTestForMyApi.ProductControllerTests
 
             CheckResponse(response, HttpStatusCode.OK);
             CheckReturnResult(returnResult, product);
+
+            await EndProductTest(product);
         }
 
         [Fact]
