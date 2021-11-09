@@ -1,7 +1,5 @@
 ﻿using IntegrationTestForMyApi.Extentions;
-using MyModelAndDatabase.Models;
 using System.Net;
-using System.Net.Http;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -12,7 +10,7 @@ namespace IntegrationTestForMyApi.ProductControllerTests
         [Fact]
         public async Task Post_BadModel_StatusCode400()
         {
-            var addProductModel = CreateAddProductWithoutAlias();
+            var addProductModel = fixture.CreateAddProductWithoutAlias();
 
             var response = await CreateProductAsync(addProductModel);
 
@@ -23,7 +21,6 @@ namespace IntegrationTestForMyApi.ProductControllerTests
         public async Task Post_NormalModelt_StatusCode200()
         {
             var response = await CreateProductAsync(fixture.CreateValideAddProduct());
-            var product = await response.Content.ReadAsAsync<Product>();
 
             response.CheckResponse(HttpStatusCode.OK);
         }

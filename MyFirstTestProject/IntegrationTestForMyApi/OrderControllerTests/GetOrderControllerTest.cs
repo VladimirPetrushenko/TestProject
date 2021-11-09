@@ -17,18 +17,17 @@ namespace IntegrationTestForMyApi.OrderControllerTests
             var response = await Initialize();
             var order = await response.Content.ReadAsAsync<OrderReadDto>();
 
-
-            response = await TestClient.GetAsync(Routs.Order + order.Id);
+            response = await GetOrderAsync(order.Id);
             var returnResult = await response.Content.ReadAsAsync<OrderReadDto>();
 
             response.CheckResponse(HttpStatusCode.OK);
-            CheckReturnResult(returnResult, order);
+            returnResult.CheckReturnResult(order);
         }
 
         [Fact]
         public async Task Get_WithoutAnyPost_ReturnEmptyResponce_StatusCode200()
         {
-            var response = await TestClient.GetAsync(Routs.Order);
+            var response = await GetOrderAsync(null);
             var returnResult = await response.Content.ReadAsAsync<List<OrderReadDto>>();
 
             response.CheckResponse(HttpStatusCode.OK);
@@ -38,7 +37,7 @@ namespace IntegrationTestForMyApi.OrderControllerTests
         [Fact]
         public async Task Get_WhenPostNotExistInDataBase_StatusCode404()
         {
-            var response = await TestClient.GetAsync(Routs.Order + 0);
+            var response = await GetOrderAsync(0);
 
             response.CheckResponse(HttpStatusCode.NotFound);
         }

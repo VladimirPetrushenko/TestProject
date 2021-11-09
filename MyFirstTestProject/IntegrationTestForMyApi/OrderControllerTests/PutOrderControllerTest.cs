@@ -18,7 +18,7 @@ namespace IntegrationTestForMyApi.OrderControllerTests
         {
             var response = await Initialize();
             var order = await response.Content.ReadAsAsync<OrderReadDto>();
-            response = await TestClient.GetAsync(Routs.Person);
+            response = await GetPersonAsync(null);
             var person = await response.Content.ReadAsAsync<List<Person>>();
 
             var updateOrder = new UpdateOrder
@@ -28,7 +28,7 @@ namespace IntegrationTestForMyApi.OrderControllerTests
                 Products = order.Products.Select(p => p.Id).ToList()
             };
 
-            response = await TestClient.PutAsJsonAsync(Routs.Order, updateOrder);
+            response = await UpdateOrderAsync(updateOrder);
             var returnResult = await response.Content.ReadAsAsync<OrderReadDto>();
 
             response.CheckResponse(HttpStatusCode.OK);
@@ -47,7 +47,7 @@ namespace IntegrationTestForMyApi.OrderControllerTests
                 Products = order.Products.Select(p => p.Id).ToList()
             };
 
-            response = await TestClient.PutAsJsonAsync(Routs.Order, updateOrder);
+            response = await UpdateOrderAsync(updateOrder);
 
             response.CheckResponse(HttpStatusCode.BadRequest);
         }
@@ -55,7 +55,7 @@ namespace IntegrationTestForMyApi.OrderControllerTests
         [Fact]
         public async Task Put_WhenPostNotExistInDataBase_StatusCode404()
         {
-            var response = await TestClient.PutAsJsonAsync(Routs.Order, new UpdateOrder { Id = 0 });
+            var response = await UpdateOrderAsync(new UpdateOrder { Id = 0 });
 
             response.CheckResponse(HttpStatusCode.NotFound);
         }
@@ -63,7 +63,7 @@ namespace IntegrationTestForMyApi.OrderControllerTests
         [Fact]
         public async Task Put_RequestForWrongRoute_StatusCode404()
         {
-            var response = await TestClient.PutAsJsonAsync(Routs.BadRoute, new UpdateOrder());
+            var response = await UpdateOrderAsync(new UpdateOrder());
 
             response.CheckResponse(HttpStatusCode.NotFound);
         }

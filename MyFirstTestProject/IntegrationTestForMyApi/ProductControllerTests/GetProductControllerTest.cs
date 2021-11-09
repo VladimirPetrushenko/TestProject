@@ -17,17 +17,17 @@ namespace IntegrationTestForMyApi.ProductControllerTests
             var response = await CreateProductAsync(fixture.CreateValideAddProduct());
             var product = await response.Content.ReadAsAsync<Product>();
 
-            response = await TestClient.GetAsync(Routs.Product + product.Id);
+            response = await GetProductAsync(product.Id);
             var returnResult = await response.Content.ReadAsAsync<Product>();
 
             response.CheckResponse(HttpStatusCode.OK);
-            CheckReturnResult(returnResult, product);
+            returnResult.CheckReturnResult(product);
         }
 
         [Fact]
         public async Task Get_WithoutAnyPost_ReturnEmptyResponce_StatusCode200()
         {
-            var response = await TestClient.GetAsync(Routs.Product);
+            var response = await GetProductAsync(null);
             var returnResult = await response.Content.ReadAsAsync<List<Product>>();
 
             response.CheckResponse(HttpStatusCode.OK);
@@ -37,7 +37,7 @@ namespace IntegrationTestForMyApi.ProductControllerTests
         [Fact]
         public async Task Get_WhenPostNotExistInDataBase_StatusCode404()
         {
-            var response = await TestClient.GetAsync(Routs.Product + 0);
+            var response = await GetProductAsync(0);
 
             response.CheckResponse(HttpStatusCode.NotFound);
         }

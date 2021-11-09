@@ -1,4 +1,5 @@
 ﻿using IntegrationTestForMyApi.Extentions;
+using IntegrationTestForMyApi.Extentions.Fixture;
 using MyClient.Models.Products;
 using MyModelAndDatabase.Models;
 using System.Net;
@@ -17,11 +18,11 @@ namespace IntegrationTestForMyApi.ProductControllerTests
             var product = await response.Content.ReadAsAsync<Product>();
             product.Name = "New name";
 
-            response = await UpdateProductAsync(CreateUpdateProductFromProduct(product));
+            response = await UpdateProductAsync(product.CreateUpdateProductFromProduct());
             var returnResult = await response.Content.ReadAsAsync<Product>();
 
             response.CheckResponse(HttpStatusCode.OK);
-            CheckReturnResult(returnResult, product);
+            returnResult.CheckReturnResult(product);
         }
 
         [Fact]
@@ -31,7 +32,7 @@ namespace IntegrationTestForMyApi.ProductControllerTests
             var product = await response.Content.ReadAsAsync<Product>();
             product.Type = ProductType.None;
 
-            response = await UpdateProductAsync(CreateUpdateProductFromProduct(product));
+            response = await UpdateProductAsync(product.CreateUpdateProductFromProduct());
 
             response.CheckResponse(HttpStatusCode.BadRequest);
         }

@@ -28,7 +28,7 @@ namespace IntegrationTestForMyApi.ProductControllerTests
             var returnResult = await response.Content.ReadAsAsync<Product>();
 
             response.CheckResponse(HttpStatusCode.OK);
-            CheckReturnResult(returnResult, product);
+            returnResult.CheckReturnResult(product);
         }
     }
 }

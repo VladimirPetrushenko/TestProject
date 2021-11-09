@@ -28,7 +28,7 @@ namespace IntegrationTestForMyApi.OrderControllerTests
             var returnResult = await response.Content.ReadAsAsync<OrderReadDto>();
 
             response.CheckResponse(HttpStatusCode.OK);
-            CheckReturnResult(returnResult, order);
+            returnResult.CheckReturnResult(order);
         }
     }
 }

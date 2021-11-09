@@ -25,9 +25,9 @@ namespace IntegrationTestForMyApi.OrderControllerTests
         {
             await InitializeDatabases();
 
-            var response = await TestClient.GetAsync(Routs.Person);
+            var response = await GetPersonAsync(null);
             var person = (await response.Content.ReadAsAsync<List<Person>>()).First();
-            response = await TestClient.GetAsync(Routs.Product); ;
+            response = await GetProductAsync(null);
             var product = await response.Content.ReadAsAsync<List<Product>>();
 
             var order = new AddOrder

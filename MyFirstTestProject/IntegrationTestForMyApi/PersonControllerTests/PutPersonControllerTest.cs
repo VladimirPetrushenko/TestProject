@@ -1,4 +1,5 @@
 ﻿using IntegrationTestForMyApi.Extentions;
+using IntegrationTestForMyApi.Extentions.Fixture;
 using MyClient.Models.Persons;
 using MyModelAndDatabase.Models;
 using System.Net;
@@ -17,11 +18,11 @@ namespace IntegrationTestForMyApi.PersonControllerTests
             var person = await response.Content.ReadAsAsync<Person>();
             person.FirstName = "NewFirstName";
 
-            response = await UpdatePersonAsync(CreateUpdatePersonFromPerson(person));
+            response = await UpdatePersonAsync(person.CreateUpdatePersonFromPerson());
             var returnResult = await response.Content.ReadAsAsync<Person>();
 
             response.CheckResponse(HttpStatusCode.OK);
-            CheckReturnResult(returnResult, person);
+            returnResult.CheckReturnResult(person);
         }
 
         [Fact]
@@ -31,7 +32,7 @@ namespace IntegrationTestForMyApi.PersonControllerTests
             var person = await response.Content.ReadAsAsync<Person>();
 
             person.FirstName = "This string is more than 20 symbols"; 
-            response = await UpdatePersonAsync(CreateUpdatePersonFromPerson(person));
+            response = await UpdatePersonAsync(person.CreateUpdatePersonFromPerson());
 
             response.CheckResponse(HttpStatusCode.BadRequest);
         }

@@ -1,4 +1,5 @@
 ﻿using IntegrationTestForMyApi.Extentions;
+using IntegrationTestForMyApi.Extentions.Fixture;
 using MyModelAndDatabase.Models;
 using System.Net;
 using System.Net.Http;
@@ -12,7 +13,7 @@ namespace IntegrationTestForMyApi.PersonControllerTests
         [Fact]
         public async Task Post_BadModel_StatusCode400()
         {
-            var model = CreateAddModelWhithoutLastName();
+            var model = fixture.CreateAddModelWhithoutLastName();
 
             var response = await CreatePersonAsync(model);
 

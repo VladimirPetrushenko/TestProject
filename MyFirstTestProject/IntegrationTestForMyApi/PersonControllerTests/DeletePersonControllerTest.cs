@@ -28,13 +28,13 @@ namespace IntegrationTestForMyApi.PersonControllerTests
             var returnResult = await response.Content.ReadAsAsync<Person>();
 
             response.CheckResponse(HttpStatusCode.OK);
-            CheckReturnResult(returnResult, person);
+            returnResult.CheckReturnResult(person);
         }
 
         [Fact]
         public async Task Delete_WhenPersonIsActiveFalse_StatusCode400()
         {
-            var model = CreateAddModelWhithoutIsActive();
+            var model = fixture.CreateAddModelWhithoutIsActive();
             var response = await CreatePersonAsync(model);
             var person = await response.Content.ReadAsAsync<Person>();
 
