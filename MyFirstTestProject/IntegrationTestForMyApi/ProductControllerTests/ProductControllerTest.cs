@@ -5,6 +5,7 @@ using MyModelAndDatabase.Models;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
+using IntegrationTestForMyApi.Extentions;
 
 namespace IntegrationTestForMyApi.ProductControllerTests
 {
@@ -20,7 +21,7 @@ namespace IntegrationTestForMyApi.ProductControllerTests
         }
         
         protected async Task<HttpResponseMessage> DeleteProductAsync(DeleteProduct product) =>
-            await DeleteAsync(product, Routs.Product);
+            await TestClient.DeleteAsync(product, Routs.Product);
 
         protected async Task<HttpResponseMessage> CreateProductAsync(AddProduct product) =>
             await TestClient.PostAsJsonAsync(Routs.Product, product);

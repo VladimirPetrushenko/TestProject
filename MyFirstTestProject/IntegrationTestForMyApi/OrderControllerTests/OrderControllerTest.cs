@@ -43,7 +43,7 @@ namespace IntegrationTestForMyApi.OrderControllerTests
             await TestClient.PostAsJsonAsync(Routs.Product, product);
 
         protected async Task<HttpResponseMessage> DeleteOrderAsync(DeleteOrder order) =>
-            await DeleteAsync(order, Routs.Order);
+            await TestClient.DeleteAsync(order, Routs.Order);
 
         protected async Task<HttpResponseMessage> Initialize()
         {

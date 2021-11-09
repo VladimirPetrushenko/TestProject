@@ -20,7 +20,7 @@ namespace IntegrationTestForMyApi.ProductControllerTests
             response = await UpdateProductAsync(CreateUpdateProductFromProduct(product));
             var returnResult = await response.Content.ReadAsAsync<Product>();
 
-            CheckResponse(response, HttpStatusCode.OK);
+            response.CheckResponse(HttpStatusCode.OK);
             CheckReturnResult(returnResult, product);
         }
 
@@ -33,7 +33,7 @@ namespace IntegrationTestForMyApi.ProductControllerTests
 
             response = await UpdateProductAsync(CreateUpdateProductFromProduct(product));
 
-            CheckResponse(response, HttpStatusCode.BadRequest);
+            response.CheckResponse(HttpStatusCode.BadRequest);
         }
 
         [Fact]
@@ -41,7 +41,7 @@ namespace IntegrationTestForMyApi.ProductControllerTests
         {
             var response = await UpdateProductAsync(new UpdateProduct { Id = 0 });
 
-            CheckResponse(response, HttpStatusCode.NotFound);
+            response.CheckResponse(HttpStatusCode.NotFound);
         }
 
         [Fact] 
@@ -49,7 +49,7 @@ namespace IntegrationTestForMyApi.ProductControllerTests
         {
             var response = await TestClient.PutAsJsonAsync(Routs.BadRoute, new UpdateProduct());
 
-            CheckResponse(response, HttpStatusCode.NotFound);
+            response.CheckResponse(HttpStatusCode.NotFound);
         }
     }
 }

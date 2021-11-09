@@ -20,7 +20,7 @@ namespace IntegrationTestForMyApi.PersonControllerTests
             response = await UpdatePersonAsync(CreateUpdatePersonFromPerson(person));
             var returnResult = await response.Content.ReadAsAsync<Person>();
 
-            CheckResponse(response, HttpStatusCode.OK);
+            response.CheckResponse(HttpStatusCode.OK);
             CheckReturnResult(returnResult, person);
         }
 
@@ -33,7 +33,7 @@ namespace IntegrationTestForMyApi.PersonControllerTests
             person.FirstName = "This string is more than 20 symbols"; 
             response = await UpdatePersonAsync(CreateUpdatePersonFromPerson(person));
 
-            CheckResponse(response, HttpStatusCode.BadRequest);
+            response.CheckResponse(HttpStatusCode.BadRequest);
         }
 
         [Fact]
@@ -41,7 +41,7 @@ namespace IntegrationTestForMyApi.PersonControllerTests
         {
             var response = await UpdatePersonAsync(new UpdatePerson { Id = 0 });
 
-            CheckResponse(response, HttpStatusCode.NotFound);
+            response.CheckResponse(HttpStatusCode.NotFound);
         }
 
         [Fact]
@@ -49,7 +49,7 @@ namespace IntegrationTestForMyApi.PersonControllerTests
         {
             var response = await TestClient.PutAsJsonAsync(Routs.BadRoute, new UpdatePerson());
 
-            CheckResponse(response, HttpStatusCode.NotFound);
+            response.CheckResponse(HttpStatusCode.NotFound);
         }
     }
 }

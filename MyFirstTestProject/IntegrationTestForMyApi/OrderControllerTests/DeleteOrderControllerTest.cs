@@ -1,4 +1,5 @@
-﻿using MyClient.Models.Dtos.Orders;
+﻿using IntegrationTestForMyApi.Extentions;
+using MyClient.Models.Dtos.Orders;
 using MyClient.Models.Orders;
 using System.Net;
 using System.Net.Http;
@@ -14,7 +15,7 @@ namespace IntegrationTestForMyApi.OrderControllerTests
         {
             var response = await DeleteOrderAsync(new DeleteOrder { Id = 0 });
 
-            CheckResponse(response, HttpStatusCode.NotFound);
+            response.CheckResponse(HttpStatusCode.NotFound);
         }
 
         [Fact]
@@ -26,7 +27,7 @@ namespace IntegrationTestForMyApi.OrderControllerTests
             response = await DeleteOrderAsync(new DeleteOrder { Id = order.Id });
             var returnResult = await response.Content.ReadAsAsync<OrderReadDto>();
 
-            CheckResponse(response, HttpStatusCode.OK);
+            response.CheckResponse(HttpStatusCode.OK);
             CheckReturnResult(returnResult, order);
         }
     }

@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using IntegrationTestForMyApi.Extentions;
 using MyClient.Models.Dtos.Orders;
 using System.Collections.Generic;
 using System.Net;
@@ -20,7 +21,7 @@ namespace IntegrationTestForMyApi.OrderControllerTests
             response = await TestClient.GetAsync(Routs.Order + order.Id);
             var returnResult = await response.Content.ReadAsAsync<OrderReadDto>();
 
-            CheckResponse(response, HttpStatusCode.OK);
+            response.CheckResponse(HttpStatusCode.OK);
             CheckReturnResult(returnResult, order);
         }
 
@@ -30,7 +31,7 @@ namespace IntegrationTestForMyApi.OrderControllerTests
             var response = await TestClient.GetAsync(Routs.Order);
             var returnResult = await response.Content.ReadAsAsync<List<OrderReadDto>>();
 
-            CheckResponse(response, HttpStatusCode.OK);
+            response.CheckResponse(HttpStatusCode.OK);
             returnResult.Should().BeEmpty();
         }
 
@@ -39,7 +40,7 @@ namespace IntegrationTestForMyApi.OrderControllerTests
         {
             var response = await TestClient.GetAsync(Routs.Order + 0);
 
-            CheckResponse(response, HttpStatusCode.NotFound);
+            response.CheckResponse(HttpStatusCode.NotFound);
         }
     }
 }

@@ -15,7 +15,7 @@ namespace IntegrationTestForMyApi.PersonControllerTests
         {
             var response = await DeletePersonAsync(new DeletePerson{ Id = 0});
 
-            CheckResponse(response, HttpStatusCode.NotFound);
+            response.CheckResponse(HttpStatusCode.NotFound);
         }
 
         [Fact]
@@ -27,7 +27,7 @@ namespace IntegrationTestForMyApi.PersonControllerTests
             response = await DeletePersonAsync(new DeletePerson { Id = person.Id });
             var returnResult = await response.Content.ReadAsAsync<Person>();
 
-            CheckResponse(response, HttpStatusCode.OK);
+            response.CheckResponse(HttpStatusCode.OK);
             CheckReturnResult(returnResult, person);
         }
 
@@ -39,7 +39,7 @@ namespace IntegrationTestForMyApi.PersonControllerTests
             var person = await response.Content.ReadAsAsync<Person>();
 
             response = await DeletePersonAsync(new DeletePerson { Id = person.Id });
-            CheckResponse(response, HttpStatusCode.BadRequest);
+            response.CheckResponse(HttpStatusCode.BadRequest);
         }
     }
 }

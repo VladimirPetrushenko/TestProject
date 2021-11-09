@@ -1,4 +1,5 @@
-﻿using MyClient.Models.Dtos.Orders;
+﻿using IntegrationTestForMyApi.Extentions;
+using MyClient.Models.Dtos.Orders;
 using MyClient.Models.Orders;
 using MyModelAndDatabase.Models;
 using System.Collections.Generic;
@@ -30,7 +31,7 @@ namespace IntegrationTestForMyApi.OrderControllerTests
             response = await TestClient.PutAsJsonAsync(Routs.Order, updateOrder);
             var returnResult = await response.Content.ReadAsAsync<OrderReadDto>();
 
-            CheckResponse(response, HttpStatusCode.OK);
+            response.CheckResponse(HttpStatusCode.OK);
         }
 
         [Fact]
@@ -48,7 +49,7 @@ namespace IntegrationTestForMyApi.OrderControllerTests
 
             response = await TestClient.PutAsJsonAsync(Routs.Order, updateOrder);
 
-            CheckResponse(response, HttpStatusCode.BadRequest);
+            response.CheckResponse(HttpStatusCode.BadRequest);
         }
 
         [Fact]
@@ -56,7 +57,7 @@ namespace IntegrationTestForMyApi.OrderControllerTests
         {
             var response = await TestClient.PutAsJsonAsync(Routs.Order, new UpdateOrder { Id = 0 });
 
-            CheckResponse(response, HttpStatusCode.NotFound);
+            response.CheckResponse(HttpStatusCode.NotFound);
         }
 
         [Fact]
@@ -64,7 +65,7 @@ namespace IntegrationTestForMyApi.OrderControllerTests
         {
             var response = await TestClient.PutAsJsonAsync(Routs.BadRoute, new UpdateOrder());
 
-            CheckResponse(response, HttpStatusCode.NotFound);
+            response.CheckResponse(HttpStatusCode.NotFound);
         }
     }
 }

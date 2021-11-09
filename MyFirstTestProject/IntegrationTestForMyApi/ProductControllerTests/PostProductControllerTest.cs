@@ -16,7 +16,7 @@ namespace IntegrationTestForMyApi.ProductControllerTests
 
             var response = await CreateProductAsync(addProductModel);
 
-            CheckResponse(response, HttpStatusCode.BadRequest);
+            response.CheckResponse(HttpStatusCode.BadRequest);
         }
 
         [Fact]
@@ -25,7 +25,7 @@ namespace IntegrationTestForMyApi.ProductControllerTests
             var response = await CreateProductAsync(fixture.CreateValideAddProduct());
             var product = await response.Content.ReadAsAsync<Product>();
 
-            CheckResponse(response, HttpStatusCode.OK);
+            response.CheckResponse(HttpStatusCode.OK);
         }
     }
 }

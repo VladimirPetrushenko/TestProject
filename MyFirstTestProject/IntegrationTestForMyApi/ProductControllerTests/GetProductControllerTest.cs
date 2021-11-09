@@ -20,7 +20,7 @@ namespace IntegrationTestForMyApi.ProductControllerTests
             response = await TestClient.GetAsync(Routs.Product + product.Id);
             var returnResult = await response.Content.ReadAsAsync<Product>();
 
-            CheckResponse(response, HttpStatusCode.OK);
+            response.CheckResponse(HttpStatusCode.OK);
             CheckReturnResult(returnResult, product);
         }
 
@@ -30,7 +30,7 @@ namespace IntegrationTestForMyApi.ProductControllerTests
             var response = await TestClient.GetAsync(Routs.Product);
             var returnResult = await response.Content.ReadAsAsync<List<Product>>();
 
-            CheckResponse(response, HttpStatusCode.OK);
+            response.CheckResponse(HttpStatusCode.OK);
             returnResult.Should().BeEmpty();
         }
 
@@ -39,7 +39,7 @@ namespace IntegrationTestForMyApi.ProductControllerTests
         {
             var response = await TestClient.GetAsync(Routs.Product + 0);
 
-            CheckResponse(response, HttpStatusCode.NotFound);
+            response.CheckResponse(HttpStatusCode.NotFound);
         }
     }
 }

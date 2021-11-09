@@ -1,4 +1,5 @@
-﻿using MyClient.Models.Orders;
+﻿using IntegrationTestForMyApi.Extentions;
+using MyClient.Models.Orders;
 using MyModelAndDatabase.Models;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,7 +17,7 @@ namespace IntegrationTestForMyApi.OrderControllerTests
         {
             var response = await CreateOrderAsync(new AddOrder { Person = 0, Products = new List<int>() { 0 } });
 
-            CheckResponse(response, HttpStatusCode.BadRequest);
+            response.CheckResponse(HttpStatusCode.BadRequest);
         }
 
         [Fact]
@@ -36,7 +37,7 @@ namespace IntegrationTestForMyApi.OrderControllerTests
             };
 
             response = await CreateOrderAsync(order);
-            CheckResponse(response, HttpStatusCode.OK);
+            response.CheckResponse(HttpStatusCode.OK);
         }
     }
 }

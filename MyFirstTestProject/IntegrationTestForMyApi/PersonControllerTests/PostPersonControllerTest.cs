@@ -16,7 +16,7 @@ namespace IntegrationTestForMyApi.PersonControllerTests
 
             var response = await CreatePersonAsync(model);
 
-            CheckResponse(response, HttpStatusCode.BadRequest);
+            response.CheckResponse(HttpStatusCode.BadRequest);
         }
 
         [Fact]
@@ -25,7 +25,7 @@ namespace IntegrationTestForMyApi.PersonControllerTests
             var response = await CreatePersonAsync(fixture.CreateValideAddPerson());
             var person = await response.Content.ReadAsAsync<Person>();
 
-            CheckResponse(response, HttpStatusCode.OK);
+            response.CheckResponse(HttpStatusCode.OK);
         }
     }
 }

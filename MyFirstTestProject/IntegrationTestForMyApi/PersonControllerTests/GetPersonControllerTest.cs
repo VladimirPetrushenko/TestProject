@@ -20,7 +20,7 @@ namespace IntegrationTestForMyApi.PersonControllerTests
             response = await TestClient.GetAsync(Routs.Person + person.Id);
             var returnResult = await response.Content.ReadAsAsync<Person>();
 
-            CheckResponse(response, HttpStatusCode.OK);
+            response.CheckResponse(HttpStatusCode.OK);
             CheckReturnResult(returnResult, person);
         }
 
@@ -30,7 +30,7 @@ namespace IntegrationTestForMyApi.PersonControllerTests
             var response = await TestClient.GetAsync(Routs.Person);
             var returnResult = await response.Content.ReadAsAsync<List<Product>>();
 
-            CheckResponse(response, HttpStatusCode.OK);
+            response.CheckResponse(HttpStatusCode.OK);
             returnResult.Should().BeEmpty();
         }
 
@@ -39,7 +39,7 @@ namespace IntegrationTestForMyApi.PersonControllerTests
         {
             var response = await TestClient.GetAsync(Routs.Person + 0);
 
-            CheckResponse(response, HttpStatusCode.NotFound);
+            response.CheckResponse(HttpStatusCode.NotFound);
         }
 
         [Fact]
@@ -52,7 +52,7 @@ namespace IntegrationTestForMyApi.PersonControllerTests
             
             response = await TestClient.GetAsync(Routs.Person + person.Id);
 
-            CheckResponse(response, HttpStatusCode.BadRequest);
+            response.CheckResponse(HttpStatusCode.BadRequest);
         }
     }
 }

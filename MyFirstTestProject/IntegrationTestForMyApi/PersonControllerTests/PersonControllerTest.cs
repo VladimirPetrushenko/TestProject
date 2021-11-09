@@ -5,6 +5,7 @@ using MyModelAndDatabase.Models;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
+using IntegrationTestForMyApi.Extentions;
 
 namespace IntegrationTestForMyApi.PersonControllerTests
 {
@@ -20,7 +21,7 @@ namespace IntegrationTestForMyApi.PersonControllerTests
         }
 
         protected async Task<HttpResponseMessage> DeletePersonAsync(DeletePerson person) =>
-            await DeleteAsync(person, Routs.Person);
+            await TestClient.DeleteAsync(person, Routs.Person);
 
         protected async Task<HttpResponseMessage> CreatePersonAsync(AddPerson person) =>
             await TestClient.PostAsJsonAsync(Routs.Person, person);

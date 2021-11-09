@@ -15,7 +15,7 @@ namespace IntegrationTestForMyApi.ProductControllerTests
         {
             var response = await DeleteProductAsync(new DeleteProduct { Id = 0});
 
-            CheckResponse(response, HttpStatusCode.NotFound);
+            response.CheckResponse(HttpStatusCode.NotFound);
         }
 
         [Fact]
@@ -27,7 +27,7 @@ namespace IntegrationTestForMyApi.ProductControllerTests
             response = await DeleteProductAsync(new DeleteProduct { Id = product.Id });
             var returnResult = await response.Content.ReadAsAsync<Product>();
 
-            CheckResponse(response, HttpStatusCode.OK);
+            response.CheckResponse(HttpStatusCode.OK);
             CheckReturnResult(returnResult, product);
         }
     }
