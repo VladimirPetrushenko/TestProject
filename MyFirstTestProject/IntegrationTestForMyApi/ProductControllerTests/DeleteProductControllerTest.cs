@@ -1,4 +1,5 @@
 ﻿using IntegrationTestForMyApi.Extentions;
+using IntegrationTestForMyApi.Extentions.Fixture;
 using MyClient.Models.Products;
 using MyModelAndDatabase.Models;
 using System.Net;

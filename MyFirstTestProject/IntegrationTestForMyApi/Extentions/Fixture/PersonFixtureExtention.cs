@@ -3,7 +3,7 @@ using MyClient.Models.Persons;
 
 namespace IntegrationTestForMyApi.Extentions.Fixture
 {
-    public static class AddPersonFixtureExtention
+    public static class PersonFixtureExtention
     {
         public static AddPerson CreateValideAddPerson(this IFixture fixture)
         {

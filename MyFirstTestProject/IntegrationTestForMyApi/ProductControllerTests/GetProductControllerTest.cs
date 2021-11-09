@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using IntegrationTestForMyApi.Extentions;
+using IntegrationTestForMyApi.Extentions.Fixture;
 using MyModelAndDatabase.Models;
 using System.Collections.Generic;
 using System.Net;

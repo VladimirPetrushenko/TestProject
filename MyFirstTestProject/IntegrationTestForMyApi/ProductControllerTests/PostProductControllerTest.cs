@@ -1,4 +1,5 @@
 ﻿using IntegrationTestForMyApi.Extentions;
+using IntegrationTestForMyApi.Extentions.Fixture;
 using System.Net;
 using System.Threading.Tasks;
 using Xunit;
