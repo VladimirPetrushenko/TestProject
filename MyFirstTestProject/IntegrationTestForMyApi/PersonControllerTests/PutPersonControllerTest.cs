@@ -1,4 +1,5 @@
-﻿using MyClient.Models.Persons;
+﻿using IntegrationTestForMyApi.Extentions;
+using MyClient.Models.Persons;
 using MyModelAndDatabase.Models;
 using System.Net;
 using System.Net.Http;
@@ -12,7 +13,7 @@ namespace IntegrationTestForMyApi.PersonControllerTests
         [Fact]
         public async Task Put_ReturnsProduct_WhenPostExistInDataBase_StatusCode200()
         {
-            var response = await CreatePersonAsync(CreateValideAddPerson());
+            var response = await CreatePersonAsync(fixture.CreateValideAddPerson());
             var person = await response.Content.ReadAsAsync<Person>();
             person.FirstName = "NewFirstName";
 
@@ -28,7 +29,7 @@ namespace IntegrationTestForMyApi.PersonControllerTests
         [Fact]
         public async Task Put_BadModel_WhenPostExistInDataBase_StatusCode400()
         {
-            var response = await CreatePersonAsync(CreateValideAddPerson());
+            var response = await CreatePersonAsync(fixture.CreateValideAddPerson());
             var person = await response.Content.ReadAsAsync<Person>();
 
             person.FirstName = "This string is more than 20 symbols"; 

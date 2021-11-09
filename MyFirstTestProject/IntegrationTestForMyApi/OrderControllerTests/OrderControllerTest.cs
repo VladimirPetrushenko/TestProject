@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using IntegrationTestForMyApi.Extentions;
 using MyClient.Models.Dtos.Orders;
 using MyClient.Models.Orders;
 using MyClient.Models.Persons;
@@ -70,10 +71,11 @@ namespace IntegrationTestForMyApi.OrderControllerTests
         {
             for(int i = 0; i < RowCount; i++)
             {
-                var person = CreateValideAddPerson();
-                var product = CreateValideAddProduct();
+                var person = fixture.CreateValideAddPerson();
+                var product = fixture.CreateValideAddProduct();
 
-                await CreatePersonAsync(person);
+                var response = await CreatePersonAsync(person);
+                var pers = await response.Content.ReadAsAsync<Person>();
                 await CreateProductAsync(product);
             }
         }

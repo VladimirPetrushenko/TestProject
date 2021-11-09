@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using IntegrationTestForMyApi.Extentions;
 using MyModelAndDatabase.Models;
 using System.Collections.Generic;
 using System.Net;
@@ -13,7 +14,7 @@ namespace IntegrationTestForMyApi.ProductControllerTests
         [Fact]
         public async Task Get_ReturnsProduct_WhenPostExistInDataBase_StatusCode200()
         {
-            var response = await CreateProductAsync(CreateValideAddProduct());
+            var response = await CreateProductAsync(fixture.CreateValideAddProduct());
             var product = await response.Content.ReadAsAsync<Product>();
 
             response = await TestClient.GetAsync(baseRoute + controllerName + product.Id);

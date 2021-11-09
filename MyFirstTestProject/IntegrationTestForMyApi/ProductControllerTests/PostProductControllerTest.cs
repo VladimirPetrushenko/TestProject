@@ -1,4 +1,5 @@
-﻿using MyModelAndDatabase.Models;
+﻿using IntegrationTestForMyApi.Extentions;
+using MyModelAndDatabase.Models;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -21,7 +22,7 @@ namespace IntegrationTestForMyApi.ProductControllerTests
         [Fact]
         public async Task Post_NormalModelt_StatusCode200()
         {
-            var response = await CreateProductAsync(CreateValideAddProduct());
+            var response = await CreateProductAsync(fixture.CreateValideAddProduct());
             var product = await response.Content.ReadAsAsync<Product>();
 
             CheckResponse(response, HttpStatusCode.OK);

@@ -1,4 +1,5 @@
-﻿using MyClient.Models.Products;
+﻿using IntegrationTestForMyApi.Extentions;
+using MyClient.Models.Products;
 using MyModelAndDatabase.Models;
 using System.Net;
 using System.Net.Http;
@@ -12,7 +13,7 @@ namespace IntegrationTestForMyApi.ProductControllerTests
         [Fact]
         public async Task Put_ReturnsProduct_WhenPostExistInDataBase_StatusCode200()
         {
-            var response = await CreateProductAsync(CreateValideAddProduct());
+            var response = await CreateProductAsync(fixture.CreateValideAddProduct());
             var product = await response.Content.ReadAsAsync<Product>();
             product.Name = "New name";
 
@@ -28,7 +29,7 @@ namespace IntegrationTestForMyApi.ProductControllerTests
         [Fact]
         public async Task Put_BadModel_WhenPostExistInDataBase_StatusCode400()
         {
-            var response = await CreateProductAsync(CreateValideAddProduct());
+            var response = await CreateProductAsync(fixture.CreateValideAddProduct());
             var product = await response.Content.ReadAsAsync<Product>();
             product.Type = ProductType.None;
 

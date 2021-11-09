@@ -1,15 +1,11 @@
 ﻿using AutoFixture;
 using FluentAssertions;
-using Microsoft.AspNetCore.Mvc.Testing;
+using IntegrationTestForMyApi.Strub;
+using Microsoft.AspNetCore;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
-using MyApi;
-using MyClient.Models.Persons;
-using MyClient.Models.Products;
+using Microsoft.EntityFrameworkCore.Storage;
 using MyModelAndDatabase.Data.Context;
-using MyModelAndDatabase.Models;
 using System;
 using System.Net;
 using System.Net.Http;
@@ -18,44 +14,29 @@ using System.Threading.Tasks;
 
 namespace IntegrationTestForMyApi
 {
-    public class IntegrationTest
+    public class IntegrationTest : IDisposable
     {
+        private readonly TestServer _server;
+        private readonly IServiceProvider _services; 
+        protected MyContext DbContext { get; }
+        protected IDbContextTransaction Transaction { get; }
+
         protected readonly HttpClient TestClient;
         protected string baseRoute = "https://localhost/api/";
-        public Fixture fixture;
-        protected MyContext context;
+        public Fixture fixture = new();
         public IntegrationTest()
         {
-            var apiFactory = new WebApplicationFactory<Startup>();
-            var testServer = new TestServer(apiFactory.Services);
-            var services = testServer.Host.Services;
-            context = (MyContext)services.GetService(typeof(MyContext));
-            TestClient = testServer.CreateClient();
-            fixture = new Fixture();
+            var builder = WebHost.CreateDefaultBuilder()
+                .UseStartup<TestStartup>();
+            _server = new TestServer(builder);
+            _services = _server.Host.Services;
+            TestClient = _server.CreateClient();
+            DbContext = GetService<MyContext>();
+            Transaction = DbContext.Database.BeginTransaction();
         }
 
-        protected AddPerson CreateValideAddPerson()
-        {
-            var firstName = fixture.Create<string>().Substring(0, 15);
-            var lastName = fixture.Create<string>().Substring(0, 15);
-            var price = fixture.Create<decimal>();
+        protected T GetService<T>() => (T)_services.GetService(typeof(T));
 
-            return fixture.Build<AddPerson>()
-                .With(p => p.FirstName, firstName)
-                .With(p => p.LastName, lastName)
-                .With(p => p.IsActive, true)
-                .Create();
-        }
-
-        public AddProduct CreateValideAddProduct()
-        {
-            var price = fixture.Create<decimal>() + 1;
-            return fixture.Build<AddProduct>()
-                .With(p => p.Type, ProductType.Others)
-                .With(p => p.Price, price)
-                .Create();
-        }
-        
         protected async Task<HttpResponseMessage> DeleteAsync<T>(T item, string controllerName)
         {
             HttpRequestMessage request = new()
@@ -70,5 +51,14 @@ namespace IntegrationTestForMyApi
 
         protected static void CheckResponse(HttpResponseMessage response, HttpStatusCode code) =>
             response.StatusCode.Should().Be(code);
+
+        public void Dispose()
+        {
+            if (Transaction != null)
+            {
+                Transaction.Rollback();
+                Transaction.Dispose();
+            }
+        }
     }
 }

@@ -1,4 +1,5 @@
-﻿using MyClient.Models.Persons;
+﻿using IntegrationTestForMyApi.Extentions;
+using MyClient.Models.Persons;
 using MyModelAndDatabase.Models;
 using System.Net;
 using System.Net.Http;
@@ -20,7 +21,7 @@ namespace IntegrationTestForMyApi.PersonControllerTests
         [Fact]
         public async Task Delete_ReturnDeletedPerson_StatusCode200()
         {
-            var response = await CreatePersonAsync(CreateValideAddPerson());
+            var response = await CreatePersonAsync(fixture.CreateValideAddPerson());
             var person = await response.Content.ReadAsAsync<Person>();
 
             response = await DeletePersonAsync(new DeletePerson { Id = person.Id });
