@@ -34,6 +34,7 @@ namespace MyApi
             services.AddScoped<IRepository<Person>, PersonRepository>();
             services.AddScoped<IRepository<Product>, ProductRepository>();
             services.AddScoped<IRepository<Order>, OrderRepository>();
+            services.AddScoped<IQuerableRepository<Person>, PersonQuerableRepository>();
 
             services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 

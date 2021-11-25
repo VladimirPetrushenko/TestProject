@@ -29,6 +29,10 @@ namespace MyModelAndDatabase.Data.Repositories
         public Task<Product> GetByID(int id) => 
             _context.Products.Where(p => p.Id == id).FirstOrDefaultAsync();
 
+        public IEnumerable<Product> GetItemsWithName(string name) =>
+            _context.Products
+            .Where(x => x.Name == name);
+
         public Task<bool> ItemExists(int id) => 
             _context.Products.AnyAsync(x => x.Id == id);
 

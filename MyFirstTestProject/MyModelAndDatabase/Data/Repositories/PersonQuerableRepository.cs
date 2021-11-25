@@ -2,17 +2,16 @@
 using MyModelAndDatabase.Data.Context;
 using MyModelAndDatabase.Data.Interfaces;
 using MyModelAndDatabase.Models;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace MyModelAndDatabase.Data.Repositories
 {
-    public class PersonRepository : IRepository<Person>
+    public class PersonQuerableRepository : IQuerableRepository<Person>
     {
         private readonly MyContext _context;
 
-        public PersonRepository(MyContext context)
+        public PersonQuerableRepository(MyContext context)
         {
             _context = context;
         }
@@ -20,10 +19,10 @@ namespace MyModelAndDatabase.Data.Repositories
         public void CreateItem(Person person) =>
             _context.People.Add(person);
 
-        public void DeleteItem(Person person) => 
+        public void DeleteItem(Person person) =>
             _context.People.Remove(person);
 
-        public IEnumerable<Person> GetAll() => 
+        public IQueryable<Person> GetAll() =>
             _context.People;
 
         public Task<Person> GetByID(int id) =>
@@ -42,7 +41,7 @@ namespace MyModelAndDatabase.Data.Repositories
         public Task<bool> ItemExists(int id) =>
             _context.People.AnyAsync(x => x.Id == id);
 
-        public IEnumerable<Person> GetItemsWithName(string name) =>
+        public IQueryable<Person> GetItemsWithName(string name) =>
             _context.People
             .Where(x => x.FirstName == name);
     }

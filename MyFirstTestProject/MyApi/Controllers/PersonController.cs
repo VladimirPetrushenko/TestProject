@@ -16,19 +16,28 @@ namespace MyApi.Controllers
         {
         }
 
-        [HttpGet("{id}")]
-        public async Task<Person> Get(int id, CancellationToken token) => await _mediator.Send(new ReadPersonById { Id = id }, token);
+        //[HttpGet("{id}")]
+        //public async Task<Person> Get(int id, CancellationToken token) => 
+        //    await _mediator.Send(new ReadPersonById { Id = id }, token);
+
+        [HttpGet("{name}")]
+        public async Task<IEnumerable<Person>> GetByName(string name, CancellationToken token) => 
+            await _mediator.Send(new ReadPersonByName { Name = name }, token);
 
         [HttpGet]
-        public async Task<IEnumerable<Person>> GetAll(CancellationToken token) => await _mediator.Send(new ReadAllPeople(), token);
+        public async Task<IEnumerable<Person>> GetAll(CancellationToken token) => 
+            await _mediator.Send(new ReadAllPeople(), token);
 
         [HttpPost]
-        public async Task<Person> Post([FromBody] AddPerson client, CancellationToken token) => await _mediator.Send(client, token);
+        public async Task<Person> Post([FromBody] AddPerson client, CancellationToken token) => 
+            await _mediator.Send(client, token);
 
         [HttpPut]
-        public async Task<Person> Update([FromBody] UpdatePerson client, CancellationToken token) => await _mediator.Send(client, token);
+        public async Task<Person> Update([FromBody] UpdatePerson client, CancellationToken token) => 
+            await _mediator.Send(client, token);
 
         [HttpDelete]
-        public async Task<Person> Delete([FromBody] DeletePerson client, CancellationToken token) => await _mediator.Send(client, token);
+        public async Task<Person> Delete([FromBody] DeletePerson client, CancellationToken token) => 
+            await _mediator.Send(client, token);
     }
 }

@@ -1,12 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace MyModelAndDatabase.Data.Interfaces
 {
-    public interface IRepository<T>
+    public interface IQuerableRepository<T>
     {
-        IEnumerable<T> GetItemsWithName(string name);
-        IEnumerable<T> GetAll();
+        IQueryable<T> GetItemsWithName(string name);
+        IQueryable<T> GetAll();
         Task<T> GetByID(int id);
         void CreateItem(T item);
         void UpdateItem(T item);

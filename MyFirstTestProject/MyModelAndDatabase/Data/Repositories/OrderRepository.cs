@@ -34,6 +34,10 @@ namespace MyModelAndDatabase.Data.Repositories
                 .Include(x=>x.Products)
                 .FirstOrDefaultAsync();
 
+        public IEnumerable<Order> GetItemsWithName(string name) =>
+            _context.Orders
+            .Where(x => x.Person.FirstName == name);
+
         public Task<bool> ItemExists(int id) => 
             _context.Orders.AnyAsync(x => x.Id == id);
 

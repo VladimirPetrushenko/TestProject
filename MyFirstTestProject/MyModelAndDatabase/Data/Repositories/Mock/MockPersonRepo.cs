@@ -56,5 +56,10 @@ namespace MyModelAndDatabase.Data
         {
             return Task.FromResult(People.Any(x => x.Id == id));
         }
+
+        public IEnumerable<Person> GetItemsWithName(string name)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

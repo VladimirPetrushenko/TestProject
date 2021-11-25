@@ -41,6 +41,11 @@ namespace MyModelAndDatabase.Data
             return Task.FromResult(Products.Where(x => x.Id == id).FirstOrDefault());
         }
 
+        public IEnumerable<Product> GetItemsWithName(string name)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task<bool> ItemExists(int id)
         {
             return Task.FromResult(Products.Any(x => x.Id == id));

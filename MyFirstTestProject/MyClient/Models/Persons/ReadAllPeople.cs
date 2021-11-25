@@ -4,6 +4,7 @@ using MyModelAndDatabase.Models;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace MyClient.Models.Persons
 {
@@ -20,7 +21,7 @@ namespace MyClient.Models.Persons
 
             public Task<IEnumerable<Person>> Handle(ReadAllPeople request, CancellationToken cancellationToken)
             {
-                var people = _repository.GetAll();
+                var people = _repository.GetAll().TakeLast(100);
 
                 return Task.FromResult(people);
             }
