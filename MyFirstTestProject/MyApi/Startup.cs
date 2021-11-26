@@ -31,10 +31,10 @@ namespace MyApi
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddScoped<IRepository<Person>, PersonRepository>();
-            services.AddScoped<IRepository<Product>, ProductRepository>();
-            services.AddScoped<IRepository<Order>, OrderRepository>();
-            services.AddScoped<IQuerableRepository<Person>, PersonQuerableRepository>();
+            services.AddScoped<IRepository<Person>, Repository<Person>>();
+            services.AddScoped<IRepository<Product>, Repository<Product>>();
+            services.AddScoped<IRepository<Order>, Repository<Order>>();
+            services.AddScoped<IQuerableRepository<Person>, QuerableRepository<Person>>();
 
             services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 

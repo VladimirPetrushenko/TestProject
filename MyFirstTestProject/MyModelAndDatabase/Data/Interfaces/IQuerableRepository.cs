@@ -1,19 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using MyModelAndDatabase.Models.Interfaces;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace MyModelAndDatabase.Data.Interfaces
 {
-    public interface IQuerableRepository<T>
+    public interface IQuerableRepository<TEntity>
+        where TEntity : class, IId
     {
-        IQueryable<T> GetItemsWithName(string name);
-        IQueryable<T> GetAll();
-        Task<T> GetByID(int id);
-        void CreateItem(T item);
-        void UpdateItem(T item);
-        void DeleteItem(T item);
+        IQueryable<TEntity> GetAll();
+        Task<TEntity> GetByID(int id);
+        void CreateItem(TEntity item);
+        void UpdateItem(TEntity item);
+        void DeleteItem(TEntity item);
         Task<bool> SaveChanges();
         Task<bool> ItemExists(int id);
     }

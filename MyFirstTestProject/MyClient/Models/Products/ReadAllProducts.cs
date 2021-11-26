@@ -2,6 +2,7 @@
 using MyModelAndDatabase.Data.Interfaces;
 using MyModelAndDatabase.Models;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -20,7 +21,7 @@ namespace MyClient.Models.Products
 
             public Task<IEnumerable<Product>> Handle(ReadAllProducts request, CancellationToken cancellationToken)
             {
-                var products = _repository.GetAll();
+                var products = _repository.GetAll().Take(100);
 
                 return Task.FromResult(products);
             }
